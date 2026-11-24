@@ -1034,6 +1034,102 @@ h2 { font-weight: 700; letter-spacing: -.01em; }
 .btn.warm small { text-align: right; min-width: 0; }
 .hl-li .tgl.sw { flex: none; }
 .hl-li > span { min-width: 0; }
+/* ---------- Song for a treat: envelope, cookie, backflip and splashdown ---------- */
+.sg-lab { display: inline-flex; align-items: center; gap: .45rem; }
+.sg-ico { width: 1.15rem; height: 1.15rem; color: var(--ios-move); flex: none; }
+.hl-link:disabled { color: var(--muted); cursor: default; }
+.modal.sg-modal { width: min(24rem, 100%); overflow-x: hidden; text-align: center; }
+.sg h3 { font-size: 1.35rem; margin: .1rem 0 0; }
+.sg p { line-height: 1.45; }
+.sg-k { color: var(--ios-move); background: color-mix(in srgb, var(--ios-move) 13%, transparent); }
+.sg-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.sg-site a { font-weight: 700; color: var(--brand); overflow-wrap: anywhere; }
+.env { position: relative; width: min(19rem, 100%); height: 10.5rem; margin: 8rem auto .3rem; perspective: 900px; transition: transform .7s cubic-bezier(.5, -.35, .75, .4), opacity .6s ease-in .1s; }
+.env.away { transform: translate(35%, -150%) rotate(-14deg) scale(.4); opacity: 0; }
+.env-back { position: absolute; inset: 0; border-radius: .75rem; background: linear-gradient(#e8879f, #f7b3c4); }
+.env-letter { position: absolute; left: 5%; right: 5%; top: .5rem; height: 9.6rem; z-index: 2; margin: 0; box-sizing: border-box; padding: .75rem .85rem; text-align: left; color: #1c1c1e; background: #fff; border-radius: .55rem; box-shadow: 0 2px 12px rgba(0, 0, 0, .14); transform: translateY(0); transition: transform .5s cubic-bezier(.55, 0, .8, .2); }
+.env.open .env-letter { transform: translateY(-7.6rem); transition: transform .7s cubic-bezier(.2, .9, .3, 1.12) .3s; }
+.env-dear { margin: 0 0 .3rem; font-weight: 700; font-size: .95rem; color: #1c1c1e; }
+.env-letter textarea { display: block; width: 100%; box-sizing: border-box; height: calc(3.1rem + 2px); resize: none; border: 0; outline: none; padding: 0 .15rem; font: inherit; font-size: 16px; line-height: 1.55rem; color: #1c1c1e; background: repeating-linear-gradient(transparent 0 calc(1.55rem - 1px), #ffc2d1 calc(1.55rem - 1px) 1.55rem); border-radius: .2rem; }
+.env-letter textarea::placeholder, .env-from input::placeholder { color: #a1a1a6; }
+.env-letter textarea:focus-visible { background-color: #fff5f8; box-shadow: 0 0 0 2px #ff9fb6; }
+.env-from { display: flex; align-items: baseline; gap: .45rem; margin-top: .55rem; font-size: .85rem; font-weight: 600; color: #6e6e73; }
+.env-from input { flex: 1; min-width: 0; border: 0; border-bottom: 1.5px solid #ffc2d1; outline: none; padding: .1rem .15rem; background: transparent; font: inherit; font-size: 16px; font-weight: 400; color: #1c1c1e; }
+.env-from input:focus-visible { border-bottom-color: var(--ios-move); background: #fff5f8; }
+.env-front { position: absolute; inset: 0; z-index: 3; pointer-events: none; border-radius: .75rem; background: linear-gradient(165deg, #ffa3b9, #ff829f); clip-path: polygon(0 0, 50% 54%, 100% 0, 100% 100%, 0 100%); }
+.env-front::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(#ff7898, #ff6b8e); clip-path: polygon(0 100%, 50% 47%, 100% 100%); }
+.env-flap { position: absolute; left: 0; right: 0; top: 0; height: 58%; z-index: 4; pointer-events: none; transform-origin: 50% 0; clip-path: polygon(0 0, 100% 0, 50% 100%); background: linear-gradient(#ff4f7b, #f0124f); transform: rotateX(0deg); transition: transform .38s ease-in .5s, z-index 0s linear .7s; }
+.env-flap i { position: absolute; inset: 0; background: linear-gradient(rgba(255, 255, 255, .22), transparent 70%); }
+.env.open .env-flap { z-index: 1; transform: rotateX(180deg); transition: transform .4s ease-out, z-index 0s linear .2s; }
+.env-seal { position: absolute; left: 50%; top: 58%; z-index: 5; width: 2.5rem; height: 2.5rem; margin: -1.25rem 0 0 -1.25rem; border-radius: 50%; display: grid; place-items: center; pointer-events: none; background: radial-gradient(circle at 35% 30%, #ff5d82, #c4083e 70%); box-shadow: 0 2px 6px rgba(120, 0, 30, .35), inset 0 0 0 3px rgba(255, 255, 255, .18); transition: transform .25s, opacity .25s; }
+.env-seal svg { width: 1.25rem; height: 1.25rem; }
+.env.open .env-seal { opacity: 0; transform: scale(.4); }
+.env.sealed .env-seal { animation: sg-stamp .4s cubic-bezier(.3, 1.5, .5, 1) .92s both; }
+@keyframes sg-stamp { 0% { transform: scale(1.9); opacity: 0; } 100% { transform: none; opacity: 1; } }
+.sg-err { color: var(--bad); min-height: 1.3em; font-size: .9rem; font-weight: 600; margin: .35rem 0 0; }
+.sg-acts { justify-content: center; margin-top: .2rem; }
+.btn.sg-go { background: var(--ios-move); color: #fff; min-width: 7rem; justify-content: center; }
+.btn.sg-go:disabled { background: color-mix(in srgb, var(--ios-move) 55%, var(--rule)); color: #fff; }
+.sg-note { font-size: .8rem; color: var(--muted); margin: .45rem 0 0; }
+
+.bird-dock { --sgd: 1; }
+.bird-dock.left { --sgd: -1; }
+.bird-dock.has-cookie .bird-bub { bottom: calc(100% + 3.9rem); }
+.sg-cookie { all: unset; position: absolute; bottom: calc(100% + .45rem); right: .55rem; z-index: 2; width: 3rem; height: 3rem; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.bird-dock.left .sg-cookie { right: auto; left: .55rem; }
+.sg-cookie svg { position: relative; display: block; width: 100%; height: 100%; animation: sg-pulse 1.6s ease-in-out infinite; filter: drop-shadow(0 0 5px rgba(255, 196, 0, .95)) drop-shadow(0 3px 4px rgba(0, 0, 0, .2)); }
+.sg-glow { position: absolute; inset: -45%; border-radius: 50%; pointer-events: none; background: radial-gradient(circle, rgba(255, 214, 10, .6) 0%, rgba(255, 159, 10, .28) 38%, transparent 68%); animation: sg-glow 1.6s ease-in-out infinite; }
+.sg-tw { position: absolute; width: .6rem; height: .6rem; pointer-events: none; background: #ffd60a; clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%); transform: scale(0); animation: sg-tw 1.9s ease-in-out var(--d) infinite; }
+.sg-tip { position: absolute; right: calc(100% + .4rem); top: 50%; transform: translateY(-50%); white-space: nowrap; pointer-events: none; background: var(--surface); color: var(--ink); font-weight: 700; font-size: .78rem; padding: .28rem .6rem; border-radius: 999px; box-shadow: 0 4px 14px rgba(0, 0, 0, .16); }
+.bird-dock.left .sg-tip { right: auto; left: calc(100% + .4rem); }
+.sg-cookie:focus-visible { outline: 3px solid var(--brand); outline-offset: 4px; border-radius: 50%; }
+.sg-cookie.pop { animation: sg-pop .65s cubic-bezier(.3, 1.6, .5, 1) both; }
+.sg-cookie.eat { animation: sg-eat .45s cubic-bezier(.45, 0, .8, .55) forwards; }
+.sg-cookie.eat .sg-tip, .sg-cookie.eat .sg-tw, .sg-cookie.eat .sg-glow { display: none; }
+.sg-cookie.eat svg { animation: none; }
+@keyframes sg-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+@keyframes sg-glow { 0%, 100% { opacity: .5; transform: scale(.82); } 50% { opacity: 1; transform: scale(1.12); } }
+@keyframes sg-tw { 0%, 100% { transform: scale(0) rotate(0); } 35% { transform: scale(1) rotate(45deg); } 65% { transform: scale(0) rotate(90deg); } }
+@keyframes sg-pop { 0% { transform: translateY(14px) scale(0) rotate(-120deg); opacity: 0; } 100% { transform: none; opacity: 1; } }
+@keyframes sg-eat { 0% { transform: none; } 35% { transform: translate(calc(var(--tx) * .25), calc(var(--ty) * .1 - 16px)) scale(.85) rotate(-40deg); } 100% { transform: translate(var(--tx), var(--ty)) scale(.2) rotate(-160deg); } }
+.sg-crumb { position: fixed; z-index: 25; width: 5px; height: 5px; margin: -2px 0 0 -2px; border-radius: 1.5px; background: #c98b45; pointer-events: none; animation: sg-crumb .9s cubic-bezier(.3, 0, .8, 1) both; }
+.sg-crumb:nth-child(odd) { background: #5b3a21; width: 4px; height: 4px; }
+@keyframes sg-crumb { 0% { transform: translate(0, 0) rotate(0); opacity: 1; } 100% { transform: translate(var(--dx), var(--dy)) rotate(220deg); opacity: 0; } }
+@keyframes sg-nom { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(1.8px) scale(1.02, .98); } }
+.sg-chomp .bd .bd-jaw { animation: bd-jaw .22s ease-in-out 3; }
+.sg-chomp .bd .bd-all { animation: sg-nom .22s ease-in-out 3; }
+.sg-flip .bird-btn { animation: sg-flip 1.5s linear both; transform-origin: 50% 56%; }
+.sg-flip .bd .bd-wing { animation: bd-flap .19s ease-in-out 7; }
+.sg-flip .bd .bd-fl { animation: bd-legl 1.5s ease-out; }
+.sg-flip .bd .bd-fr { animation: bd-legr 1.5s ease-out; }
+.sg-flip .bd .bd-sh { opacity: 0; }
+@keyframes sg-flip {
+  0% { transform: translateY(0) rotate(0deg) scale(1, 1); animation-timing-function: ease-out; }
+  9% { transform: translateY(5px) rotate(0deg) scale(1.13, .84); animation-timing-function: cubic-bezier(.2, .7, .4, 1); }
+  15% { transform: translateY(-2rem) rotate(calc(var(--sgd) * 30deg)) scale(.93, 1.09); animation-timing-function: cubic-bezier(.25, .6, .45, 1); }
+  48% { transform: translateY(-10.5rem) rotate(calc(var(--sgd) * 385deg)) scale(1, 1); animation-timing-function: cubic-bezier(.55, 0, .85, .4); }
+  86% { transform: translateY(0) rotate(calc(var(--sgd) * 720deg)) scale(1, 1); animation-timing-function: ease-out; }
+  91% { transform: translateY(8px) rotate(calc(var(--sgd) * 720deg)) scale(1.17, .8); animation-timing-function: ease-in-out; }
+  96% { transform: translateY(-3px) rotate(calc(var(--sgd) * 720deg)) scale(.96, 1.05); animation-timing-function: ease-in-out; }
+  100% { transform: translateY(0) rotate(calc(var(--sgd) * 720deg)) scale(1, 1); }
+}
+.sg-splash { position: absolute; left: 48%; bottom: .15rem; width: 0; height: 0; z-index: 3; pointer-events: none; }
+.bird-dock.left .sg-splash { left: 52%; }
+.sg-pool { position: absolute; left: -2.9rem; top: -.65rem; width: 5.8rem; height: 1.2rem; border-radius: 50%; background: radial-gradient(ellipse, rgba(90, 200, 250, .8), rgba(0, 122, 255, .38) 58%, transparent 72%); animation: sg-pool 2.8s ease-out both; }
+.sg-ring { position: absolute; left: -2.1rem; top: -.6rem; width: 4.2rem; height: 1.15rem; box-sizing: border-box; border-radius: 50%; border: 2px solid rgba(90, 200, 250, .95); animation: sg-ring 1.1s ease-out both; }
+.sg-ring.r2 { animation-delay: .28s; }
+.sg-drop { position: absolute; left: -.26rem; top: -.6rem; width: .52rem; height: .66rem; border-radius: 50% 50% 50% 50% / 60% 60% 42% 42%; background: linear-gradient(#d4f4ff, #34aadc); box-shadow: inset -1px -1px 0 rgba(0, 90, 160, .25); animation: sg-drop .85s linear both; }
+@keyframes sg-pool { 0% { transform: scale(.2, .4); opacity: 0; } 9% { transform: scale(1.1, 1); opacity: 1; } 70% { opacity: .85; } 100% { transform: scale(1.3, 1); opacity: 0; } }
+@keyframes sg-ring { 0% { transform: scale(.3); opacity: 1; } 100% { transform: scale(1.9); opacity: 0; } }
+@keyframes sg-drop { 0% { transform: translate(0, 0) scale(var(--s)); opacity: 1; animation-timing-function: cubic-bezier(.2, .7, .4, 1); } 45% { transform: translate(calc(var(--dx) * .7), var(--dy)) scale(var(--s)); opacity: 1; animation-timing-function: cubic-bezier(.5, 0, 1, 1); } 100% { transform: translate(var(--dx), 20px) scale(calc(var(--s) * .6)); opacity: 0; } }
+.bird-bub.sg-thx { background: var(--ios-move); color: #fff; font-size: .95rem; padding: .45rem .85rem; }
+.bird-bub.sg-thx::after { border-top-color: var(--ios-move); }
+@media (prefers-reduced-motion: reduce) {
+  .sg-cookie svg, .sg-glow, .sg-tw, .sg-cookie.pop { animation: none; }
+  .sg-tw { display: none; }
+  .env, .env-letter, .env.open .env-letter, .env-flap, .env.open .env-flap, .env-seal { transition: none; }
+  .env.sealed .env-seal { animation: none; opacity: 1; transform: none; }
+}
 </style>
 
 <div class="app" id="app"></div>
@@ -8941,7 +9037,7 @@ function birdDraw() {
 function birdPlace() {
   var w = document.getElementById('bird'); if (!w) return;
   var b = birdCfg(), answering = !!(run && app.querySelector('.qcard')), inExam = !!(exam && document.querySelector('.bar') && !app.querySelector('.sum-top'));
-  var hide = !b.show || inExam || (answering && (window.innerWidth < 760 || document.documentElement.classList.contains('docked')));
+  var hide = !(b.show || songWantsDuck()) || inExam || (answering && (window.innerWidth < 760 || document.documentElement.classList.contains('docked')));
   w.hidden = hide;
   if (hide) return;
   var bar = document.querySelector('.bar'), bottom = (bar ? bar.offsetHeight : 0) + 10;
@@ -9127,6 +9223,231 @@ function latentMaybe() {
     if (G.latent || CUR || run || exam || document.querySelector('.overlay') || !app.querySelector('.hl-top')) return;
     showLatent();
   }, 6000);
+}
+
+/* ============================================================
+   SONG FOR A TREAT: the Settings row "Put Alfie on a good song for a treat" opens an envelope with a letter
+   to write a song rec on. Send seals it and posts it to Alfie (one per device). A glowing cookie then appears
+   by the duck; feeding it sets off a high double backflip, a splashdown and a thank-you bubble.
+   SONG.via picks the delivery: 'formsubmit' (email), 'gform' (Google Form) or 'ntfy' (phone push).
+   With no delivery set, or in a preview build, sending is pretended so the flow can be tried.
+   ============================================================ */
+var SONG = { via: 'formsubmit', url: 'https://formsubmit.co/ajax/8755916f7b7ac2b50eab0dea6e5cd1ea', fields: {}, preview: false, site: 'https://alfietaba.github.io/1A-Tron-Finals-Gym/' };
+function songCfg() { if (!G.song || typeof G.song !== 'object') G.song = {}; return G.song; }
+function songReady() { return SONG.preview || !!SONG.via; }
+/* The Claude version runs in a sandbox that blocks requests to other sites, so it links to the public site instead */
+function songSandboxed() { try { return window.self !== window.top && !/github\.io$/.test(location.hostname) && !/^(localhost|127\.0\.0\.1|)$/.test(location.hostname); } catch (e) { return true; } }
+
+function songPost(rec, from) {
+  if (SONG.preview || !SONG.via) return new Promise(function (ok) { setTimeout(ok, 700); });
+  if (!window.fetch) return Promise.reject(new Error('This browser cannot send.'));
+  var msg = rec + (from ? '\nFrom: ' + from : ''), p;
+  if (SONG.via === 'ntfy') {
+    p = fetch(SONG.url, { method: 'POST', body: msg, headers: { 'Title': 'Song rec from Finals Gym', 'Tags': 'musical_note' } });
+  } else if (SONG.via === 'formsubmit') {
+    p = fetch(SONG.url, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ song: rec, from: from || 'Anonymous', _subject: 'Song rec from Finals Gym: ' + rec.slice(0, 60), _template: 'table', _captcha: 'false' }) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok || String(j.success) === 'false') throw new Error('Not sent'); return r; }); });
+  } else if (SONG.via === 'gform') {
+    var fd = new FormData(); fd.append(SONG.fields.song, rec); if (SONG.fields.from) fd.append(SONG.fields.from, from || '');
+    p = fetch(SONG.url, { method: 'POST', mode: 'no-cors', body: fd });   /* Google answers opaquely; reaching it counts */
+  } else return Promise.reject(new Error('No delivery set up.'));
+  var late = new Promise(function (ok, no) { setTimeout(function () { no(new Error('Timed out')); }, 15000); });
+  return Promise.race([p, late]).then(function (r) { if (r && r.type !== 'opaque' && r.ok === false) throw new Error('HTTP ' + r.status); });
+}
+
+/* ---------- the Settings row ---------- */
+function songRowHTML() {
+  if (!songReady()) return '';
+  var s = songCfg(), nm = esc(birdCfg().name);
+  var sub = s.sent ? (s.cookie ? 'Sent. Your cookie is waiting by ' + nm + '.' : 'Sent from this device. Thank you!') : 'Send me a song rec and ' + nm + ' gets a cookie.';
+  return '<div class="hl-li sg-li"><span><span class="sg-lab">' + songEnvIcon() + 'Put Alfie on a good song for a treat</span><small>' + sub + '</small></span>' +
+    '<button class="hl-link" type="button" id="sg-open"' + (s.sent ? ' disabled' : '') + '>' + (s.sent ? 'Sent' : 'Open') + '</button></div>';
+}
+function songEnvIcon() {
+  return '<svg class="sg-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 7l8.5 6.2L20.5 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>';
+}
+function songBind() {
+  var b = document.getElementById('sg-open');
+  if (b) b.addEventListener('click', function () { Snd.tap(); showSong(); });
+}
+
+/* ---------- the envelope ---------- */
+function showSong() {
+  var s = songCfg(), b = birdCfg();
+  if (s.sent) return;
+  if (!SONG.preview && songSandboxed()) {
+    var q = overlay('<div class="sg"><h3>Put Alfie on a good song</h3><p>Songs send from the public site, so open it there. Your cookie shows up on that site too.</p>' +
+      '<p class="sg-site"><a href="' + SONG.site + '#song" target="_blank" rel="noopener">' + SONG.site.replace(/^https:\/\//, '') + '</a></p>' +
+      '<div class="aid-acts"><button class="btn" type="button" id="sg-x">Close</button></div></div>', 'sg-modal');
+    q.m.querySelector('#sg-x').addEventListener('click', q.close);
+    return;
+  }
+  var m = overlay(
+    '<div class="sg">' +
+      '<p class="lt-k sg-k">For a treat</p>' +
+      '<h3>Put Alfie on a good song</h3>' +
+      '<div class="env" id="sg-env">' +
+        '<div class="env-back"></div>' +
+        '<div class="env-flap"><i></i></div>' +
+        '<form class="env-letter" id="sg-form" autocomplete="off" novalidate>' +
+          '<p class="env-dear">Dear Alfie, you need to hear:</p>' +
+          '<label class="sg-sr" for="sg-song">Song and artist</label>' +
+          '<textarea id="sg-song" rows="2" maxlength="300" placeholder="Song – artist" required></textarea>' +
+          '<label class="env-from"><span>From</span><input id="sg-from" maxlength="40" placeholder="your name (optional)"></label>' +
+        '</form>' +
+        '<div class="env-front"></div>' +
+        '<div class="env-seal" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.9c0 5.4-7.5 10-7.5 10z" fill="#fff"/></svg></div>' +
+      '</div>' +
+      '<p class="sg-err" id="sg-err" role="alert"></p>' +
+      '<div class="aid-acts sg-acts"><button class="btn ghost" type="button" id="sg-x">Not now</button><button class="btn sg-go" type="submit" form="sg-form" id="sg-go">Send</button></div>' +
+      '<p class="sg-note">One per device. ' + esc(b.name) + ' gets a cookie for it.</p>' +
+    '</div>', 'sg-modal');
+  m.m.setAttribute('aria-label', 'Put Alfie on a good song');
+  var env = m.m.querySelector('#sg-env'), ta = m.m.querySelector('#sg-song'), from = m.m.querySelector('#sg-from');
+  var err = m.m.querySelector('#sg-err'), go = m.m.querySelector('#sg-go'), x = m.m.querySelector('#sg-x'), busy = false;
+  if (s.draft) ta.value = s.draft;
+  ta.addEventListener('input', function () { s.draft = ta.value.slice(0, 300); err.textContent = ''; save(); });
+  x.addEventListener('click', function () { if (!busy) m.close(); });
+  setTimeout(function () { env.classList.add('open'); }, reduced ? 0 : 280);
+  setTimeout(function () { if (env.isConnected) try { ta.focus({ preventScroll: true }); } catch (e) { ta.focus(); } }, reduced ? 50 : 1050);
+  m.m.querySelector('#sg-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (busy) return;
+    var rec = ta.value.trim(), who = from.value.trim();
+    if (rec.length < 2) { err.textContent = 'Write a song first.'; ta.focus(); return; }
+    busy = true; go.disabled = true; x.disabled = true; go.textContent = 'Sending…'; err.textContent = '';
+    Snd.tap(); buzz(12);
+    env.classList.remove('open'); env.classList.add('sealed');
+    var anim = new Promise(function (ok) { setTimeout(ok, reduced ? 200 : 1250); });
+    Promise.all([songPost(rec, who), anim]).then(function () {
+      s.sent = dayKey(); s.cookie = 1; delete s.draft; save();
+      songWhoosh(); env.classList.add('away');
+      setTimeout(function () {
+        m.close();
+        var y = window.scrollY; if (app.querySelector('.hl-top')) { showGym(); window.scrollTo(0, y); }
+        songCookie(true);
+      }, reduced ? 100 : 700);
+    }, function () {
+      busy = false; go.disabled = false; x.disabled = false; go.textContent = 'Try again';
+      env.classList.remove('sealed'); env.classList.add('open');
+      err.textContent = 'It didn\'t send. Check your connection and try again.';
+    });
+  });
+}
+
+/* ---------- the cookie and the backflip ---------- */
+var songBusy = false;
+function songWantsDuck() { var s = songCfg(); return !!s.cookie || songBusy; }
+function songCookieSVG() {
+  return '<svg viewBox="0 0 64 64" aria-hidden="true">' +
+    '<circle cx="32" cy="33" r="26" fill="#b87333"/><circle cx="32" cy="31" r="25" fill="#e0a458"/>' +
+    '<path d="M14 22c5-9 18-13 28-9" fill="none" stroke="#f5c98a" stroke-width="3" stroke-linecap="round" opacity=".8"/>' +
+    '<g fill="#5b3a21"><ellipse cx="22" cy="27" rx="4" ry="3.3"/><ellipse cx="38" cy="20" rx="3.4" ry="2.8"/><ellipse cx="43" cy="35" rx="4.2" ry="3.4"/><ellipse cx="28" cy="42" rx="3.6" ry="3"/><ellipse cx="17" cy="38" rx="2.6" ry="2.2"/><ellipse cx="34" cy="31" rx="2.4" ry="2"/><ellipse cx="46" cy="25" rx="2" ry="1.7"/></g>' +
+    '<g fill="#8a5a33" opacity=".5"><circle cx="26" cy="18" r="1"/><circle cx="48" cy="44" r="1.2"/><circle cx="38" cy="47" r="1"/><circle cx="12" cy="30" r="1"/></g></svg>';
+}
+function songCookie(fresh) {
+  var s = songCfg(), w = document.getElementById('bird');
+  if (!s.cookie || !w || w.querySelector('.sg-cookie')) return;
+  var nm = birdCfg().name;
+  var c = h('button', 'sg-cookie' + (fresh && !reduced ? ' pop' : ''), '<span class="sg-glow"></span>' + songCookieSVG() +
+    '<i class="sg-tw" style="--d:0s;left:-6%;top:8%"></i><i class="sg-tw" style="--d:.7s;right:-4%;top:-6%"></i><i class="sg-tw" style="--d:1.3s;right:6%;bottom:-2%"></i>' +
+    '<span class="sg-tip">Feed ' + esc(nm) + '</span>');
+  c.type = 'button';
+  c.setAttribute('aria-label', 'A cookie from Alfie. Feed it to ' + nm + '.');
+  w.insertBefore(c, w.firstChild); w.classList.add('has-cookie');
+  birdPlace();
+  if (fresh) { Snd.init(); if (G.snd && Snd.ctx) { Snd.tone(880, 0, 0.12, 'triangle', 0.1); Snd.tone(1318.5, 0.08, 0.25, 'triangle', 0.09); } buzz([10, 40, 10]); }
+  c.addEventListener('click', function () { songFeed(c); });
+}
+function songFeed(c) {
+  var s = songCfg(), w = document.getElementById('bird'), b = birdCfg();
+  if (songBusy || !w) return;
+  songBusy = true; s.cookie = 0; s.fed = 1; save();
+  var btn = w.querySelector('.bird-btn'), jaw = w.querySelector('.bd-jaw'), bub = w.querySelector('.bird-bub');
+  var done = function () {
+    songBusy = false;
+    w.classList.remove('sg-chomp', 'sg-flip', 'sg-land', 'has-cookie');
+    var sp = w.querySelector('.sg-splash'); if (sp) sp.remove();
+    birdPlace();
+  };
+  var thanks = function () {
+    if (b.q) quackSound();
+    if (bub) { bub.textContent = 'Thanks! – Alfie'; bub.classList.add('on', 'sg-thx'); clearTimeout(bub._t); bub._t = setTimeout(function () { bub.classList.remove('on', 'sg-thx'); }, 4600); }
+  };
+  if (reduced) { c.remove(); w.classList.remove('has-cookie'); thanks(); setTimeout(done, 400); return; }
+  /* 1. the cookie flies into the beak */
+  var cr = c.getBoundingClientRect(), jr = (jaw || btn).getBoundingClientRect();
+  c.style.setProperty('--tx', (jr.left + jr.width / 2 - (cr.left + cr.width / 2)).toFixed(0) + 'px');
+  c.style.setProperty('--ty', (jr.top + jr.height / 2 - (cr.top + cr.height / 2)).toFixed(0) + 'px');
+  c.classList.remove('pop'); c.classList.add('eat'); c.disabled = true;
+  /* 2. chomp, with crumbs */
+  setTimeout(function () {
+    c.remove(); w.classList.remove('has-cookie'); w.classList.add('sg-chomp');
+    songMunch(); buzz([8, 60, 8, 60, 8]);
+    songCrumbs(jaw || btn);
+  }, 430);
+  /* 3. a high double backflip */
+  setTimeout(function () {
+    w.classList.remove('sg-chomp'); w.classList.add('sg-flip');
+    songSwish(0.1); buzz(20);
+  }, 1150);
+  /* 4. splashdown, then the thank-you */
+  setTimeout(function () {
+    w.classList.add('sg-land');
+    songSplash(w); songSploosh(); buzz([30, 30, 50]);
+  }, 1150 + 1360);
+  setTimeout(thanks, 1150 + 1650);
+  setTimeout(done, 1150 + 1650 + 4700);
+}
+function songCrumbs(el) {
+  var r = el.getBoundingClientRect();
+  for (var i = 0; i < 7; i++) {
+    var k = h('i', 'sg-crumb');
+    k.style.left = (r.left + r.width / 2 + (Math.random() * 14 - 7)).toFixed(0) + 'px';
+    k.style.top = (r.top + r.height / 2).toFixed(0) + 'px';
+    k.style.setProperty('--dx', (Math.random() * 44 - 22).toFixed(0) + 'px');
+    k.style.setProperty('--dy', (30 + Math.random() * 30).toFixed(0) + 'px');
+    k.style.animationDelay = (i * 0.06).toFixed(2) + 's';
+    document.body.appendChild(k);
+    (function (k) { setTimeout(function () { k.remove(); }, 1200); })(k);
+  }
+}
+function songSplash(w) {
+  var sp = h('div', 'sg-splash'), html = '<i class="sg-pool"></i><i class="sg-ring"></i><i class="sg-ring r2"></i>';
+  for (var i = 0; i < 12; i++) {
+    var a = -170 + i * (160 / 11) + (Math.random() * 8 - 4), d = 34 + Math.random() * 40, rad = a * Math.PI / 180;
+    html += '<i class="sg-drop" style="--dx:' + (Math.cos(rad) * d).toFixed(0) + 'px;--dy:' + (Math.sin(rad) * (d + 20)).toFixed(0) + 'px;--s:' + (0.6 + Math.random() * 0.7).toFixed(2) + ';animation-delay:' + (Math.random() * 0.06).toFixed(2) + 's"></i>';
+  }
+  sp.innerHTML = html;
+  w.appendChild(sp);
+}
+
+/* ---------- sounds (made on the fly, like the quack) ---------- */
+function songNoise(at, dur, type, f0, f1, vol, q) {
+  if (!G.snd) return; Snd.init(); var c = Snd.ctx; if (!c) return;
+  var n = Math.ceil(c.sampleRate * dur), buf = c.createBuffer(1, n, c.sampleRate), d = buf.getChannelData(0);
+  for (var i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+  var src = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain(), t0 = c.currentTime + at;
+  src.buffer = buf; f.type = type; f.Q.value = q || 1;
+  f.frequency.setValueAtTime(f0, t0); f.frequency.exponentialRampToValueAtTime(f1, t0 + dur);
+  g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(vol, t0 + Math.min(0.02, dur / 4)); g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+  src.connect(f); f.connect(g); g.connect(c.destination); src.start(t0); src.stop(t0 + dur + 0.02);
+}
+function songMunch() { [0, 0.2, 0.4].forEach(function (t) { songNoise(t, 0.09, 'bandpass', 2200, 900, 0.35, 1.2); }); }
+function songSwish(at) { songNoise(at, 0.5, 'bandpass', 500, 2600, 0.12, 2); }
+function songWhoosh() { songNoise(0, 0.45, 'bandpass', 2400, 500, 0.12, 1.5); }
+function songSploosh() {
+  songNoise(0, 0.55, 'lowpass', 3000, 260, 0.5, 0.7);
+  if (!G.snd || !Snd.ctx) return;
+  [0.08, 0.17, 0.27].forEach(function (t, i) { Snd.tone(520 + i * 140, t, 0.09, 'sine', 0.07, 1100 + i * 200); });
+}
+/* opened from a link like …/#song */
+function songMaybeOpen() {
+  if (location.hash === '#song' && songReady() && !songCfg().sent && (SONG.preview || !songSandboxed())) {
+    try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { /* ignore */ }
+    setTimeout(showSong, 400);
+  }
 }
 
 /* ============================================================
@@ -10132,6 +10453,7 @@ function showGym() {
       '<div class="hl-li"><span>Back up progress<small>Saves a file you can import on another device.</small></span><button class="hl-link" type="button" id="bk-out">Export</button></div>' +
       '<div class="hl-li"><span>Restore progress<small>From an export, on this device.</small></span><button class="hl-link" type="button" id="bk-in">Import</button></div>' +
       '<div class="hl-li"><span>Study with me on Latent<small>An invite to my study group on the Latent app.</small></span><button class="hl-link" type="button" id="lt-open">Invite</button></div>' +
+      songRowHTML() +
     '</div>' +
     '<details class="how"><summary>How this works</summary><ul><li>You answer before you see anything. Pulling the answer out of your head is what builds memory.</li><li>Missed questions come back in the same run, then again after 8 hours, 1 day, 2 days and 4 days.</li><li>Each ring is one course. It fills with the XP you earn in that course today, and closes at your daily XP goal (change it in Settings). A ring streak counts the days in a row you closed it.</li><li>Smart runs mix topics, like the exam does. Tap a topic on a course page to drill just that topic.</li><li>Infinite mode never runs out. Once you have mastered every question in a topic, generators write new versions of its calculation questions with fresh numbers. Turn on Let Infinite mode create new questions in Settings to mix them in from the start.</li><li>The formula sheet button sits at the top of every question for courses that have one.</li><li>On a keyboard: 1 to 5 picks an option, Enter checks or moves on, H opens a hint, F opens the formula sheet.</li></ul></details>' +
     '<div class="foot"><span>1A-Tron Finals Gym · Updated as new course material is posted. Progress saves in this browser; use Export in Settings to move it to another device. <button class="lt-foot" type="button" id="lt-foot">Study with me on Latent</button></span></div>';
@@ -10147,6 +10469,7 @@ function showGym() {
   document.getElementById('bk-out').addEventListener('click', function (e) { Snd.tap(); exportProgress(e.currentTarget); });
   document.getElementById('bk-in').addEventListener('click', function () { Snd.tap(); importProgress(); });
   ['lt-open', 'lt-foot'].forEach(function (id) { document.getElementById(id).addEventListener('click', function () { Snd.tap(); showLatent(); }); });
+  songBind();
   latentMaybe();
   window.scrollTo(0, 0);
 }
@@ -11160,6 +11483,8 @@ function finishMock() {
 candleBoot();
 birdBoot();
 showGym();
+songCookie(false);
+songMaybeOpen();
 
 })();
 </script>

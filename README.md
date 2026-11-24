@@ -18,6 +18,8 @@ The home screen is modelled on Apple Health's activity rings. Each course gets i
 
 Moxie, a small duckling named after my first dog, sits in the corner. Click it and it jumps, flaps and quacks, and every so often it lands on its butt, sees stars and gets back up with a scuff. Colours, hats and extras unlock as your total XP grows and as you reach milestones: your first mastered question, a 7-day streak, a finished mock exam, and fully mastering half a course, a whole course or every course. Nothing is spent, and Moxie hides during mock exams and while you answer on a phone.
 
+Put Alfie on a good song for a treat: in Settings, write a song rec in the envelope and send it (one per device). It lands in my inbox, and you get a cookie to feed Moxie, who does a double backflip for it.
+
 | Summary | On a phone |
 | --- | --- |
 | ![The home screen with one activity ring per course, final dates and a week of past rings](docs/screenshots/home.png) | ![The same home screen on a phone](docs/screenshots/home-phone.png) |

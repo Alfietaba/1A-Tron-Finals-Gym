@@ -238,7 +238,7 @@ function birdDraw() {
 function birdPlace() {
   var w = document.getElementById('bird'); if (!w) return;
   var b = birdCfg(), answering = !!(run && app.querySelector('.qcard')), inExam = !!(exam && document.querySelector('.bar') && !app.querySelector('.sum-top'));
-  var hide = !b.show || inExam || (answering && (window.innerWidth < 760 || document.documentElement.classList.contains('docked')));
+  var hide = !(b.show || songWantsDuck()) || inExam || (answering && (window.innerWidth < 760 || document.documentElement.classList.contains('docked')));
   w.hidden = hide;
   if (hide) return;
   var bar = document.querySelector('.bar'), bottom = (bar ? bar.offsetHeight : 0) + 10;

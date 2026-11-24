@@ -1001,6 +1001,7 @@ function showGym() {
       '<div class="hl-li"><span>Back up progress<small>Saves a file you can import on another device.</small></span><button class="hl-link" type="button" id="bk-out">Export</button></div>' +
       '<div class="hl-li"><span>Restore progress<small>From an export, on this device.</small></span><button class="hl-link" type="button" id="bk-in">Import</button></div>' +
       '<div class="hl-li"><span>Study with me on Latent<small>An invite to my study group on the Latent app.</small></span><button class="hl-link" type="button" id="lt-open">Invite</button></div>' +
+      songRowHTML() +
     '</div>' +
     '<details class="how"><summary>How this works</summary><ul><li>You answer before you see anything. Pulling the answer out of your head is what builds memory.</li><li>Missed questions come back in the same run, then again after 8 hours, 1 day, 2 days and 4 days.</li><li>Each ring is one course. It fills with the XP you earn in that course today, and closes at your daily XP goal (change it in Settings). A ring streak counts the days in a row you closed it.</li><li>Smart runs mix topics, like the exam does. Tap a topic on a course page to drill just that topic.</li><li>Infinite mode never runs out. Once you have mastered every question in a topic, generators write new versions of its calculation questions with fresh numbers. Turn on Let Infinite mode create new questions in Settings to mix them in from the start.</li><li>The formula sheet button sits at the top of every question for courses that have one.</li><li>On a keyboard: 1 to 5 picks an option, Enter checks or moves on, H opens a hint, F opens the formula sheet.</li></ul></details>' +
     '<div class="foot"><span>1A-Tron Finals Gym · Updated as new course material is posted. Progress saves in this browser; use Export in Settings to move it to another device. <button class="lt-foot" type="button" id="lt-foot">Study with me on Latent</button></span></div>';
@@ -1016,6 +1017,7 @@ function showGym() {
   document.getElementById('bk-out').addEventListener('click', function (e) { Snd.tap(); exportProgress(e.currentTarget); });
   document.getElementById('bk-in').addEventListener('click', function () { Snd.tap(); importProgress(); });
   ['lt-open', 'lt-foot'].forEach(function (id) { document.getElementById(id).addEventListener('click', function () { Snd.tap(); showLatent(); }); });
+  songBind();
   latentMaybe();
   window.scrollTo(0, 0);
 }
@@ -2029,3 +2031,5 @@ function finishMock() {
 candleBoot();
 birdBoot();
 showGym();
+songCookie(false);
+songMaybeOpen();

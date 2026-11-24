@@ -20,7 +20,7 @@ def main():
     page = (read('build/template.html')
             .replace('/*@HELPERS@*/', read('build/helpers.js'))
             .replace('/*@DATA@*/', data)
-            .replace('/*@APP@*/', read('build/bird.js') + '\n' + read('build/latent.js') + '\n' + read('build/app.js')))
+            .replace('/*@APP@*/', read('build/bird.js') + '\n' + read('build/latent.js') + '\n' + read('build/song.js') + '\n' + read('build/app.js')))
     head = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
             '<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">\n'
             '<meta name="description" content="1A-Tron Finals Gym: a learning-first study app for first-year engineering exams. '
@@ -35,7 +35,7 @@ def main():
     # test build: exposes a few internals on window.__gym so the browser tests can drive the app
     hook = ("window.__gym = { COURSES: COURSES, qCard: qCard, setCur: function (c) { CUR = c; }, showHome: showHome, "
             "showFormula: showFormula, gradeQ: gradeQ, partsOf: partsOf, structOf: structOf, G: function () { return G; }, "
-            "candleTick: candleTick, birdSVG: birdSVG, Snd: Snd, quack: quackSound };\nshowGym();")
+            "candleTick: candleTick, birdSVG: birdSVG, Snd: Snd, quack: quackSound, SONG: SONG, showSong: showSong, songCookie: songCookie };\nshowGym();")
     test = page.replace('\nshowGym();\n', '\n' + hook + '\n')
     assert test != page, 'could not find the start-up call to hook into'
     shell = ('<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1">'
