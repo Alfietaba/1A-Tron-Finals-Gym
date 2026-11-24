@@ -563,15 +563,17 @@ function overlay(html, cls) {
   return { ov: ov, m: m, close: close };
 }
 function addXP(n) {
-  var before = lvlInfo(CUR.S.xp).L;
+  var before = lvlInfo(CUR.S.xp).L, t0 = totalXP(), rang = false;
   CUR.S.xp += n;
   var goal = xpGoal(), was = addDayXP(CUR.id, n);
   if (was < goal && was + n >= goal) {
+    rang = true;
     var cs = ringCourses(), all = cs.indexOf(CUR) >= 0 && cs.every(function (c) { return closedOn(dayKey(), c.id); });
     ringToast(CUR, all);
   }
   var after = lvlInfo(CUR.S.xp);
   if (after.L > before) levelUp(after);
+  birdUnlocks(t0, totalXP(), rang ? 3000 : 600);
 }
 function levelUp(li) {
   Snd.level(); buzz([30, 50, 30, 50, 90]); FX.burst(120, 0.5, 0.35);
@@ -913,7 +915,7 @@ function exportProgress(btn) {
   save();
   var o = { app: 'midterm-gym', v: 1, at: new Date().toISOString(), keys: {} };
   backupKeys().forEach(function (k) { var v = load(k); if (v) o.keys[k] = v; });
-  var json = JSON.stringify(o), name = 'midterm-gym-progress-' + dayKey() + '.json', blob = new Blob([json], { type: 'application/json' });
+  var json = JSON.stringify(o), name = 'finals-gym-progress-' + dayKey() + '.json', blob = new Blob([json], { type: 'application/json' });
   var label = btn.textContent, say = function (t) { btn.textContent = t; setTimeout(function () { if (btn.isConnected) btn.textContent = label; }, 2400); };
   var plain = function () {
     try { var u = URL.createObjectURL(blob), a = document.createElement('a'); a.href = u; a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(u); }, 4000); say('Saved'); }
@@ -937,8 +939,8 @@ function importProgress() {
   file.addEventListener('change', function () { var f = file.files && file.files[0]; if (!f) return; f.text().then(function (t) { paste.value = t; msg.textContent = 'Loaded ' + f.name + '.'; }); });
   m.m.querySelector('#bk-x').addEventListener('click', m.close);
   m.m.querySelector('#bk-go').addEventListener('click', function () {
-    var o; try { o = JSON.parse(paste.value); } catch (e) { msg.textContent = 'That is not a Midterm Gym backup.'; return; }
-    if (!o || o.app !== 'midterm-gym' || !o.keys || typeof o.keys !== 'object') { msg.textContent = 'That is not a Midterm Gym backup.'; return; }
+    var o; try { o = JSON.parse(paste.value); } catch (e) { msg.textContent = 'That is not a Finals Gym backup.'; return; }
+    if (!o || (o.app !== 'midterm-gym' && o.app !== 'finals-gym') || !o.keys || typeof o.keys !== 'object') { msg.textContent = 'That is not a Finals Gym backup.'; return; }
     var ok = backupKeys(), n = 0;
     Object.keys(o.keys).forEach(function (k) { if (ok.indexOf(k) >= 0) { store(k, o.keys[k]); n++; } });
     if (!n) { msg.textContent = 'The backup had no progress in it.'; return; }
@@ -982,6 +984,7 @@ function showGym() {
       '<div class="hl-card hl-tile"><span class="hl-tag qs">' + boltIcon() + 'Questions</span><div class="hl-n">' + tn + '<small>/' + GOAL + '</small></div><p class="hl-s">Today\'s goal across every course.</p></div>' +
       '<div class="hl-card hl-tile"><span class="hl-tag tm">' + candleIcon() + 'Focus</span><div class="hl-n" id="tmr-big">' + (cd ? fmtClock(cdLeft(cd)) : '25:00') + '</div><button class="hl-link" type="button" id="tmr-pill">' + (cd ? 'Open timer' : 'Start the study timer') + '</button></div>' +
     '</section>' +
+    birdCardHTML() +
     '<button class="btn big inf hl-mix" type="button" id="mix"><span class="bl">' + infIcon() + 'Infinite mix</span><small>' + (mixRec.st ? 'best streak ' + mixRec.st : 'sooner exams first') + '</small></button>' +
     '<h2 class="hl-sec">Courses</h2><div class="courses">' + cards + '</div>' +
     '<h2 class="hl-sec" id="settings">Settings</h2>' +
@@ -996,6 +999,7 @@ function showGym() {
     '<div class="foot"><span>Progress saves in this browser. Use Export in Settings to move it to another device.</span></div>';
   animateRings(app);
   bindToggles();
+  birdCardBind(); birdDraw();
   app.querySelectorAll('[data-course]').forEach(function (b) { b.addEventListener('click', function () { Snd.tap(); showHome(CBY[b.getAttribute('data-course')]); }); });
   document.getElementById('mix').addEventListener('click', function () { Snd.tap(); showInfIntro(true); });
   document.getElementById('hl-set').addEventListener('click', function () { document.getElementById('settings').scrollIntoView({ behavior: 'smooth' }); });
@@ -2007,4 +2011,5 @@ function finishMock() {
 }
 
 candleBoot();
+birdBoot();
 showGym();

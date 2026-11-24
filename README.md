@@ -1,6 +1,6 @@
-# Midterm Gym
+# Finals Gym
 
-A study app I built for my first-term Mechatronics Engineering midterms at the University of Waterloo, now updated for finals. It's designed around one rule: **the AI helps me practise, but it doesn't do the thinking for me.**
+A study app I built for my first-term Mechatronics Engineering exams at the University of Waterloo. It started as Midterm Gym and became Finals Gym once midterms were over. It's designed around one rule: **the AI helps me practise, but it doesn't do the thinking for me.**
 
 **Try it: [alfietaba.github.io/Midterm-Gym](https://alfietaba.github.io/Midterm-Gym/)**. It runs in any browser, on a phone or a laptop, and saves your progress on your own device. Settings has Export and Import, so you can back up your progress or move it to another device.
 
@@ -15,6 +15,8 @@ So I built the opposite: a tool that makes me attempt every question first, tell
 ## The home screen
 
 The home screen is modelled on Apple Health's activity rings. Each course gets its own coloured ring, which closes when you earn that day's XP goal in it (100 XP by default, and you can change it in Settings). Next to each ring is the date of that course's final. Below the rings are a week of past days, your study streak, the next exam and the daily question goal. Only the look changed: the practice works the same way.
+
+A small duckling sits in the corner. Click it and it flutters and quacks. As your total XP grows, new colours, hats and extras unlock for it (a hard hat, safety goggles, a graduation cap and more). Nothing is spent, and it hides itself during mock exams and while you answer on a phone.
 
 | Summary | On a phone |
 | --- | --- |

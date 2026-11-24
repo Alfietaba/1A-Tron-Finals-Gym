@@ -33,7 +33,7 @@ def day(n): return (datetime.date.today() + datetime.timedelta(days=n)).isoforma
 XD = {day(-i): {'math115': 120 if i % 2 == 0 else 60, 'mte121': 100 if i < 3 else 40, 'mte100': 80, 'math116': 30 + 20 * i, 'che102': 110 if i < 4 else 20, '_g': 100} for i in range(1, 7)}
 XD[today] = {'math115': 135, 'mte121': 70, 'mte100': 100, 'math116': 45, 'che102': 20, '_g': 100}
 SEED = {
-    'midterm-gym-global-v1': {'streak': 6, 'last': today, 'today': {'d': today, 'n': 14, 'hit': False}, 'snd': False, 'hap': False, 'xd': XD},
+    'midterm-gym-global-v1': {'streak': 6, 'last': today, 'today': {'d': today, 'n': 14, 'hit': False}, 'snd': False, 'hap': False, 'xd': XD, 'bird': {'name': 'Pip', 'col': 'sun', 'hat': 'hard', 'acc': 'goggles'}},
     'math115-midterm-gym-v1': {'xp': 1180, 'q': m115},
 }
 INIT = 'try { ' + ' '.join(f'localStorage.setItem({json.dumps(k)}, {json.dumps(json.dumps(v))});' for k, v in SEED.items()) + ' } catch (e) {}'
@@ -50,7 +50,10 @@ async def first_mc(pg):
         if await pg.locator('.qcard .opt').count():
             return
         await pg.click('.bar .link'); await pg.wait_for_timeout(150)
+        ov = pg.locator('.overlay .btn')   # level-up or daily-goal popups
+        if await ov.count(): await ov.first.click(); await pg.wait_for_timeout(150)
         await pg.click('.bar .btn'); await pg.wait_for_timeout(300)
+        if await ov.count(): await ov.first.click(); await pg.wait_for_timeout(150)
 
 
 async def answer_right(pg):
