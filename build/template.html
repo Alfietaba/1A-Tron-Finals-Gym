@@ -833,15 +833,15 @@ h2 { font-weight: 700; letter-spacing: -.01em; }
 .bd .bd-jaw { transform-box: fill-box; transform-origin: 2% 20%; }
 .bd .bd-eye { transform-box: fill-box; transform-origin: 50% 50%; animation: bd-blink 5.2s infinite; }
 .bd .bd-prop { transform-box: fill-box; transform-origin: 50% 50%; }
-.bd .bd-all { animation: bd-bob 3.4s ease-in-out infinite; }
+.bd .bd-all { animation: bd-bob 3.4s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 100%; }
 @keyframes bd-blink { 0%, 93%, 100% { transform: scaleY(1); } 96% { transform: scaleY(.12); } }
 @keyframes bd-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(1.6px); } }
 @keyframes bd-flap { 0%, 100% { transform: rotate(0); } 30% { transform: rotate(-42deg); } 65% { transform: rotate(8deg); } }
-@keyframes bd-hop { 0% { transform: translateY(0); } 28% { transform: translateY(-15px); } 55% { transform: translateY(-4px); } 72% { transform: translateY(-8px); } 100% { transform: translateY(0); } }
+@keyframes bd-hop { 0% { transform: none; } 10% { transform: translateY(2px) scale(1.04, .94); } 36% { transform: translateY(-30px); } 60% { transform: translateY(-5px); } 70% { transform: translateY(-11px); } 86% { transform: translateY(1px) scale(1.03, .96); } 100% { transform: none; } }
 @keyframes bd-jaw { 0%, 100% { transform: rotate(0); } 20%, 55% { transform: rotate(24deg); } }
 @keyframes bd-spin { from { transform: scaleX(1); } 50% { transform: scaleX(-1); } to { transform: scaleX(1); } }
 .flap .bd .bd-wing { animation: bd-flap .19s ease-in-out 4; }
-.flap .bd .bd-all { animation: bd-hop .72s ease-out; }
+.flap .bd .bd-all { animation: bd-hop .85s ease-out; }
 .quack .bd .bd-jaw { animation: bd-jaw .36s ease-out; }
 .flap .bd .bd-prop { animation: bd-spin .14s linear 5; }
 .bird-dock { position: fixed; right: max(.6rem, env(safe-area-inset-right, 0px)); bottom: .6rem; z-index: 24; width: 4.6rem; transition: bottom .25s ease; }
@@ -960,6 +960,66 @@ h2 { font-weight: 700; letter-spacing: -.01em; }
 .lt-copy { flex: none; min-height: 44px; min-width: 4.5rem; border: 0; border-radius: .7rem; background: var(--surface); color: var(--brand); font: inherit; font-weight: 600; cursor: pointer; }
 .lt-copy:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
 .lt-note a { color: var(--brand); font-weight: 600; }
+
+/* duck: legs spread mid-air, shadow shrinks, and a 1-in-5 chance of landing on its butt */
+.bd .bd-fl, .bd .bd-fr { transform-box: fill-box; transform-origin: 50% 0%; }
+.bd .bd-sh { transform-box: fill-box; transform-origin: 50% 50%; }
+.bd .bd-tilt { transform-box: fill-box; transform-origin: 24% 93%; }
+@keyframes bd-legl { 0%, 14%, 82%, 100% { transform: none; } 30%, 66% { transform: translate(-4px, 3px) rotate(24deg); } }
+@keyframes bd-legr { 0%, 14%, 82%, 100% { transform: none; } 30%, 66% { transform: translate(4px, 3px) rotate(-24deg); } }
+@keyframes bd-shad { 0%, 100% { transform: none; opacity: 1; } 36% { transform: scale(.55); opacity: .45; } 70% { transform: scale(.8); opacity: .7; } }
+.flap .bd .bd-fl { animation: bd-legl .85s ease-out; }
+.flap .bd .bd-fr { animation: bd-legr .85s ease-out; }
+.flap .bd .bd-sh, .oops .bd .bd-sh { animation: bd-shad .85s ease-out; }
+@keyframes bd-ohop { 0% { transform: none; } 7% { transform: translateY(2px) scale(1.04, .94); } 22% { transform: translateY(-30px); } 36% { transform: translateY(3px) scale(1.08, .86); } 40% { transform: translateY(-4px) scale(.97, 1.03); } 44%, 76% { transform: none; } 82% { transform: translateY(-7px); } 90%, 100% { transform: none; } }
+@keyframes bd-otilt { 0%, 14% { transform: none; } 26% { transform: rotate(-12deg); } 36% { transform: rotate(-42deg); } 41% { transform: rotate(-33deg); } 46%, 74% { transform: rotate(-38deg); } 84% { transform: rotate(7deg); } 92% { transform: rotate(-3deg); } 100% { transform: none; } }
+@keyframes bd-olegl { 0%, 10%, 90%, 100% { transform: none; } 20%, 32% { transform: translate(-4px, 3px) rotate(24deg); } 40%, 74% { transform: translate(20px, 0) rotate(-62deg); } 80% { transform: translate(-1px, 1px) rotate(8deg); } }
+@keyframes bd-olegr { 0%, 10%, 90%, 100% { transform: none; } 20%, 32% { transform: translate(4px, 3px) rotate(-24deg); } 40%, 74% { transform: translate(26px, -3px) rotate(-78deg); } 80% { transform: translate(1px, 1px) rotate(-6deg); } }
+@keyframes bd-daze { 0%, 34%, 78%, 100% { transform: none; } 40%, 72% { transform: scaleY(.3); } }
+.oops .bd .bd-all { animation: bd-ohop 1.75s ease-out; }
+.oops .bd .bd-tilt { animation: bd-otilt 1.75s ease-in-out; }
+.oops .bd .bd-fl { animation: bd-olegl 1.75s ease-out; }
+.oops .bd .bd-fr { animation: bd-olegr 1.75s ease-out; }
+.oops .bd .bd-eye { animation: bd-daze 1.75s ease-out; }
+.oops .bd .bd-wing { animation: bd-flap .19s ease-in-out 3, bd-flap .19s ease-in-out 1.35s 2; }
+.oops .bd .bd-sh { animation: bd-shad 1.75s ease-out; }
+.oops .bd .bd-prop { animation: bd-spin .14s linear 5; }
+@media (prefers-reduced-motion: reduce) {
+  .oops .bd .bd-all, .oops .bd .bd-tilt, .oops .bd .bd-fl, .oops .bd .bd-fr, .oops .bd .bd-sh, .flap .bd .bd-fl, .flap .bd .bd-fr, .flap .bd .bd-sh { animation: none; }
+  .oops .bd .bd-wing { animation: bd-flap .3s ease-in-out 1; }
+}
+/* duck milestones */
+.bs-x.ach { white-space: normal; text-align: center; line-height: 1.25; align-items: flex-start; max-width: 7.5rem; }
+.bs-x.ach svg { margin-top: .1rem; flex: none; }
+.bs-x.won { color: var(--good); font-weight: 600; }
+.bs-cnt { font-weight: 600; color: var(--muted); font-size: .85rem; margin-left: .3rem; }
+.bs-ms { background: var(--surface-2); border-radius: .9rem; }
+.bs-m { display: grid; grid-template-columns: 1.6rem minmax(0, 1fr); gap: .6rem; align-items: start; padding: .65rem .8rem; }
+.bs-m + .bs-m { border-top: 1px solid var(--rule); }
+.bs-mi { width: 1.5rem; height: 1.5rem; border-radius: 50%; border: 2px solid var(--rule); display: grid; place-items: center; margin-top: .05rem; }
+.bs-m.ok .bs-mi { background: #34c759; border-color: transparent; color: #fff; }
+.bs-mi svg { width: .95rem; height: .95rem; }
+.bs-mt b { display: block; font-size: .92rem; }
+.bs-mt small { display: block; color: var(--muted); font-size: .8rem; line-height: 1.35; margin-top: .1rem; }
+.bird-toast { white-space: normal; width: max-content; max-width: min(26rem, calc(100vw - 1.6rem)); }
+.bird-toast b, .bird-toast small { white-space: normal; }
+
+/* the tumble hurts a little: impact lines, dust, dizzy stars, and a scuff that fades after it gets up */
+.bd .bd-fx, .bd .bd-dizzy, .bd .bd-scuff { opacity: 0; }
+.bd .bd-puff, .bd .bd-boom, .bd .bd-dizzy { transform-box: fill-box; transform-origin: 50% 50%; }
+.bd .bd-boom { transform-origin: 50% 100%; }
+@keyframes bd-fxon { 0%, 34% { opacity: 0; } 37% { opacity: 1; } 62% { opacity: .9; } 78%, 100% { opacity: 0; } }
+@keyframes bd-puff { 0%, 34% { transform: scale(.2); } 40% { transform: scale(1); } 75%, 100% { transform: translate(var(--dx), -5px) scale(1.5); } }
+@keyframes bd-boom { 0%, 35% { transform: scale(.3); opacity: 0; } 38% { transform: scale(1.1); opacity: 1; } 48% { transform: scale(1.25); opacity: 0; } 100% { opacity: 0; } }
+@keyframes bd-dzon { 0%, 40% { opacity: 0; } 46%, 74% { opacity: 1; } 80%, 100% { opacity: 0; } }
+@keyframes bd-dzspin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+@keyframes bd-scuff { 0%, 14% { opacity: 0; } 16%, 62% { opacity: 1; } 100% { opacity: 0; } }
+.oops .bd .bd-fx { animation: bd-fxon 1.75s ease-out; }
+.oops .bd .bd-puff { animation: bd-puff 1.75s ease-out; }
+.oops .bd .bd-boom { animation: bd-boom 1.75s ease-out; }
+.oops .bd .bd-dizzy { animation: bd-dzon 1.75s linear, bd-dzspin .6s linear infinite; }
+.scuffed .bd .bd-scuff { animation: bd-scuff 4.2s ease-out; }
+@media (prefers-reduced-motion: reduce) { .oops .bd .bd-dizzy, .oops .bd .bd-puff { animation: none; } }
 </style>
 
 <div class="app" id="app"></div>

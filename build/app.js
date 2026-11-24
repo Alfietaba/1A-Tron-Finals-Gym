@@ -573,7 +573,7 @@ function addXP(n) {
   }
   var after = lvlInfo(CUR.S.xp);
   if (after.L > before) levelUp(after);
-  birdUnlocks(t0, totalXP(), rang ? 3000 : 600);
+  birdAfter(t0, rang ? 3000 : 600);
 }
 function levelUp(li) {
   Snd.level(); buzz([30, 50, 30, 50, 90]); FX.burst(120, 0.5, 0.35);
@@ -1993,6 +1993,7 @@ function finishMock() {
     return '<div class="stat"><span class="lab">' + x.s.label + '</span><div class="big-n">' + (Math.round(x.got * 10) / 10) + '<span class="muted" style="font-size:.85rem;font-family:var(--font-ui)"> / ' + x.max + '</span></div><div class="mbar' + (p < 50 ? ' lo' : '') + '" aria-hidden="true"><i style="width:' + p + '%"></i></div></div>';
   }).join('') + '</div>';
   var pct = Math.round(100 * got / max), xp = Math.round(got / max * 50) + 30;
+  birdCfg().mock = 1;   /* for the duck's Visor milestone */
   addXP(xp); bumpToday(exam.ids.length); save();
   Snd.done(); buzz([25, 40, 25, 40, 60]); if (pct >= 70) FX.burst(110, 0.5, 0.3);
   var items = rows.map(function (r, i) {

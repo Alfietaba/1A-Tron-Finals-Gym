@@ -16,7 +16,7 @@ So I built the opposite: a tool that makes me attempt every question first, tell
 
 The home screen is modelled on Apple Health's activity rings. Each course gets its own coloured ring, which closes when you earn that day's XP goal in it (100 XP by default, and you can change it in Settings). Next to each ring is the date of that course's final. Below the rings are a week of past days, your study streak, the next exam and the daily question goal. Only the look changed: the practice works the same way.
 
-A small duckling sits in the corner. Click it and it flutters and quacks. As your total XP grows, new colours, hats and extras unlock for it (a hard hat, safety goggles, a graduation cap and more). Nothing is spent, and it hides itself during mock exams and while you answer on a phone.
+Moxie, a small duckling named after my first dog, sits in the corner. Click it and it jumps, flaps and quacks, and every so often it lands on its butt, sees stars and gets back up with a scuff. Colours, hats and extras unlock as your total XP grows and as you reach milestones: your first mastered question, a 7-day streak, a finished mock exam, and fully mastering half a course, a whole course or every course. Nothing is spent, and Moxie hides during mock exams and while you answer on a phone.
 
 | Summary | On a phone |
 | --- | --- |
