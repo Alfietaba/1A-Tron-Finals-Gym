@@ -10,7 +10,19 @@ var T = [
   { id: 'h7', name: 'Empirical and molecular formulas', sec: 'Combustion analysis' },
   { id: 'h8', name: 'Ideal gas law and pressure', sec: 'PV = nRT' },
   { id: 'h9', name: 'Gas mixtures and reacting gases', sec: 'Dalton\'s law' },
-  { id: 'h10', name: 'Kinetic theory and real gases', sec: 'Speeds, van der Waals' }
+  { id: 'h10', name: 'Kinetic theory and real gases', sec: 'Speeds, van der Waals' },
+  { id: 'h11', name: 'Reaction rates and collision theory', sec: 'Unit 3 · Ṙ and Eₐ' },
+  { id: 'h12', name: 'Rate laws and half-lives', sec: 'Unit 3 · orders, ak' },
+  { id: 'h13', name: 'Arrhenius equation', sec: 'Unit 3 · k and T' },
+  { id: 'h14', name: 'Vapour pressure and humidity', sec: 'Unit 4 · Clausius–Clapeyron' },
+  { id: 'h15', name: 'Phase diagrams', sec: 'Unit 4 · triple, critical' },
+  { id: 'h16', name: 'Henry\'s and Raoult\'s laws', sec: 'Unit 4 · solutions' },
+  { id: 'h17', name: 'Colligative properties', sec: 'Unit 4 · ΔT = iKm' },
+  { id: 'h18', name: 'Equilibrium constants', sec: 'Unit 5 · Kc, Kp, combining' },
+  { id: 'h19', name: 'Equilibrium calculations', sec: 'Unit 5 · Q and ICE tables' },
+  { id: 'h20', name: 'Le Chatelier and van \'t Hoff', sec: 'Unit 5 · shifts, K(T)' },
+  { id: 'h21', name: 'Redox and galvanic cells', sec: 'Unit 6 · E°cell, agents' },
+  { id: 'h22', name: 'Nernst, K and electrolysis', sec: 'Unit 6 · E vs Q, Faraday' }
 ];
 
 /* --- diagrams --- */
@@ -39,6 +51,41 @@ var MANO = '<svg class="dg" viewBox="0 0 260 214" role="img" aria-label="Open-en
   '<text class="dg-s" x="156" y="14" text-anchor="middle">open, P₀ = 760 mmHg</text>' +
   '<path class="dg-dim" d="M134 182 L106 200"/><text class="dg-s" x="102" y="205" text-anchor="end">mercury</text></svg>';
 
+/* Units 4: a one-component phase diagram. Triple point (120,120), critical point (240,40), dashed 1 atm line at y = 100.
+   W solid, X on the liquid-gas curve, Y gas, Z supercritical. The solid-liquid line leans right (solid denser). */
+var PD = '<svg class="dg" viewBox="0 0 300 200" role="img" aria-label="Phase diagram of a pure substance, pressure against temperature. The solid–gas curve rises from the lower left to the triple point. From there the solid–liquid line rises steeply and leans slightly right, and the liquid–gas curve rises to the critical point. A dashed line marks 1 atm, above the triple point. Point W is in the solid region, X is on the liquid–gas curve, Y is in the gas region at high temperature and low pressure, and Z is beyond the critical point.">' +
+  '<path class="dg-ax" d="M40 10 V170 H290"/>' +
+  '<path class="dg-l" d="M46 166 Q90 150 120 120"/><path class="dg-l" d="M120 120 L134 14"/><path class="dg-l" d="M120 120 Q190 95 240 40"/>' +
+  '<path class="dg-hid" d="M40 100 H290"/><text class="dg-s" x="276" y="95" text-anchor="end">1 atm</text>' +
+  '<circle cx="120" cy="120" r="3.5" fill="currentColor"/><circle cx="240" cy="40" r="3.5" fill="currentColor"/>' +
+  '<text class="dg-s" x="126" y="137">triple point</text><text class="dg-s" x="232" y="30" text-anchor="end">critical point</text>' +
+  '<text class="dg-t" x="58" y="40">Solid</text><text class="dg-t" x="146" y="72">Liquid</text><text class="dg-t" x="178" y="156">Gas</text>' +
+  '<circle cx="78" cy="80" r="3" fill="currentColor"/><text class="dg-t" x="66" y="76">W</text>' +
+  '<circle cx="185" cy="87.5" r="3" fill="currentColor"/><text class="dg-t" x="193" y="94">X</text>' +
+  '<circle cx="250" cy="150" r="3" fill="currentColor"/><text class="dg-t" x="256" y="146">Y</text>' +
+  '<circle cx="268" cy="22" r="3" fill="currentColor"/><text class="dg-t" x="274" y="27">Z</text>' +
+  '<text class="dg-s" x="165" y="190" text-anchor="middle">Temperature</text>' +
+  '<text class="dg-s" x="22" y="90" text-anchor="middle" transform="rotate(-90 22 90)">Pressure</text></svg>';
+
+/* Units 3 to 5 equations, typed from the lecture slides, shown above the midterm data sheet pages */
+var FX = [
+  ['Rate of reaction', 'For aA + bB → cC + dD: Ṙ = −#frac{1}{a}#frac{d[A]}{dt} = −#frac{1}{b}#frac{d[B]}{dt} = #frac{1}{c}#frac{d[C]}{dt} = #frac{1}{d}#frac{d[D]}{dt}. Ṙ is positive; d[X]/dt is negative for reactants.'],
+  ['Rate law', 'Ṙ = k[A]<sup>m</sup>[B]<sup>n</sup>. The orders m and n come from experiments (method of initial rates), not from the coefficients. Overall order = m + n.'],
+  ['Integrated rate laws (aA → products)', 'Zero order: [A] = [A]₀ − akt, t½ = [A]₀ / (2ak), k in M/s<br>First order: ln[A] = ln[A]₀ − akt, t½ = ln 2 / (ak), k in s⁻¹<br>Second order: 1/[A] = 1/[A]₀ + akt, t½ = 1 / (ak[A]₀), k in M⁻¹·s⁻¹<br>Straight-line plot: [A], ln[A] or 1/[A] against t.'],
+  ['Arrhenius', 'k = A e<sup>−Eₐ/RT</sup>, so ln k = −(Eₐ/R)(1/T) + ln A (slope −Eₐ/R).<br>ln#frac{k₂}{k₁} = −#frac{Eₐ}{R}(#frac{1}{T₂} − #frac{1}{T₁}), R = 8.314 J/(mol·K), T in K.'],
+  ['Clausius–Clapeyron', 'ln#frac{P₂}{P₁} = −#frac{ΔH<sub>vap</sub>}{R}(#frac{1}{T₂} − #frac{1}{T₁}). Boiling: P<sub>vap</sub>(T<sub>bp</sub>) = P. Normal boiling point: P<sub>vap</sub> = 1 atm.<br>ΔH<sub>sub</sub> = ΔH<sub>fus</sub> + ΔH<sub>vap</sub>.'],
+  ['Humidity', '%RH = P<sub>H₂O</sub> / P<sub>vap</sub>(T) × 100%. Dew point: P<sub>vap</sub>(T<sub>dp</sub>) = P<sub>H₂O</sub>. Mole fraction in air: y = P<sub>H₂O</sub> / P.'],
+  ['Henry and Raoult', 'Henry (dissolved gas): P<sub>A</sub> = H<sub>A</sub>x<sub>A</sub>, or C<sub>A</sub> = k<sub>A</sub>P<sub>A</sub>.<br>Raoult (solvent or ideal mixture): P<sub>A</sub> = x<sub>A</sub>P<sub>A</sub><sup>vap</sup>. Dalton: y<sub>A</sub> = P<sub>A</sub> / P.'],
+  ['Colligative properties', 'ΔP<sub>solvent</sub> = −x<sub>solute</sub>P<sub>solvent</sub><sup>vap</sup><br>ΔT<sub>bp</sub> = iK<sub>b</sub>m, ΔT<sub>fp</sub> = −iK<sub>f</sub>m, m = mol solute / kg solvent. Water: K<sub>b</sub> = 0.512, K<sub>f</sub> = 1.86 K·kg/mol.<br>i = particles per formula unit (1 for molecules, up to the number of ions).'],
+  ['Equilibrium constants', 'For aA + bB ⇌ cC + dD: K<sub>c</sub> = #frac{[C]<sup>c</sup>[D]<sup>d</sup>}{[A]<sup>a</sup>[B]<sup>b</sup>}, K<sub>p</sub> uses partial pressures in bar. Leave out pure solids and liquids.<br>K<sub>p</sub> = K<sub>c</sub>(RT)<sup>Δn</sup>, Δn = gas moles of products − reactants, R = 0.08314 L·bar/(mol·K).<br>Elementary step: K<sub>c</sub> = k<sub>f</sub> / k<sub>r</sub>. K &gt; 10¹⁰ goes to completion; K &lt; 10⁻¹⁰ barely goes.'],
+  ['Combining K', 'Reverse a reaction: 1/K. Multiply by n: K<sup>n</sup>. Add reactions: multiply their Ks.'],
+  ['Q and Le Chatelier', 'Q has the form of K with the current amounts. Q &lt; K: net forward. Q &gt; K: net reverse.<br>Smaller volume favours fewer gas moles. Inert gas at constant V, catalysts and solids: no shift. Heating favours the endothermic direction.'],
+  ['van \'t Hoff', 'ln#frac{K₂}{K₁} = −#frac{ΔH°}{R}(#frac{1}{T₂} − #frac{1}{T₁}). Endothermic: K rises with T. Exothermic: K falls.'],
+  ['Redox', 'Oxidation: loses electrons, oxidation state goes up, happens at the anode. Reduction: gains electrons, oxidation state goes down, happens at the cathode. The oxidizing agent is reduced; the reducing agent is oxidized.<br>Balancing in acid: split into half-reactions, balance atoms other than O and H, then O with H₂O, H with H⁺ and charge with e⁻. Match the electrons and add.'],
+  ['Cell potential', 'E°<sub>cell</sub> = E°<sub>cathode</sub> − E°<sub>anode</sub>, both as reduction potentials from the table. E°<sub>cell</sub> &gt; 0: spontaneous (galvanic). Multiplying a half-reaction does not change its E°.<br>Cell notation: anode | anode solution || cathode solution | cathode. Electrons flow through the wire from the anode to the cathode.'],
+  ['Nernst and K', 'E = E° − #frac{RT}{nF} ln Q, or E° − #frac{0.0592}{n} log Q at 25 °C. F = 96485 C/mol.<br>At equilibrium E = 0 and Q = K, so ln K = #frac{nFE°}{RT}. Concentration cell: E° = 0 and the more concentrated side is the cathode.'],
+  ['Electrolysis', 'Q = It (C = A·s), mol e⁻ = It/F, mass = #frac{ItM}{zF} where z is the electrons per ion.<br>Current efficiency η = actual ÷ theoretical × 100%. Reduction is still at the cathode, which is the negative electrode in electrolysis.']
+];
 var Q = [
 /* ---------- Atoms and the mole ---------- */
 mc('h1-1', 'h1', 'How many protons, neutrons and electrons are in one ion of <sup>56</sup>Fe<sup>3+</sup>?',
@@ -448,6 +495,391 @@ num('h10-23', 'h10', 'By how much does the pressure increase 10.0 m below the su
   'P = ρgh gives pascals.',
   '1000 × 9.81 × 10.0 = 98100 Pa = 98.1 kPa, almost one extra atmosphere.', null, null, { sf: 3, unit: 'kPa' }),
 
+/* ================= Unit 3 · Rates of reactions ================= */
+/* ---------- Reaction rates and collision theory ---------- */
+mc('h11-1', 'h11', 'Two reactant molecules collide with more energy than the activation energy, but no reaction happens. What is the most likely reason?',
+  ['They hit in the wrong orientation', 'The molecules were moving too fast to stick', 'The reaction gives off heat, so it reverses', 'There was no catalyst to start the reaction'], 0,
+  'Collision theory needs three things: a collision, enough energy (at least Eₐ), and the right orientation so the bonds that break and form can line up. The energy was enough here, so the orientation is what failed. A catalyst is never required, and ΔH says nothing about whether one collision works.', { k: 'c' }),
+mc('h11-2', 'h11', 'Which statement about a catalyst is true?',
+  ['It gives the reaction a new path with a lower activation energy', 'It is used up, so it appears as a reactant in the balanced equation', 'It makes the reaction more exothermic', 'It raises the energy of the reactant molecules'], 0,
+  'A catalyst takes part in the mechanism but comes out unchanged, so it is not in the overall equation. It lowers Eₐ by offering a different path, so more collisions have enough energy. It does not change ΔH (the reactants and products are the same) and it does not heat the molecules up.', { k: 'c' }),
+mc('h11-3', 'h11', 'Zinc granules react with hydrochloric acid: Zn(s) + 2 HCl(aq) → $ZnCl2$(aq) + $H2$(g). Which change slows the reaction down?',
+  ['Diluting the acid with water', 'Grinding the zinc into a powder', 'Warming the acid', 'Stirring the mixture', 'Using a more concentrated acid'], 0,
+  'Dilution lowers [HCl], so there are fewer collisions each second. Powdering the zinc (more surface), warming (more energetic collisions) and stirring (fresh acid at the metal surface) all speed it up.', { k: 'c' }),
+mc('h11-4', 'h11', 'For 2 $N2O5$(g) → 4 $NO2$(g) + $O2$(g), the rate of reaction is Ṙ = 3.0 × 10⁻⁴ M/s. What is d[$NO2$]/dt?',
+  ['1.2 × 10⁻³ M/s', '−1.2 × 10⁻³ M/s', '7.5 × 10⁻⁵ M/s', '3.0 × 10⁻⁴ M/s', '6.0 × 10⁻⁴ M/s'], 0,
+  'Ṙ = (1/4) d[$NO2$]/dt, so d[$NO2$]/dt = 4 × 3.0 × 10⁻⁴ = 1.2 × 10⁻³ M/s. It is positive because $NO2$ is being made. Dividing by 4 instead gives 7.5 × 10⁻⁵, the ratio upside down. 6.0 × 10⁻⁴ M/s is how fast $N2O5$ is used up (coefficient 2).', { k: 'n' }),
+num('h11-5', 'h11', 'For 4 $NH3$(g) + 5 $O2$(g) → 4 NO(g) + 6 $H2O$(g), oxygen is used up at 0.0250 M/s, so d[$O2$]/dt = −0.0250 M/s. What is d[$H2O$]/dt, in M/s? Give 3 significant figures.', '0.0300',
+  'Find the rate of reaction first: Ṙ = −(1/5) d[O₂]/dt. Then d[H₂O]/dt = 6Ṙ.',
+  'Ṙ = 0.0250 / 5 = 0.00500 M/s. Water is a product with coefficient 6, so d[$H2O$]/dt = +6 × 0.00500 = 0.0300 M/s. In one step: 0.0250 × 6/5.', null, null, { sf: 3, unit: 'M/s' }),
+num('h11-6', 'h11', 'For 2 A → B, [A] falls from 0.800 M at t = 0 to 0.560 M at t = 60.0 s. What is the average rate of reaction Ṙ over this time, in M/s? Give 3 significant figures.', '0.00200',
+  'Ṙ = −(1/a) Δ[A]/Δt with a = 2. Ṙ is always positive.',
+  'Δ[A] = 0.560 − 0.800 = −0.240 M. Ṙ = −(1/2)(−0.240 / 60.0) = 0.00200 M/s. A itself changes at −0.00400 M/s; dividing by the coefficient gives the one rate of reaction that every species agrees on.', null, null, { sf: 3, unit: 'M/s' }),
+mc('h11-7', 'h11', 'A reaction has Eₐ = 85 kJ/mol in the forward direction and ΔH = −40 kJ/mol. What is the activation energy of the reverse reaction?',
+  ['125 kJ/mol', '45 kJ/mol', '85 kJ/mol', '40 kJ/mol', '−125 kJ/mol'], 0,
+  'On the reaction profile the products sit 40 kJ/mol below the reactants, and the peak is 85 kJ/mol above the reactants. Climbing from the products to the same peak takes 85 + 40 = 125 kJ/mol. In general Eₐ(reverse) = Eₐ(forward) − ΔH.', { k: 'n' }),
+mc('h11-8', 'h11', 'According to collision theory, why does a small temperature rise speed up most reactions so much?',
+  ['More collisions now have at least Eₐ', 'The activation energy drops as the molecules heat up', 'The molecules line up in better orientations', 'The reactant concentrations rise with temperature'], 0,
+  'Warmer molecules collide a little more often, but the big effect is energy: the high-energy tail of the speed distribution grows quickly, so many more collisions clear Eₐ. Eₐ itself is fixed for a given path (only a catalyst changes it), and heating does not improve orientation.', { k: 'c' }),
+
+/* ---------- Rate laws and half-lives ---------- */
+mc('h12-1', 'h12', 'The rate law is Ṙ = k[A]²[B]. If [A] is tripled and [B] is halved, the rate becomes…',
+  ['4.5 times as fast', '1.5 times as fast', '9 times as fast', '3 times as fast', '18 times as fast'], 0,
+  'Second order in A: tripling A multiplies the rate by 3² = 9. First order in B: halving B multiplies it by ½. 9 × ½ = 4.5.', { k: 'c' }),
+mc('h12-2', 'h12', 'When [A] is made 4 times larger, with everything else the same, the initial rate doubles. What is the order with respect to A?',
+  ['0.5', '1', '2', '4', '0.25'], 0,
+  'Rate ∝ [A]<sup>m</sup>, so 4<sup>m</sup> = 2 and m = ½. Orders come from experiments; they do not have to be whole numbers or match the coefficients.', { k: 'c' }),
+multi('h12-3', 'h12', 'Initial rates were measured for 2 A + B → C:<br>Exp 1: [A]₀ = 0.10 M, [B]₀ = 0.10 M, Ṙ = 2.0 × 10⁻⁴ M/s<br>Exp 2: [A]₀ = 0.20 M, [B]₀ = 0.10 M, Ṙ = 8.0 × 10⁻⁴ M/s<br>Exp 3: [A]₀ = 0.10 M, [B]₀ = 0.30 M, Ṙ = 6.0 × 10⁻⁴ M/s', [
+  { ask: 'What is the order with respect to A?', ans: '2', hint: 'Compare two experiments where only [A] changes.', why: 'Exp 1 → 2: [A] doubles and the rate goes up 4 times, which is 2², so the order in A is 2. That it matches the coefficient is a coincidence; orders always come from the data.' },
+  { ask: 'What is the order with respect to B?', ans: '1', hint: 'Compare Exp 1 and Exp 3.', why: '[B] triples and the rate triples, so the order in B is 1.' },
+  { ask: 'What is the value of k, in M⁻²·s⁻¹? Give 2 significant figures.', ans: '0.20', sf: 2, unit: 'M⁻²·s⁻¹', hint: 'Put any one experiment into Ṙ = k[A]²[B].', why: 'k = 2.0 × 10⁻⁴ / (0.10² × 0.10) = 0.20 M⁻²·s⁻¹. The units make Ṙ come out in M/s: third order overall needs M⁻²·s⁻¹.' },
+  { ask: 'What is the initial rate when [A]₀ = 0.050 M and [B]₀ = 0.40 M, in M/s? Give 2 significant figures, like 1.0E-4.', ans: '2.0E-4', sf: 2, unit: 'M/s', hint: 'Use the full rate law with your k.', why: 'Ṙ = 0.20 × 0.050² × 0.40 = 2.0 × 10⁻⁴ M/s. Halving A cuts the rate by 4, and making B 4 times bigger wins it back.' }
+], 'C'),
+mc('h12-4', 'h12', 'What are the units of k for a reaction that is second order overall?',
+  ['M⁻¹·s⁻¹', 'M·s⁻¹', 's⁻¹', 'M⁻²·s⁻¹', 'M²·s⁻¹'], 0,
+  'Ṙ is in M/s, and k[A]² is k × M², so k must be (M/s) ÷ M² = M⁻¹·s⁻¹. Zero order gives M/s, first order s⁻¹, third order M⁻²·s⁻¹.', { k: 'c' }),
+mc('h12-5', 'h12', 'For A → products, plots of [A], ln[A] and 1/[A] against time were made. Only 1/[A] against t is a straight line, and its slope is 0.042 M⁻¹·s⁻¹. What are the order and k?',
+  ['Second order, k = 0.042 M⁻¹·s⁻¹', 'First order, k = 0.042 s⁻¹', 'Second order, k = −0.042 M⁻¹·s⁻¹', 'Zero order, k = 0.042 M/s'], 0,
+  'A straight 1/[A] plot means second order: 1/[A] = akt + 1/[A]₀, so the slope is ak. Here a = 1, so k = 0.042 M⁻¹·s⁻¹, and the slope is positive. A straight ln[A] plot (first order) or [A] plot (zero order) would slope down, with slope −ak.', { k: 'c' }),
+num('h12-6', 'h12', 'A → products is first order with k = 2.50 × 10⁻³ s⁻¹. How long does it take for [A] to fall to 15.0% of its starting value, in seconds? Give 3 significant figures.', '759',
+  'First order: ln([A]₀/[A]) = akt with a = 1.',
+  'ln(1 / 0.150) = 1.897. t = 1.897 / 2.50 × 10⁻³ = 759 s. You do not need [A]₀: for first order, only the fraction left matters.', null, null, { sf: 3, unit: 's' }),
+num('h12-7', 'h12', 'For 2 A → products, the rate of reaction is Ṙ = −½ d[A]/dt = k[A]², with k = 0.150 M⁻¹·s⁻¹. If [A]₀ = 0.400 M, what is [A] after 20.0 s, in M? Give 3 significant figures.', '0.118',
+  'In this course the integrated law carries the coefficient: 1/[A] = 1/[A]₀ + akt, with a = 2.',
+  '1/[A] = 1/0.400 + 2 × 0.150 × 20.0 = 2.50 + 6.00 = 8.50 M⁻¹, so [A] = 0.118 M. The a is there because d[A]/dt = −2Ṙ: A disappears twice as fast as the rate of reaction. Leaving a out gives 0.182 M, a common mistake.', null, null, { sf: 3, unit: 'M' }),
+num('h12-8', 'h12', 'A → products is zero order with k = 1.20 × 10⁻³ M/s and [A]₀ = 0.0600 M. What is the half-life, in seconds? Give 3 significant figures.', '25.0',
+  'Zero order: t½ = [A]₀ / (2ak).',
+  't½ = 0.0600 / (2 × 1 × 1.20 × 10⁻³) = 25.0 s. In zero order, [A] drops by the same amount every second (ak = 0.00120 M/s), so losing half of 0.0600 M takes 0.0300 / 0.00120 = 25.0 s.', null, null, { sf: 3, unit: 's' }),
+mc('h12-9', 'h12', 'A reaction\'s half-life doubles when the starting concentration of A is halved. What is the order with respect to A?',
+  ['Second', 'First', 'Zero', 'Third'], 0,
+  'Second order: t½ = 1/(ak[A]₀), so halving [A]₀ doubles t½. First-order t½ = ln 2/(ak) does not depend on [A]₀ at all, and zero-order t½ = [A]₀/(2ak) would halve.', { k: 'c' }),
+multi('h12-10', 'h12', 'Sulfuryl chloride decomposes in a rigid vessel at constant temperature: $SO2Cl2$(g) → $SO2$(g) + $Cl2$(g). The reaction is first order with k = 2.20 × 10⁻⁵ s⁻¹. The vessel starts with pure $SO2Cl2$ at 1.20 atm.', [
+  { ask: 'What is the partial pressure of $SO2Cl2$ after 5.00 h, in atm? Give 3 significant figures.', ans: '0.808', sf: 3, unit: 'atm', hint: 'At fixed V and T, partial pressure is proportional to concentration, so you can put pressures into the first-order law. Convert hours to seconds.', why: 't = 5.00 × 3600 = 18 000 s. P = 1.20 e<sup>−(2.20 × 10⁻⁵)(18 000)</sup> = 1.20 e<sup>−0.396</sup> = 0.808 atm.' },
+  { ask: 'What is the total pressure at that time, in atm? Give 3 significant figures.', ans: '1.59', sf: 3, unit: 'atm', hint: 'Each molecule that reacts makes two gas molecules, a net gain of one.', why: '1.20 − 0.808 = 0.392 atm reacted, making 0.392 atm of $SO2$ and 0.392 atm of $Cl2$. Total = 0.808 + 2 × 0.392 = 1.59 atm, which is also 2 × 1.20 − 0.808.' },
+  { ask: 'How long, in hours, until the total pressure reaches 1.80 atm? Give 3 significant figures.', ans: '8.75', sf: 3, unit: 'h', hint: 'P(total) = 2P₀ − P(SO₂Cl₂). Find the SO₂Cl₂ pressure first.', why: 'P(SO₂Cl₂) = 2.40 − 1.80 = 0.60 atm, exactly half of 1.20 atm. That is one half-life: t½ = ln 2 / k = 31 500 s = 8.75 h.' }
+], 'C'),
+num('h12-11', 'h12', 'A + B → C has the rate law Ṙ = k[A][B]. Both start at 0.0250 M, and 60.0% of A has reacted after 85.0 s. What is k, in M⁻¹·s⁻¹? Give 3 significant figures.', '0.706',
+  'A and B start equal and react 1 : 1, so [A] = [B] the whole time and Ṙ = k[A]². Use the second-order integrated law.',
+  '[A] = 0.400 × 0.0250 = 0.0100 M. 1/[A] = 1/[A]₀ + kt, so k = (1/0.0100 − 1/0.0250) / 85.0 = (100. − 40.0) / 85.0 = 0.706 M⁻¹·s⁻¹.', null, null, { sf: 3, unit: 'M⁻¹·s⁻¹' }),
+
+/* ---------- Arrhenius equation ---------- */
+num('h13-1', 'h13', 'A rate constant triples when the temperature rises from 300. K to 320. K. What is the activation energy, in kJ/mol? Give 3 significant figures.', '43.8',
+  'ln(k₂/k₁) = −(Eₐ/R)(1/T₂ − 1/T₁) with R = 8.314 J/(mol·K).',
+  'ln 3 = 1.0986. 1/320. − 1/300. = −2.083 × 10⁻⁴ K⁻¹. Eₐ = 1.0986 × 8.314 / 2.083 × 10⁻⁴ = 43 800 J/mol = 43.8 kJ/mol. Keep R in J and convert to kJ at the end.', null, null, { sf: 3, unit: 'kJ/mol' }),
+num('h13-2', 'h13', 'A reaction has Eₐ = 75.0 kJ/mol and k = 2.40 × 10⁻⁴ s⁻¹ at 25.0 °C. What is k at 50.0 °C, in s⁻¹? Give 3 significant figures, like 1.23E-3.', '2.49E-3',
+  'Two-point Arrhenius with T in kelvin: ln(k₂/k₁) = −(Eₐ/R)(1/T₂ − 1/T₁).',
+  'T₁ = 298.15 K and T₂ = 323.15 K. ln(k₂/k₁) = −(75 000 / 8.314)(1/323.15 − 1/298.15) = 2.341, so k₂/k₁ = 10.4 and k₂ = 2.49 × 10⁻³ s⁻¹. Using °C instead of K gives a wildly wrong answer.', null, null, { sf: 3, unit: 's⁻¹' }),
+mc('h13-3', 'h13', 'A plot of ln k against 1/T is a straight line with slope −6200 K. What is Eₐ?',
+  ['51.5 kJ/mol', '0.746 kJ/mol', '6.20 kJ/mol', '−51.5 kJ/mol', '746 kJ/mol'], 0,
+  'ln k = −(Eₐ/R)(1/T) + ln A, so the slope is −Eₐ/R. Eₐ = 6200 × 8.314 = 51 500 J/mol = 51.5 kJ/mol. Eₐ is positive; the minus sign belongs to the slope.', { k: 'n' }),
+mc('h13-4', 'h13', 'Reactions X and Y have the same rate constant at 300 K. X has Eₐ = 40 kJ/mol and Y has Eₐ = 90 kJ/mol. At 350 K…',
+  ['Y has the larger rate constant', 'X has the larger rate constant', 'They still have equal rate constants', 'It depends on the concentrations'], 0,
+  'ln(k₂/k₁) = (Eₐ/R)(1/T₁ − 1/T₂), so the bigger Eₐ is, the faster k climbs with temperature. Between 300 and 350 K, Y speeds up about 170 times and X only about 10 times. Rate constants do not depend on concentration.', { k: 'c' }),
+num('h13-5', 'h13', 'A reaction has Eₐ = 60.0 kJ/mol. At what temperature, in °C, is its rate constant 10.0 times its value at 25.0 °C? Give 3 significant figures.', '56.3',
+  'Solve ln(k₂/k₁) = −(Eₐ/R)(1/T₂ − 1/T₁) for 1/T₂.',
+  '1/T₂ = 1/298.15 − (8.314 × ln 10.0) / 60 000 = 0.0033540 − 0.0003191 = 0.0030349 K⁻¹. T₂ = 329.5 K = 56.3 °C. Keep plenty of digits in 1/T: you are subtracting two close numbers.', null, null, { sf: 3, unit: '°C' }),
+multi('h13-6', 'h13', 'A first-order reaction has k = 1.35 × 10⁻³ s⁻¹ at 35.0 °C and k = 8.10 × 10⁻³ s⁻¹ at 55.0 °C.', [
+  { ask: 'What is Eₐ, in kJ/mol? Give 3 significant figures.', ans: '75.3', sf: 3, unit: 'kJ/mol', hint: 'Two-point Arrhenius with T in kelvin.', why: 'ln(8.10 / 1.35) = ln 6.00 = 1.792. 1/328.15 − 1/308.15 = −1.978 × 10⁻⁴ K⁻¹. Eₐ = 1.792 × 8.314 / 1.978 × 10⁻⁴ = 75 300 J/mol = 75.3 kJ/mol.' },
+  { ask: 'What is the half-life at 45.0 °C, in seconds? Give 3 significant figures.', ans: '204', sf: 3, unit: 's', hint: 'Find k at 318.15 K with your Eₐ, then t½ = ln 2 / k (a = 1).', why: 'ln(k / 1.35 × 10⁻³) = −(75 300 / 8.314)(1/318.15 − 1/308.15) = 0.924, so k = 3.40 × 10⁻³ s⁻¹. t½ = 0.6931 / 3.40 × 10⁻³ = 204 s.' }
+], 'C'),
+mc('h13-7', 'h13', 'In k = A e<sup>−Eₐ/RT</sup>, what does k approach as the temperature becomes very large?',
+  ['A', 'Zero', 'Eₐ/R', 'Infinity', '1/A'], 0,
+  'As T grows, Eₐ/RT shrinks toward 0 and e⁰ = 1, so k → A, the pre-exponential factor. A is the rate constant you would get if every collision had enough energy; it still includes how often molecules collide and the orientation factor.', { k: 'c' }),
+
+/* ================= Unit 4 · Phase equilibrium ================= */
+/* ---------- Vapour pressure and humidity ---------- */
+mc('h14-1', 'h14', 'Which liquid has the lowest vapour pressure at 25 °C?',
+  ['Glycerol, $C3H5(OH)3$', 'Diethyl ether, $C4H10O$', 'Pentane, $C5H12$', 'Ethanol, $C2H5OH$', 'Acetone, $C3H6O$'], 0,
+  'Strong intermolecular forces hold molecules in the liquid, so fewer escape and the vapour pressure is low. Glycerol has three O–H groups per molecule and hydrogen bonds extensively. Ethanol has only one O–H, and ether, acetone and pentane cannot hydrogen bond to each other at all.', { k: 'c' }),
+mc('h14-2', 'h14', 'A liquid boils when…',
+  ['its vapour pressure equals the pressure above it', 'it reaches 100 °C', 'its vapour pressure reaches 1 atm, whatever the outside pressure', 'all of its intermolecular forces are broken'], 0,
+  'Boiling means bubbles of vapour can form inside the liquid, which needs the vapour pressure to match the pressure pushing on the liquid. At 1 atm that temperature is the normal boiling point. On a mountain the pressure is lower, so water boils below 100 °C.', { k: 'c' }),
+mc('h14-3', 'h14', 'A closed flask holds liquid water and water vapour at equilibrium at 30 °C. More liquid water at 30 °C is added, and there is still vapour space above it. The pressure of the water vapour…',
+  ['stays the same', 'increases, since more liquid can evaporate', 'decreases, since the vapour space is smaller', 'doubles'], 0,
+  'Vapour pressure depends only on the liquid and the temperature. Adding liquid changes neither, so once evaporation and condensation balance again the vapour pressure is back to the same value.', { k: 'c' }),
+num('h14-4', 'h14', 'Benzene has a normal boiling point of 80.1 °C and ΔH<sub>vap</sub> = 30.8 kJ/mol. Estimate its vapour pressure at 25.0 °C, in mmHg. Give 3 significant figures.', '109',
+  'Use the normal boiling point as one point: P = 760 mmHg at 353.25 K. Then Clausius–Clapeyron.',
+  'ln(P₂/760) = −(30 800 / 8.314)(1/298.15 − 1/353.25) = −1.938, so P₂ = 760 e<sup>−1.938</sup> = 109 mmHg. The normal boiling point always gives you a free data point: P<sub>vap</sub> = 1 atm = 760 mmHg.', null, null, { sf: 3, unit: 'mmHg' }),
+num('h14-5', 'h14', 'A liquid has a vapour pressure of 100. mmHg at 34.9 °C and 400. mmHg at 63.5 °C. What is its ΔH<sub>vap</sub>, in kJ/mol? Give 3 significant figures.', '41.8',
+  'Clausius–Clapeyron: ln(P₂/P₁) = −(ΔH<sub>vap</sub>/R)(1/T₂ − 1/T₁).',
+  'ln 4.00 = 1.386. 1/336.65 − 1/308.05 = −2.758 × 10⁻⁴ K⁻¹. ΔH<sub>vap</sub> = 1.386 × 8.314 / 2.758 × 10⁻⁴ = 41 800 J/mol = 41.8 kJ/mol.', null, null, { sf: 3, unit: 'kJ/mol' }),
+num('h14-6', 'h14', 'At a mountain camp the air pressure is 0.650 atm. At what temperature does water boil there, in °C? For water, ΔH<sub>vap</sub> = 40.7 kJ/mol. Give 3 significant figures.', '88.1',
+  'Water boils where its vapour pressure equals 0.650 atm. Use the normal boiling point (1 atm, 373.15 K) as the other point.',
+  '1/T₂ = 1/373.15 − (8.314 × ln 0.650) / 40 700 = 0.0026799 + 0.0000880 = 0.0027679 K⁻¹. T₂ = 361.3 K = 88.1 °C. Lower outside pressure means a lower boiling point, which is why pasta takes longer to cook up high.', null, null, { sf: 3, unit: '°C' }),
+mc('h14-7', 'h14', 'For water, ΔH<sub>fus</sub> = 6.01 kJ/mol and ΔH<sub>vap</sub> = 45.05 kJ/mol near 0 °C. What is ΔH<sub>sub</sub>?',
+  ['51.06 kJ/mol', '39.04 kJ/mol', '45.05 kJ/mol', '−51.06 kJ/mol', '270.8 kJ/mol'], 0,
+  'Subliming (solid → gas) ends in the same place as melting and then vaporizing, so ΔH<sub>sub</sub> = ΔH<sub>fus</sub> + ΔH<sub>vap</sub> = 6.01 + 45.05 = 51.06 kJ/mol. It is positive because every step absorbs heat.', { k: 'c' }),
+multi('h14-8', 'h14', '0.250 g of water is sealed in an evacuated 2.00 L flask and held at 40.0 °C. The vapour pressure of water at 40.0 °C is 55.3 mmHg.', [
+  { ask: 'What is the largest mass of water that can be vapour in the flask, in g? Give 3 significant figures.', ans: '0.102', sf: 3, unit: 'g', hint: 'The water vapour pressure can never go above the vapour pressure. Use PV = nRT with P = 55.3 mmHg.', why: 'n = (55.3/760 atm)(2.00 L) / (0.082057 × 313.15) = 5.66 × 10⁻³ mol. × 18.015 g/mol = 0.102 g. Since 0.250 g is more than 0.102 g, the rest must stay liquid: liquid and vapour are in equilibrium.' },
+  { ask: 'What mass of liquid water is in the flask, in g? Give 3 significant figures.', ans: '0.148', sf: 3, unit: 'g', hint: 'Whatever cannot be vapour stays liquid.', why: '0.250 − 0.102 = 0.148 g of liquid. If the flask held less than 0.102 g of water, it would all be vapour, at a pressure below 55.3 mmHg.' }
+], 'C'),
+multi('h14-9', 'h14', 'The weather report says: 30.0 °C, barometric pressure 1.00 atm, relative humidity 60.0%. The vapour pressure of water is 31.8 mmHg at 30.0 °C, and ΔH<sub>vap</sub> = 44.0 kJ/mol.', [
+  { ask: 'What is the mole fraction of water vapour in the air? Give 3 significant figures.', ans: '0.0251', sf: 3, hint: 'RH = P(H₂O) / P<sub>vap</sub>(T). Then y = P(H₂O) / P.', why: 'P(H₂O) = 0.600 × 31.8 = 19.08 mmHg. y = 19.08 / 760 = 0.0251.' },
+  { ask: 'What is the dew point, in °C? Give 3 significant figures.', ans: '21.4', sf: 3, unit: '°C', hint: 'The dew point is where P<sub>vap</sub>(T) falls to the actual water pressure, 19.08 mmHg. Use Clausius–Clapeyron from 30.0 °C.', why: '1/T = 1/303.15 − (8.314 / 44 000) ln(19.08 / 31.8) = 0.0032987 + 0.0000965 = 0.0033952 K⁻¹. T = 294.5 K = 21.4 °C. Cool the air below that and dew forms.' }
+], 'C'),
+mc('h14-10', 'h14', 'Humid air is cooled at constant pressure, and no water condenses. What happens to its relative humidity?',
+  ['It increases', 'It decreases', 'It stays the same', 'It drops to zero'], 0,
+  'The amount of water vapour, and so P(H₂O), does not change. But P<sub>vap</sub> falls as T falls, and RH = P(H₂O) / P<sub>vap</sub>(T), so RH rises. At the dew point it reaches 100%.', { k: 'c' }),
+
+/* ---------- Phase diagrams ---------- */
+mc('h15-1', 'h15', 'On this phase diagram, which phases are in equilibrium at point X?' + PD,
+  ['Liquid and gas', 'Solid and liquid', 'Solid and gas', 'Solid, liquid and gas', 'Gas only'], 0,
+  'X sits on the curve between the liquid and gas regions, the vapour-pressure curve. Along it, liquid and vapour coexist. All three phases coexist only at the triple point.', { k: 'c' }),
+mc('h15-2', 'h15', 'On this phase diagram, the substance at point W is heated at constant pressure until it is well past the liquid–gas curve. What happens?' + PD,
+  ['It melts, then boils', 'It sublimes straight to a gas', 'It boils, then melts', 'It stays solid the whole time'], 0,
+  'A horizontal line from W crosses the solid–liquid line first (melting) and then the liquid–gas curve (boiling). W is above the triple-point pressure; only below that pressure would heating make the solid sublime.', { k: 'c' }),
+mc('h15-3', 'h15', 'On this phase diagram, which point is a supercritical fluid?' + PD,
+  ['Z', 'X', 'Y', 'W'], 0,
+  'Z is beyond the critical point in both temperature and pressure. There, liquid and gas are no longer separate phases: no boundary divides them and ΔH<sub>vap</sub> is zero. Y is hot but at low pressure, so it is an ordinary gas.', { k: 'c' }),
+mc('h15-4', 'h15', 'On this phase diagram, the solid–liquid line leans to the right as the pressure increases. What does that tell you?' + PD,
+  ['The solid is denser than the liquid', 'The liquid is denser than the solid', 'The substance has no normal boiling point', 'The substance cannot sublime'], 0,
+  'Squeezing favours the denser phase. If raising the pressure at a fixed temperature turns liquid into solid (the line leans right), the solid must be denser, so it sinks in its own liquid. Water is the odd one out: its line leans left because ice is less dense than liquid water.', { k: 'c' }),
+mc('h15-5', 'h15', 'The triple point of $CO2$ is at 5.11 atm and −56.6 °C. A block of dry ice is warmed in a room at 1 atm. What happens?',
+  ['It sublimes directly to gas', 'It melts and then boils', 'It melts and stays liquid', 'It boils at −56.6 °C'], 0,
+  '1 atm is below the triple-point pressure, and liquid $CO2$ cannot exist below the triple-point pressure. So the solid goes straight to gas. That is why dry ice is "dry".', { k: 'c' }),
+mc('h15-6', 'h15', 'True or false: a substance whose triple-point pressure is above 1 atm has no normal boiling point.',
+  ['True', 'False'], 0,
+  'The normal boiling point is where liquid and vapour coexist at 1 atm. If the triple point is above 1 atm, there is no liquid at 1 atm at any temperature, so there is no normal boiling point, only a normal sublimation point. $CO2$ is the example.', { k: 'c' }),
+mc('h15-7', 'h15', 'True or false: a pure substance can have more than one triple point.',
+  ['True', 'False'], 0,
+  'A substance with more than one solid form (polymorphism) has extra triple points where two solids and one other phase coexist. Carbon has a graphite–diamond–liquid triple point, and water has several among its forms of ice. Each set of three phases still meets at only one point.', { k: 'c' }),
+mc('h15-8', 'h15', 'True or false: at the critical point, ΔH<sub>vap</sub> becomes zero.',
+  ['True', 'False'], 0,
+  'At the critical point the liquid and vapour have become identical, with the same density, so turning one into the other takes no energy. Above it there is no phase boundary at all.', { k: 'c' }),
+mc('h15-9', 'h15', 'Why are supercritical fluids such as $CO2$ useful solvents, for example to decaffeinate coffee?',
+  ['They dissolve like a liquid but diffuse like a gas', 'They react with caffeine and destroy it chemically', 'They are liquids at room temperature and 1 atm', 'They have a lower density than any gas'], 0,
+  'A supercritical fluid is dense enough to dissolve things better than a gas, but it flows into solids better than a liquid. Releasing the pressure turns it back into gas, so no solvent is left behind.', { k: 'c' }),
+
+/* ---------- Henry's and Raoult's laws ---------- */
+multi('h16-1', 'h16', 'At 20 °C, Henry\'s constant for $O2$ in water is H = 4.01 × 10⁴ atm, where P<sub>A</sub> = H<sub>A</sub>x<sub>A</sub>. Water is in contact with air at 1.00 atm, which is 20.95 mol-% $O2$.', [
+  { ask: 'What is the mole fraction of dissolved $O2$? Give 3 significant figures, like 1.23E-6.', ans: '5.22E-6', sf: 3, hint: 'Use the partial pressure of $O2$, not the total pressure.', why: 'P(O₂) = 0.2095 × 1.00 = 0.2095 atm. x = 0.2095 / 4.01 × 10⁴ = 5.22 × 10⁻⁶.' },
+  { ask: 'How many milligrams of $O2$ dissolve in 1.00 kg of water? Give 3 significant figures.', ans: '9.28', sf: 3, unit: 'mg', hint: '1.00 kg of water is 55.5 mol. The solution is so dilute that n(O₂) is about x × n(water).', why: 'n(O₂) = 5.22 × 10⁻⁶ × 55.51 mol = 2.90 × 10⁻⁴ mol. × 32.00 g/mol = 9.28 × 10⁻³ g = 9.28 mg. That is about how much oxygen cool, clean water holds for fish.' }
+], 'C'),
+multi('h16-2', 'h16', 'At 25 °C, the solubility of $CO2$ in a soft drink is 0.034 mol/L when the $CO2$ pressure above it is 1.0 atm. The drink is sealed under 4.0 atm of $CO2$.', [
+  { ask: 'What is the $CO2$ concentration in the sealed drink, in mol/L? Give 2 significant figures.', ans: '0.14', sf: 2, unit: 'mol/L', hint: 'Henry\'s law in the form C = kP: concentration is proportional to partial pressure.', why: 'k = 0.034 mol/(L·atm). C = 0.034 × 4.0 = 0.136, which is 0.14 mol/L.' },
+  { ask: 'A 355 mL can goes completely flat in open air, where the CO₂ pressure is close to 0. What volume of $CO2$ does it release, measured at 25 °C and 1.00 atm, in L? Give 2 significant figures.', ans: '1.2', sf: 2, unit: 'L', hint: 'Moles released = (change in concentration) × volume of drink. Then V = nRT/P.', why: 'n = 0.136 × 0.355 = 0.0483 mol. V = 0.0483 × 0.082057 × 298.15 / 1.00 = 1.2 L, more than three times the volume of the can.' }
+], 'C'),
+mc('h16-3', 'h16', 'In P<sub>A</sub> = H<sub>A</sub>x<sub>A</sub>, Henry\'s constant for $O2$ in water goes up as the water warms. What does that mean?',
+  ['Less $O2$ dissolves in warmer water', 'More $O2$ dissolves in warmer water', 'Solubility does not depend on temperature', 'The partial pressure of $O2$ in the air rises'], 0,
+  'Rearrange: x<sub>A</sub> = P<sub>A</sub> / H<sub>A</sub>. At the same partial pressure, a bigger H means a smaller mole fraction dissolved. Most gases are less soluble in warm water, which is why fish struggle in warm ponds.', { k: 'c' }),
+multi('h16-4', 'h16', 'Hexane and heptane form an ideal solution. At 25 °C the vapour pressures of the pure liquids are 151 mmHg (hexane) and 45.7 mmHg (heptane). The liquid is 30.0 mol-% hexane.', [
+  { ask: 'What is the total vapour pressure above the solution, in mmHg? Give 3 significant figures.', ans: '77.3', sf: 3, unit: 'mmHg', hint: 'Raoult\'s law for each component, P<sub>A</sub> = x<sub>A</sub>P<sub>A</sub><sup>vap</sup>, then add them (Dalton).', why: 'Hexane: 0.300 × 151 = 45.3 mmHg. Heptane: 0.700 × 45.7 = 32.0 mmHg. Total 77.3 mmHg.' },
+  { ask: 'What is the mole fraction of hexane in the vapour? Give 3 significant figures.', ans: '0.586', sf: 3, hint: 'y<sub>A</sub> = P<sub>A</sub> / P (Dalton).', why: 'y = 45.3 / 77.3 = 0.586. The vapour is much richer in hexane (0.586) than the liquid (0.300), because hexane is the more volatile liquid.' }
+], 'C'),
+mc('h16-5', 'h16', 'An ideal solution is 30 mol-% A and 70 mol-% B. Pure A has a higher vapour pressure than pure B. Which is true of the vapour in equilibrium with it?',
+  ['y<sub>A</sub> &gt; 0.30', 'y<sub>A</sub> = 0.30', 'y<sub>A</sub> &lt; 0.30', 'y<sub>A</sub> = 0.50'], 0,
+  'y<sub>A</sub> = x<sub>A</sub>P<sub>A</sub><sup>vap</sup> / P, and the total P = x<sub>A</sub>P<sub>A</sub><sup>vap</sup> + x<sub>B</sub>P<sub>B</sub><sup>vap</sup> is less than P<sub>A</sub><sup>vap</sup>, so y<sub>A</sub> &gt; x<sub>A</sub>. The vapour is always enriched in the more volatile component. That is the idea behind distillation.', { k: 'c' }),
+num('h16-6', 'h16', 'The vapour above a hexane–heptane solution at 25 °C is 50.0 mol-% hexane. The pure vapour pressures are 151 mmHg (hexane) and 45.7 mmHg (heptane). What is the mole fraction of hexane in the liquid? Give 3 significant figures.', '0.232',
+  'Equal vapour mole fractions mean equal partial pressures. Write each with Raoult\'s law.',
+  '151x = 45.7(1 − x), so x = 45.7 / (151 + 45.7) = 0.232. The liquid needs much less hexane than the vapour has, because hexane evaporates so easily.', null, null, { sf: 3 }),
+multi('h16-7', 'h16', 'A vapour mixture of 40.0 mol-% hexane and 60.0 mol-% heptane is compressed slowly at 25 °C. Pure vapour pressures: hexane 151 mmHg, heptane 45.7 mmHg. Assume an ideal solution.', [
+  { ask: 'At what pressure does the first drop of liquid form, in mmHg? Give 3 significant figures.', ans: '63.4', sf: 3, unit: 'mmHg', hint: 'At the dew point the liquid mole fractions still add to 1: y<sub>hex</sub>P/151 + y<sub>hep</sub>P/45.7 = 1.', why: 'From Raoult and Dalton, x<sub>i</sub> = y<sub>i</sub>P / P<sub>i</sub><sup>vap</sup>. So 1/P = 0.400/151 + 0.600/45.7 = 0.01578 mmHg⁻¹ and P = 63.4 mmHg.' },
+  { ask: 'What is the mole fraction of hexane in that first drop? Give 3 significant figures.', ans: '0.168', sf: 3, hint: 'x = yP / P<sup>vap</sup> for hexane.', why: 'x = 0.400 × 63.4 / 151 = 0.168. The first liquid is rich in heptane, the less volatile component, because it condenses more easily.' }
+], 'C'),
+mc('h16-8', 'h16', 'Pure A and pure B have vapour pressures of 150 and 250 mmHg. A 50 : 50 (mole) mixture has a total vapour pressure of 180 mmHg. What does this show?',
+  ['A negative deviation: A–B attractions are stronger than A–A and B–B', 'A positive deviation: A–B attractions are weaker than the A–A and B–B ones', 'Ideal behaviour, since 180 is between 150 and 250', 'Nothing, without the boiling points'], 0,
+  'Raoult\'s law predicts 0.5 × 150 + 0.5 × 250 = 200 mmHg. The real 180 mmHg is lower, so molecules escape less easily than in an ideal mixture: the A–B attractions hold them in. That is a negative deviation, and such mixtures boil higher than predicted.', { k: 'c' }),
+multi('h16-9', 'h16', 'A solution of methanol ($CH3OH$) in water has a methanol mole fraction of 0.100. Its density is 0.980 g/mL.', [
+  { ask: 'What is the molality of methanol, in mol/kg? Give 3 significant figures.', ans: '6.17', sf: 3, unit: 'mol/kg', hint: 'Take 1 mol of solution as a basis: 0.100 mol methanol and 0.900 mol water.', why: 'Water: 0.900 × 18.015 = 16.21 g = 0.01621 kg. Molality = 0.100 / 0.01621 = 6.17 mol/kg.' },
+  { ask: 'What is the molarity of methanol, in mol/L? Give 3 significant figures.', ans: '5.05', sf: 3, unit: 'mol/L', hint: 'Molarity needs the volume of the whole solution: total mass ÷ density.', why: 'Methanol: 0.100 × 32.04 = 3.204 g. Total 19.42 g ÷ 0.980 g/mL = 19.81 mL. Molarity = 0.100 / 0.01981 L = 5.05 mol/L. Molality uses kg of solvent; molarity uses litres of solution.' }
+], 'C'),
+
+/* ---------- Colligative properties ---------- */
+mc('h17-1', 'h17', 'Which aqueous solution has the lowest freezing point? Assume complete dissociation.',
+  ['0.10 m $MgCl2$', '0.12 m NaCl', '0.20 m glucose', '0.070 m $K3PO4$', '0.25 m sucrose'], 0,
+  'ΔT<sub>f</sub> = −iK<sub>f</sub>m, so compare i × m, the particles per kg of water. $MgCl2$: 3 × 0.10 = 0.30. $K3PO4$: 4 × 0.070 = 0.28. Sucrose 0.25, NaCl 0.24, glucose 0.20. Most particles means the biggest drop and the lowest freezing point.', { k: 'c' }),
+num('h17-2', 'h17', '15.0 g of ethylene glycol ($C2H6O2$, 62.07 g/mol) is dissolved in 250. g of water. What is the freezing point of the solution, in °C? K<sub>f</sub> for water is 1.86 K·kg/mol. Give 3 significant figures.', '-1.80',
+  'ΔT<sub>f</sub> = −iK<sub>f</sub>m with i = 1 (it does not dissociate) and m in mol per kg of water.',
+  'n = 15.0 / 62.07 = 0.2417 mol. m = 0.2417 / 0.250 kg = 0.9667 mol/kg. ΔT<sub>f</sub> = −1.86 × 0.9667 = −1.80 K, so the solution freezes at −1.80 °C. A change of 1 K is a change of 1 °C.', null, null, { sf: 3, unit: '°C' }),
+num('h17-3', 'h17', '12.0 g of a non-volatile compound that does not dissociate is dissolved in 150. g of water, and the boiling point rises by 0.220 °C. K<sub>b</sub> = 0.512 K·kg/mol. What is its molar mass, in g/mol? Give 3 significant figures.', '186',
+  'ΔT<sub>b</sub> = K<sub>b</sub>m gives the molality. Then moles = m × kg of water.',
+  'm = 0.220 / 0.512 = 0.4297 mol/kg. n = 0.4297 × 0.150 = 0.06445 mol. M = 12.0 / 0.06445 = 186 g/mol.', null, null, { sf: 3, unit: 'g/mol' }),
+num('h17-4', 'h17', '50.0 g of a non-volatile compound dissolved in 200. g of water at 30.0 °C lowers the vapour pressure from 31.82 mmHg to 30.10 mmHg. What is the molar mass of the compound, in g/mol? Give 3 significant figures.', '78.8',
+  'Vapour-pressure lowering: ΔP = −x<sub>solute</sub>P<sub>solvent</sub><sup>vap</sup>. Find x<sub>solute</sub>, then the moles of solute.',
+  'x<sub>solute</sub> = (31.82 − 30.10) / 31.82 = 0.05405. n(water) = 200. / 18.015 = 11.10 mol. n(solute) = x × n(water) / (1 − x) = 0.6344 mol. M = 50.0 / 0.6344 = 78.8 g/mol.', null, null, { sf: 3, unit: 'g/mol' }),
+num('h17-5', 'h17', '0.500 g of $CaCl2$ (110.98 g/mol) is dissolved in 100. g of water. Assuming it dissociates completely, by how much does the boiling point rise, in °C? K<sub>b</sub> = 0.512 K·kg/mol. Give 3 significant figures.', '0.0692',
+  '$CaCl2$ → Ca²⁺ + 2 Cl⁻ gives i = 3. ΔT<sub>b</sub> = iK<sub>b</sub>m.',
+  'n = 0.500 / 110.98 = 4.505 × 10⁻³ mol. m = 0.04505 mol/kg. ΔT<sub>b</sub> = 3 × 0.512 × 0.04505 = 0.0692 °C. Forgetting i gives a third of that.', null, null, { sf: 3, unit: '°C' }),
+num('h17-6', 'h17', '2.00 g of NaCl is dissolved in 100. g of water, and the solution freezes at −1.18 °C. K<sub>f</sub> = 1.86 K·kg/mol. What percentage of the NaCl is dissociated? Give 3 significant figures.', '85.4',
+  'Find the measured i from ΔT<sub>f</sub> = −iK<sub>f</sub>m. For NaCl, i = 1 + α, where α is the fraction dissociated.',
+  'm = (2.00 / 58.44) / 0.100 = 0.3422 mol/kg. i = 1.18 / (1.86 × 0.3422) = 1.854. Each formula unit that splits adds one extra particle, so i = 1 + α and α = 0.854 = 85.4%. Ion pairing keeps i below 2.', null, null, { sf: 3, unit: '%' }),
+mc('h17-7', 'h17', 'What is the largest possible van \'t Hoff factor for $Al2(SO4)3$?',
+  ['5', '2', '3', '17', '7'], 0,
+  '$Al2(SO4)3$ → 2 Al³⁺ + 3 $SO4$²⁻, which is 5 ions per formula unit. The sulfate ion stays together, so counting atoms (17) is wrong. Real solutions give a bit less than 5 because ions pair up.', { k: 'c' }),
+mc('h17-8', 'h17', 'The measured van \'t Hoff factor for 0.10 m NaCl is about 1.9, not 2. Why?',
+  ['Some Na⁺ and Cl⁻ ions pair up in solution', 'NaCl does not dissolve completely at 0.10 m', 'Some water molecules split into ions', 'Na⁺ ions attract each other'], 0,
+  'Oppositely charged ions attract, and some stay together as ion pairs that count as one particle. The more concentrated the solution, the more pairing, and the further i falls below the ideal value.', { k: 'c' }),
+multi('h17-9', 'h17', 'A compound has the empirical formula $C3H2Cl$ (73.50 g/mol). Dissolving 0.750 g of it in 20.0 g of benzene lowers the freezing point by 1.31 °C. For benzene, K<sub>f</sub> = 5.12 K·kg/mol.', [
+  { ask: 'What is the molar mass, in g/mol? Give 3 significant figures.', ans: '147', sf: 3, unit: 'g/mol', hint: 'm = ΔT<sub>f</sub> / K<sub>f</sub> (i = 1 for a molecular compound in benzene). Then n = m × kg of benzene.', why: 'm = 1.31 / 5.12 = 0.2559 mol/kg. n = 0.2559 × 0.0200 = 5.117 × 10⁻³ mol. M = 0.750 / 5.117 × 10⁻³ = 147 g/mol.' },
+  { ask: 'How many carbon atoms are in one molecule?', ans: '6', hint: 'Divide the molar mass by the empirical formula mass.', why: '147 / 73.50 = 2.0, so the molecular formula is ($C3H2Cl$)₂ = $C6H4Cl2$, dichlorobenzene.' }
+], 'C'),
+mc('h17-10', 'h17', 'Colligative properties depend on…',
+  ['how many solute particles there are', 'what the solute particles are, not how many', 'the molar mass of the solute and nothing else', 'the shape and polarity of the solute molecules'], 0,
+  'Vapour-pressure lowering, boiling-point elevation, freezing-point depression and osmotic pressure count particles per amount of solvent, not what the particles are. That is why 1 mol of NaCl (2 mol of ions) lowers the freezing point about twice as much as 1 mol of sugar.', { k: 'c' }),
+
+/* ================= Unit 5 · Chemical equilibrium ================= */
+/* ---------- Equilibrium constants ---------- */
+mc('h18-1', 'h18', 'What is K<sub>c</sub> for $CaCO3$(s) ⇌ CaO(s) + $CO2$(g)?',
+  ['[$CO2$]', '[CaO][$CO2$] / [$CaCO3$]', '1 / [$CO2$]', '[CaO][$CO2$]'], 0,
+  'Pure solids and pure liquids have an activity of 1, so they drop out of K. Only the gas is left: K<sub>c</sub> = [$CO2$]. At a given temperature the $CO2$ concentration above the solids is fixed, however much solid there is.', { k: 'c' }),
+mc('h18-2', 'h18', 'A reaction has K = 3 × 10⁻¹⁵ at 25 °C. What does that tell you?',
+  ['Almost no products form at equilibrium', 'The reaction goes essentially to completion', 'The reaction is very slow', 'Reactants and products are present in similar amounts'], 0,
+  'K below about 10⁻¹⁰ means the forward reaction barely happens; above about 10¹⁰ it goes to completion. K says where equilibrium lies, not how fast the system gets there. Speed is kinetics.', { k: 'c' }),
+num('h18-3', 'h18', 'For 2 $SO2$(g) + $O2$(g) ⇌ 2 $SO3$(g), the equilibrium concentrations are [$SO2$] = 0.0400 M, [$O2$] = 0.0240 M and [$SO3$] = 0.160 M. What is K<sub>c</sub>? Give 3 significant figures.', '667',
+  'K<sub>c</sub> = [SO₃]² / ([SO₂]²[O₂]). Each concentration is raised to the power of its coefficient.',
+  'K<sub>c</sub> = 0.160² / (0.0400² × 0.0240) = 0.0256 / 3.84 × 10⁻⁵ = 667. Use equilibrium concentrations only, never the starting ones.', null, null, { sf: 3 }),
+num('h18-4', 'h18', 'For $N2$(g) + 3 $H2$(g) ⇌ 2 $NH3$(g), K<sub>c</sub> = 0.500 at 400. °C. What is K<sub>p</sub>, with pressures in bar? Give 3 significant figures, like 1.23E-4.', '1.60E-4',
+  'K<sub>p</sub> = K<sub>c</sub>(RT)<sup>Δn</sup> with R = 0.08314 L·bar/(mol·K), T in K, and Δn = moles of gas products − moles of gas reactants.',
+  'Δn = 2 − 4 = −2. RT = 0.08314 × 673.15 = 55.97. K<sub>p</sub> = 0.500 × 55.97⁻² = 1.60 × 10⁻⁴. Using R = 0.082057 would give K<sub>p</sub> with pressures in atm instead of bar.', null, null, { sf: 3 }),
+mc('h18-5', 'h18', 'For which reaction does K<sub>p</sub> = K<sub>c</sub>?',
+  ['$H2$(g) + $I2$(g) ⇌ 2 HI(g)', '$N2O4$(g) ⇌ 2 $NO2$(g)', '2 $SO2$(g) + $O2$(g) ⇌ 2 $SO3$(g)', '$PCl5$(g) ⇌ $PCl3$(g) + $Cl2$(g)'], 0,
+  'K<sub>p</sub> = K<sub>c</sub>(RT)<sup>Δn</sup>, and (RT)⁰ = 1. Only H₂ + I₂ ⇌ 2 HI has the same number of gas moles on each side, 2 and 2.', { k: 'c' }),
+num('h18-6', 'h18', 'At one temperature:<br>$N2$(g) + $O2$(g) ⇌ 2 NO(g), K₁ = 4.1 × 10⁻³¹<br>2 NO(g) + $O2$(g) ⇌ 2 $NO2$(g), K₂ = 1.6 × 10¹²<br>What is K for $NO2$(g) ⇌ ½ $N2$(g) + $O2$(g)? Give 2 significant figures, like 1.2E9.', '1.2E9',
+  'Add the two reactions, then reverse the result and halve it. Adding multiplies the Ks, reversing inverts K, and halving takes a square root.',
+  'Adding: $N2$ + 2 $O2$ ⇌ 2 $NO2$, K = K₁K₂ = 6.56 × 10⁻¹⁹. Reversing: 1/K = 1.52 × 10¹⁸. Halving: √(1.52 × 10¹⁸) = 1.2 × 10⁹.', null, null, { sf: 2 }),
+mc('h18-7', 'h18', 'A ⇌ 2 B has K = 16. What is K for B ⇌ ½ A?',
+  ['0.25', '4', '−4', '1/16', '8'], 0,
+  'Reverse: 2 B ⇌ A has K = 1/16. Halve: raise that to the ½ power, √(1/16) = 1/4 = 0.25.', { k: 'c' }),
+mc('h18-8', 'h18', 'Which statement about a reaction at equilibrium is true?',
+  ['The forward and reverse reactions go on at equal rates', 'Both the forward and reverse reactions have stopped', 'The concentrations of reactants and products are equal', 'K depends on the amounts you started with'], 0,
+  'Equilibrium is dynamic: both reactions keep running at the same rate, so the concentrations stop changing. They are not usually equal, and K is fixed at a given temperature whatever you start with.', { k: 'c' }),
+num('h18-9', 'h18', 'The elementary reaction A + B ⇌ C has k<sub>f</sub> = 3.6 × 10³ M⁻¹·s⁻¹ forward and k<sub>r</sub> = 12 s⁻¹ in reverse. What is K<sub>c</sub>? Give 2 significant figures, Mobius style (for example 4.5E3).', '3.0E2',
+  'At equilibrium the forward and reverse rates are equal: k<sub>f</sub>[A][B] = k<sub>r</sub>[C].',
+  'K<sub>c</sub> = [C] / ([A][B]) = k<sub>f</sub> / k<sub>r</sub> = 3.6 × 10³ / 12 = 300, which is 3.0E2 to 2 significant figures. A large k<sub>f</sub> compared with k<sub>r</sub> means the products win.', null, null, { sf: 2 }),
+mc('h18-10', 'h18', 'Why is liquid water left out of K for a reaction in aqueous solution, such as $NH3$(aq) + $H2O$(l) ⇌ $NH4$⁺(aq) + OH⁻(aq)?',
+  ['A pure liquid has an activity of 1', 'Water does not take part in the reaction', 'Its concentration is zero', 'Liquids react too slowly to count'], 0,
+  'In K, each species enters as its activity: c/c° for solutes, P/P° for gases, and 1 for pure liquids and solids. Water as the solvent is essentially pure, so its activity is 1 and it drops out. It still reacts: it supplies the H⁺ that turns $NH3$ into $NH4$⁺.', { k: 'c' }),
+
+/* ---------- Equilibrium calculations ---------- */
+num('h19-1', 'h19', 'For CO(g) + $H2O$(g) ⇌ $CO2$(g) + $H2$(g), K<sub>c</sub> = 1.60 at a high temperature. 0.200 mol CO and 0.200 mol $H2O$ are placed in a 2.00 L vessel. What is [$CO2$] at equilibrium, in M? Give 3 significant figures.', '0.0558',
+  'ICE table in concentrations: start at 0.100 M each, change ±x. Both sides are perfect squares, so take the square root.',
+  'x² / (0.100 − x)² = 1.60, so x / (0.100 − x) = √1.60 = 1.265. x = 0.1265 / 2.265 = 0.0558 M. Check: 0.0558² / 0.0442² = 1.60.', null, null, { sf: 3, unit: 'M' }),
+num('h19-2', 'h19', '2 $H2S$(g) ⇌ 2 $H2$(g) + $S2$(g) has K<sub>c</sub> = 1.0 × 10⁻⁹ at a certain temperature. A vessel starts with 0.100 M $H2S$ only. What is [$H2$] at equilibrium, in M? Give 2 significant figures, like 1.2E-4.', '2.7E-4',
+  'K is tiny, so very little reacts. Try 0.100 − 2x ≈ 0.100.',
+  'Changes: −2x, +2x, +x. (2x)²x / 0.100² = 1.0 × 10⁻⁹ gives 4x³ = 1.0 × 10⁻¹¹ and x = 1.36 × 10⁻⁴. [H₂] = 2x = 2.7 × 10⁻⁴ M. Check: 2x is 0.27% of 0.100, so the approximation is fine.', null, null, { sf: 2, unit: 'M' }),
+multi('h19-3', 'h19', 'For $PCl5$(g) ⇌ $PCl3$(g) + $Cl2$(g), K<sub>c</sub> = 0.0420 at 250 °C. A vessel starts with [$PCl5$] = 0.100 M, [$PCl3$] = 0.0500 M and [$Cl2$] = 0.0500 M.', [
+  { ask: 'What is Q<sub>c</sub> at the start? Give 3 significant figures.', ans: '0.0250', sf: 3, hint: 'Q has the same form as K, but uses the concentrations you have now.', why: 'Q<sub>c</sub> = (0.0500)(0.0500) / 0.100 = 0.0250. Q &lt; K, so the reaction moves forward and more $PCl5$ breaks down.' },
+  { ask: 'What is [$PCl5$] at equilibrium, in M? Give 3 significant figures.', ans: '0.0889', sf: 3, unit: 'M', hint: '(0.0500 + x)² / (0.100 − x) = 0.0420. Expand it into a quadratic.', why: 'x² + 0.1420x − 0.00170 = 0, so x = 0.0111 M. [PCl₅] = 0.100 − 0.0111 = 0.0889 M.' },
+  { ask: 'What is [$Cl2$] at equilibrium, in M? Give 3 significant figures.', ans: '0.0611', sf: 3, unit: 'M', hint: 'Use the same x.', why: '[Cl₂] = 0.0500 + 0.0111 = 0.0611 M. Check: 0.0611² / 0.0889 = 0.0420.' }
+], 'C'),
+multi('h19-4', 'h19', 'Pure $N2O4$ is put in a rigid vessel at 1.000 bar and 25 °C, and some of it dissociates: $N2O4$(g) ⇌ 2 $NO2$(g). At equilibrium, at the same temperature, the total pressure is 1.184 bar.', [
+  { ask: 'What is K<sub>p</sub>, in bar? Give 3 significant figures.', ans: '0.166', sf: 3, unit: 'bar', hint: 'Use an ICE table in partial pressures. If x bar of $N2O4$ reacts, the total goes up by x.', why: 'Total = (1.000 − x) + 2x = 1.000 + x = 1.184, so x = 0.184 bar. P(NO₂) = 0.368 bar and P(N₂O₄) = 0.816 bar. K<sub>p</sub> = 0.368² / 0.816 = 0.166.' },
+  { ask: 'What percentage of the $N2O4$ dissociated? Give 3 significant figures.', ans: '18.4', sf: 3, unit: '%', hint: 'Compare x with the starting pressure.', why: '0.184 / 1.000 = 18.4%.' },
+  { ask: 'What is K<sub>c</sub> at 25 °C? Give 3 significant figures, like 1.23E-3.', ans: '6.70E-3', sf: 3, hint: 'K<sub>c</sub> = K<sub>p</sub>(RT)<sup>−Δn</sup> with R = 0.08314 L·bar/(mol·K).', why: 'Δn = 2 − 1 = 1. K<sub>c</sub> = 0.166 / (0.08314 × 298.15) = 0.166 / 24.79 = 6.70 × 10⁻³.' }
+], 'C'),
+num('h19-5', 'h19', '1.00 mol of $H2$ and 1.00 mol of $I2$ are sealed in a flask and heated. At equilibrium, 78.0% of the $H2$ has reacted: $H2$(g) + $I2$(g) ⇌ 2 HI(g). What is K<sub>c</sub>? Give 3 significant figures.', '50.3',
+  'You do not need the volume: Δn = 0, so V cancels in K<sub>c</sub>.',
+  'Reacted: 0.780 mol of each. Left: 0.220 mol $H2$ and 0.220 mol $I2$. Made: 1.56 mol HI. K<sub>c</sub> = (1.56/V)² / ((0.220/V)(0.220/V)) = 1.56² / 0.220² = 50.3.', null, null, { sf: 3 }),
+mc('h19-6', 'h19', 'For a reaction, Q<sub>c</sub> = 2.5 × 10³ and K<sub>c</sub> = 4.0 × 10². What happens as it moves to equilibrium?',
+  ['Net reverse reaction: more reactants form', 'Net forward reaction: more products form', 'Nothing: it is already at equilibrium', 'It depends on the temperature'], 0,
+  'Q &gt; K means there is too much product for equilibrium. The reaction runs in reverse, using up products and making reactants, until Q falls to K.', { k: 'c' }),
+mc('h19-7', 'h19', 'For 2 HI(g) ⇌ $H2$(g) + $I2$(g), K<sub>c</sub> = 0.0200. A 5.00 L vessel holds 0.200 mol HI, 0.0200 mol $H2$ and 0.0300 mol $I2$. What happens as the system moves to equilibrium?',
+  ['More $H2$ and $I2$ form', 'More HI forms', 'Nothing changes', 'All of the HI decomposes'], 0,
+  'Concentrations: HI 0.0400 M, H₂ 0.00400 M, I₂ 0.00600 M. Q<sub>c</sub> = (0.00400)(0.00600) / 0.0400² = 0.0150. Q &lt; K = 0.0200, so the net reaction goes forward: HI breaks down into more H₂ and I₂. A finite K means it never all decomposes.', { k: 'n' }),
+num('h19-8', 'h19', 'A(g) ⇌ 2 B(g) has K<sub>p</sub> = 0.500 bar at a certain temperature. A rigid vessel starts with pure A at 2.00 bar. What is the partial pressure of B at equilibrium, in bar? Give 3 significant figures.', '0.883',
+  'ICE in pressures: A = 2.00 − x and B = 2x. Solve (2x)² / (2.00 − x) = 0.500.',
+  '4x² = 0.500(2.00 − x), so 4x² + 0.500x − 1.00 = 0. x = (−0.500 + √(0.250 + 16.0)) / 8 = 0.441 bar. P(B) = 2x = 0.883 bar. Take the positive root; a negative pressure has no meaning.', null, null, { sf: 3, unit: 'bar' }),
+
+/* ---------- Le Chatelier and van 't Hoff ---------- */
+mc('h20-1', 'h20', '$N2O4$(g) ⇌ 2 $NO2$(g) has ΔH = +57 kJ/mol. Which change increases the amount of $NO2$ at equilibrium?',
+  ['Raising the temperature', 'Lowering the temperature', 'Decreasing the volume', 'Adding a catalyst', 'Adding argon at constant volume'], 0,
+  'The forward reaction absorbs heat, so treat heat as a reactant: adding heat pushes the reaction forward and K rises. A smaller volume favours the side with fewer gas molecules ($N2O4$). A catalyst, or an inert gas at constant volume, changes nothing at equilibrium.', { k: 'c' }),
+mc('h20-2', 'h20', 'Argon is added at constant volume and temperature to 2 $SO2$(g) + $O2$(g) ⇌ 2 $SO3$(g) at equilibrium. What happens?',
+  ['No shift: the partial pressures do not change', 'It shifts right, since the total pressure went up', 'It shifts left, since there is more gas', '$SO3$ decomposes completely'], 0,
+  'The total pressure rises, but each reacting gas has the same moles in the same volume, so its concentration and partial pressure are unchanged. Q still equals K. Only a change in volume shifts this equilibrium.', { k: 'c' }),
+mc('h20-3', 'h20', 'A catalyst is added to a reaction mixture at equilibrium. What happens?',
+  ['The equilibrium amounts stay the same', 'More products form, since the forward rate rises', 'K rises, because Eₐ is lower', 'More reactants form, since the reverse rate rises'], 0,
+  'A catalyst lowers Eₐ for the forward and the reverse reaction by the same amount, so both speed up equally. It helps a system reach equilibrium sooner but does not move it, and K is unchanged.', { k: 'c' }),
+mc('h20-4', 'h20', 'For C(s) + $CO2$(g) ⇌ 2 CO(g) at equilibrium, the volume is halved at constant temperature. What happens to the amount of CO?',
+  ['It decreases', 'It increases', 'It stays the same'], 0,
+  'Squeezing favours the side with fewer gas molecules. The left has 1 mol of gas (the solid does not count) and the right has 2, so the equilibrium shifts left and CO is used up.', { k: 'c' }),
+mc('h20-5', 'h20', 'For C(s) + $CO2$(g) ⇌ 2 CO(g) at equilibrium, more solid carbon is added. What happens to the amount of CO?',
+  ['It stays the same', 'It increases', 'It decreases', 'It increases until all the CO₂ is used up'], 0,
+  'A pure solid has an activity of 1 however much is there, so it does not appear in Q or K. Adding carbon leaves Q = K, and nothing shifts, as long as some solid was already present.', { k: 'c' }),
+mc('h20-6', 'h20', 'A reaction has K<sub>p</sub> = 1.8 × 10⁻⁵ at 300 K and 4.6 × 10⁻³ at 500 K. The forward reaction is…',
+  ['endothermic', 'exothermic', 'neither, since ΔH = 0', 'impossible to tell from this'], 0,
+  'K grows as T rises, so heating pushes the reaction forward. By Le Chatelier (and the van \'t Hoff equation) that happens when the forward reaction absorbs heat: ΔH &gt; 0.', { k: 'c' }),
+num('h20-7', 'h20', '$N2$(g) + 3 $H2$(g) ⇌ 2 $NH3$(g) has ΔH° = −92.2 kJ/mol and K<sub>p</sub> = 6.0 × 10⁵ at 298 K. Estimate K<sub>p</sub> at 500. K. Give 2 significant figures.', '0.18',
+  'van \'t Hoff: ln(K₂/K₁) = −(ΔH°/R)(1/T₂ − 1/T₁). Keep the sign of ΔH°.',
+  'ln(K₂/K₁) = −(−92 200 / 8.314)(1/500. − 1/298) = 11 090 × (−0.001356) = −15.0. K₂ = 6.0 × 10⁵ × e<sup>−15.0</sup> = 0.18. The reaction is exothermic, so K falls sharply as T rises; ammonia plants accept a lower K to get a faster rate.', null, null, { sf: 2 }),
+num('h20-8', 'h20', 'A reaction has K = 0.0500 at 400. K and K = 0.200 at 450. K. What is ΔH°, in kJ/mol? Give 3 significant figures.', '41.5',
+  'Solve van \'t Hoff for ΔH°: ΔH° = −R ln(K₂/K₁) / (1/T₂ − 1/T₁).',
+  'ln(0.200 / 0.0500) = ln 4.00 = 1.386. 1/450. − 1/400. = −2.778 × 10⁻⁴ K⁻¹. ΔH° = −8.314 × 1.386 / (−2.778 × 10⁻⁴) = 41 500 J/mol = 41.5 kJ/mol. K rises with T, so the reaction is endothermic, and the positive sign agrees.', null, null, { sf: 3, unit: 'kJ/mol' }),
+mc('h20-9', 'h20', 'The volume of an equilibrium mixture of $N2$(g) + $O2$(g) ⇌ 2 NO(g) is halved at constant temperature. The amount of NO…',
+  ['stays the same', 'increases, since the pressure goes up', 'decreases', 'doubles'], 0,
+  'Both sides have 2 mol of gas, so the volume cancels in Q and squeezing leaves Q = K. All the pressures double, but there is no shift and the amounts stay put.', { k: 'c' }),
+mc('h20-10', 'h20', 'More $N2$ is added at constant volume to $N2$ + 3 $H2$ ⇌ 2 $NH3$ at equilibrium. What happens to K<sub>c</sub>?',
+  ['It is unchanged; the reaction shifts forward', 'It increases, so the reaction shifts toward NH₃', 'It decreases, and the reaction shifts back', 'It is unchanged, and nothing shifts'], 0,
+  'K depends only on temperature. Adding $N2$ makes Q smaller than K, so the reaction runs forward, making $NH3$, until Q = K again.', { k: 'c' }),
+
+/* ================= Unit 6 · Electrochemistry ================= */
+/* ---------- Redox and galvanic cells ---------- */
+mc('h21-1', 'h21', 'What is the oxidation state of Cr in $Cr2O7$²⁻?',
+  ['+6', '+7', '+12', '+3'], 0,
+  'Each O is −2, so seven O give −14. The ion\'s total is −2, so the two Cr add to +12 and each is +6. (+12 forgets to split it between two atoms.)', { k: 'c' }),
+mc('h21-2', 'h21', 'In 2 Fe³⁺(aq) + Sn²⁺(aq) → 2 Fe²⁺(aq) + Sn⁴⁺(aq), which species is the reducing agent?',
+  ['Sn²⁺', 'Fe³⁺', 'Fe²⁺', 'Sn⁴⁺'], 0,
+  'Sn²⁺ is oxidized (+2 → +4), so it gives electrons away: it is the reducing agent. Fe³⁺ is reduced, so it is the oxidizing agent.', { k: 'c' }),
+num('h21-3', 'h21', 'Balance in acidic solution: $MnO4$⁻ + Fe²⁺ → Mn²⁺ + Fe³⁺. With the smallest whole-number coefficients, what is the coefficient of H⁺?', '8',
+  'Half-reactions: balance O with $H2O$, then H with H⁺, then charge with e⁻. Then match the electrons.',
+  'Reduction: $MnO4$⁻ + 8 H⁺ + 5 e⁻ → Mn²⁺ + 4 $H2O$. Oxidation: Fe²⁺ → Fe³⁺ + e⁻, times 5. Overall: $MnO4$⁻ + 5 Fe²⁺ + 8 H⁺ → Mn²⁺ + 5 Fe³⁺ + 4 $H2O$. Check the charge: +17 on each side.'),
+num('h21-4', 'h21', 'Using Table 6.1 (Zn²⁺|Zn: −0.763 V, Ag⁺|Ag: +0.800 V), what is E°<sub>cell</sub> for Zn(s)|Zn²⁺(aq)||Ag⁺(aq)|Ag(s), in V? Give 4 significant figures.', '1.563',
+  'E°<sub>cell</sub> = E°<sub>cathode</sub> − E°<sub>anode</sub>, using reduction potentials as listed. Do not multiply E° by the 2 in front of Ag.',
+  'Silver has the higher E°, so it is reduced at the cathode. 0.800 − (−0.763) = 1.563 V. The balanced reaction needs 2 Ag⁺, but E° is an intensive property and does not double.', null, null, { sf: 4, unit: 'V' }),
+mc('h21-5', 'h21', 'Which metal will reduce Pb²⁺(aq) to Pb(s) spontaneously under standard conditions? (Pb²⁺|Pb: −0.125 V)',
+  ['Zn (Zn²⁺|Zn: −0.763 V)', 'Cu (Cu²⁺|Cu: +0.340 V)', 'Ag (Ag⁺|Ag: +0.800 V)', 'None of them'], 0,
+  'Pb²⁺ is the cathode, so the metal must be the anode with a lower E°: E°<sub>cell</sub> = −0.125 − (−0.763) = +0.638 V &gt; 0 for Zn. With Cu or Ag, E°<sub>cell</sub> would be negative.', { k: 'c' }),
+mc('h21-6', 'h21', 'In a galvanic cell, which statement is true?',
+  ['Electrons flow through the wire from the anode to the cathode', 'Reduction happens at the anode, and oxidation at the cathode', 'Electrons cross between the half-cells through the salt bridge', 'The cathode is the half-cell with the lower reduction potential'], 0,
+  'Oxidation at the anode releases electrons, which travel through the external circuit to the cathode, where reduction uses them. Ions, not electrons, move through the salt bridge.', { k: 'c' }),
+num('h21-7', 'h21', 'What is E°<sub>cell</sub> for Mg(s)|Mg²⁺(aq)||Cu²⁺(aq)|Cu(s), in V? (Mg²⁺|Mg: −2.370 V, Cu²⁺|Cu: +0.340 V) Give 3 significant figures.', '2.71',
+  'The anode is written on the left in cell notation.',
+  'E°<sub>cell</sub> = 0.340 − (−2.370) = 2.710 V, so 2.71 V to 3 significant figures. Mg is a very strong reducing agent.', null, null, { sf: 3, unit: 'V' }),
+mc('h21-8', 'h21', 'True or false: in Table 6.1, Na(s) is the strongest reducing agent.',
+  ['True', 'False'], 0,
+  'Na⁺|Na has the most negative reduction potential (−2.713 V), so the reverse reaction, Na → Na⁺ + e⁻, happens most readily. Na gives electrons away most easily: the strongest reducing agent.', { k: 'c' }),
+mc('h21-9', 'h21', 'A reduction half-reaction is multiplied by 2 to balance electrons. What happens to its E°?',
+  ['It stays the same', 'It doubles', 'It halves', 'It changes sign'], 0,
+  'E° is a voltage, energy per unit charge, so it does not depend on how much reacts. Only reversing the reaction (to write an oxidation) changes its sign, and the E<sub>cathode</sub> − E<sub>anode</sub> formula already handles that.', { k: 'c' }),
+
+/* ---------- Nernst equation, K and electrolysis ---------- */
+num('h22-1', 'h22', 'Find E<sub>cell</sub> at 25 °C for Zn(s)|Zn²⁺(0.010 M)||Cu²⁺(1.0 M)|Cu(s). E°<sub>cell</sub> = 1.103 V. Give 3 significant figures.', '1.16',
+  'Nernst: E = E° − (RT/nF) ln Q, with Q = [Zn²⁺]/[Cu²⁺] and n = 2.',
+  'Q = 0.010/1.0 = 0.010. RT/nF = (8.314 × 298.15)/(2 × 96485) = 0.01285 V. E = 1.103 − 0.01285 ln(0.010) = 1.103 + 0.0592 = 1.16 V. A small Q (few products) pushes E above E°.', null, null, { sf: 3, unit: 'V' }),
+num('h22-2', 'h22', 'For Cu²⁺(aq) + Fe(s) → Cu(s) + Fe²⁺(aq), E°<sub>cell</sub> = 0.780 V. What is ln K at 25 °C? Give 3 significant figures.', '60.7',
+  'At equilibrium E = 0, so ln K = nFE°/RT. n = 2.',
+  'ln K = (2 × 96485 × 0.780)/(8.314 × 298.15) = 60.7, so K = e<sup>60.7</sup> ≈ 2 × 10²⁶. A positive E° of under a volt already makes K enormous: the reaction goes to completion.', null, null, { sf: 3 }),
+num('h22-3', 'h22', 'A current of 2.50 A passes through a CuSO₄ solution for 30.0 min. What mass of Cu is deposited, in g? Give 3 significant figures.', '1.48',
+  'Q = It, then mol e⁻ = Q/F. Cu²⁺ + 2 e⁻ → Cu.',
+  'Q = 2.50 × 1800 s = 4500 C. 4500/96485 = 0.04664 mol e⁻, so 0.02332 mol Cu × 63.55 g/mol = 1.48 g.', null, null, { sf: 3, unit: 'g' }),
+num('h22-4', 'h22', 'How long does it take to plate 5.00 g of Ag with a current of 1.50 A, in minutes? Give 3 significant figures.', '49.7',
+  'mol Ag = mol e⁻ (Ag⁺ + e⁻ → Ag). Then t = nF/I.',
+  '5.00/107.87 = 0.04635 mol e⁻. t = 0.04635 × 96485 / 1.50 = 2981 s = 49.7 min.', null, null, { sf: 3, unit: 'min' }),
+mc('h22-5', 'h22', 'As a galvanic cell runs, what happens to E<sub>cell</sub>?',
+  ['It falls until it reaches 0 at equilibrium', 'It stays at E°<sub>cell</sub> the whole time it runs', 'It increases as the products build up', 'It drops to E°<sub>cell</sub> and then stays there'], 0,
+  'Products build up and reactants run out, so Q grows and (RT/nF) ln Q grows. E falls until Q = K, where E = 0: a dead battery.', { k: 'c' }),
+num('h22-6', 'h22', 'A concentration cell has Cu|Cu²⁺(0.010 M) on one side and Cu²⁺(1.0 M)|Cu on the other, at 25 °C. What is E<sub>cell</sub>, in V? Give 3 significant figures.', '0.0592',
+  'E° = 0 for a concentration cell. The more concentrated side is the cathode, so Q = [dilute]/[concentrated].',
+  'E = 0 − (0.01285) ln(0.010/1.0) = 0.0592 V. The dilute side dissolves (anode) and the concentrated side plates out (cathode) until the two match.', null, null, { sf: 3, unit: 'V' }),
+num('h22-7', 'h22', 'A 2.00 A current runs for 25.0 min through a Cu²⁺ solution, but only 0.900 g of Cu is deposited. What is the current efficiency, in %? Give 3 significant figures.', '91.1',
+  'η = actual mass ÷ theoretical mass × 100%.',
+  'Q = 2.00 × 1500 = 3000 C → 0.03109 mol e⁻ → 0.01555 mol Cu → 0.988 g in theory. η = 0.900/0.988 × 100% = 91.1%.', null, null, { sf: 3, unit: '%' }),
+multi('h22-8', 'h22', 'A galvanic cell is Ni(s)|Ni²⁺(1.0 M)||Ag⁺(0.050 M)|Ag(s) at 25 °C. Ni²⁺|Ni: −0.250 V and Ag⁺|Ag: +0.800 V.', [
+  { ask: 'What is E°<sub>cell</sub>, in V? Give 4 significant figures.', ans: '1.050', sf: 4, unit: 'V', hint: 'E°<sub>cathode</sub> − E°<sub>anode</sub>.', why: '0.800 − (−0.250) = 1.050 V.' },
+  { ask: 'What is E<sub>cell</sub> at these concentrations, in V? Give 3 significant figures.', ans: '0.973', sf: 3, unit: 'V', hint: 'Ni + 2 Ag⁺ → Ni²⁺ + 2 Ag, so n = 2 and Q = [Ni²⁺]/[Ag⁺]².', why: 'Q = 1.0/0.050² = 400. E = 1.050 − 0.01285 ln 400 = 1.050 − 0.0770 = 0.973 V.' },
+  { ask: 'The cell delivers 0.200 A for 2.00 h. What mass of Ni dissolves, in g? Give 3 significant figures.', ans: '0.438', sf: 3, unit: 'g', hint: 'Ni → Ni²⁺ + 2 e⁻.', why: 'Q = 0.200 × 7200 = 1440 C → 0.01492 mol e⁻ → 0.007462 mol Ni × 58.69 g/mol = 0.438 g.' }
+], 'C'),
+mc('h22-9', 'h22', 'Molten NaCl is electrolyzed. What happens at the cathode?',
+  ['Na⁺ is reduced to Na', 'Cl⁻ is oxidized to Cl₂', 'Na is oxidized to Na⁺', 'Water is reduced to H₂'], 0,
+  'The cathode is where reduction happens in every cell. In an electrolytic cell it is the negative electrode, forcing electrons onto Na⁺. Cl⁻ is oxidized at the anode. There is no water in the melt.', { k: 'c' }),
+
+mc('h21-10', 'h21', 'What is E°<sub>cell</sub> for 2 Al(s) + 3 Sn²⁺(aq) → 2 Al³⁺(aq) + 3 Sn(s)? (Al³⁺|Al: −1.676 V, Sn²⁺|Sn: −0.137 V)',
+  ['1.539 V', '2.941 V', '1.813 V', '−1.539 V'], 0,
+  'Sn²⁺ is reduced (cathode) and Al is oxidized (anode): −0.137 − (−1.676) = 1.539 V. The coefficients 2 and 3 do not multiply E° (that gives 2.941 V), and adding the two values gives 1.813 V.', { k: 'n' }),
+mc('h22-10', 'h22', 'Aluminum is made by electrolysis of molten Al₂O₃. What mass of Al does a current of 1.00 × 10⁵ A make in 1.00 h? (Al: 26.98 g/mol)',
+  ['33.6 kg', '101 kg', '50.3 kg', '0.559 kg'], 0,
+  'Q = 1.00 × 10⁵ × 3600 s = 3.60 × 10⁸ C, which is 3731 mol e⁻. Al³⁺ needs 3 e⁻, so 1244 mol Al × 26.98 = 33.6 kg. Forgetting the 3 gives 101 kg, and using 60 s instead of 3600 s gives 0.559 kg.', { k: 'n' }),
+
 
 ];
 
@@ -461,11 +893,11 @@ Q.forEach(function (q) {
 
 COURSES.push({
   id: 'che102', code: 'CHE 102', name: 'Chemistry for Engineers', key: 'che102-midterm-gym-v1', hue: 'c2', tol: 0.01,
-  exam: { at: '2026-10-23T18:30:00-04:00', label: 'Fri Oct 23, 6:30 PM' },
-  scope: 'Stoichiometry and gases (Units 1 and 2)',
+  exam: { at: '2026-12-15T09:00:00-05:00', label: 'Tue Dec 15, 9:00 AM', name: 'Final' },
+  scope: 'Units 1 to 6: stoichiometry, gases, rates, phase, chemical and electrochemical equilibrium',
   topics: T, Q: Q,
   titles: ['Mole Rookie', 'Unit Juggler', 'Balancer', 'Limiting Legend', 'Yield Chaser', 'Formula Finder', 'Gas Law Guru', 'Partial Pressure Pro', 'Kinetic Theorist', 'Midterm Catalyst'],
-  formula: { kind: 'html', title: 'CHE 102 data sheet (typed)', note: 'A typed summary of the constants and equations the CHE 102 midterm provides. The official sheet and periodic table are not included in this public version, so use any periodic table.',
+  formula: { kind: 'html', title: 'CHE 102 data sheet (typed)', extra: FX, extraTitle: 'Units 3 to 6 equations (from your slides)', note: 'The newer units come first, typed from the lecture slides. Then A typed summary of the constants and equations the CHE 102 midterm provides. The official sheet and periodic table are not included in this public version, so use any periodic table.',
     items: [
       ['Constants', 'N<sub>A</sub> = 6.02214 × 10<sup>23</sup> mol<sup>−1</sup><br>k<sub>B</sub> = 1.38066 × 10<sup>−23</sup> J/K<br>F = 96485 C/mol'],
       ['Gas constant R', '8.314 J/(mol·K) = 8.314 m³·Pa/(mol·K)<br>0.082057 L·atm/(mol·K) · 0.08314 L·bar/(mol·K)<br>82.057 cm³·atm/(mol·K) · 1.9859 cal/(mol·K)<br>10.7316 ft³·psi/(lbmol·°R) · 0.73024 ft³·atm/(lbmol·°R)'],
@@ -476,7 +908,7 @@ COURSES.push({
       ['Dry air', 'M = 29 g/mol, 21 mol-% O<sub>2</sub> and 79 mol-% N<sub>2</sub>'],
       ['Atom economy', 'mass of desired product(s) ÷ mass of all reactants']
     ] },
-  mock: { minutes: 90, blurb: 'Same layout as your Fall 2026 midterm: Part A has 8 conceptual multiple choice (2 points each), Part B has 4 numerical multiple choice (5 points each), and Part C has 2 open-ended calculations (10 points each), for 56 points.',
+  mock: { minutes: 90, blurb: 'Same layout as your Fall 2026 midterm: Part A has 8 conceptual multiple choice (2 points each), Part B has 4 numerical multiple choice (5 points each), and Part C has 2 open-ended calculations (10 points each), for 56 points. Questions come from all six units.',
     sections: [
       { label: 'Part A · conceptual', short: 'Part A', n: 8, pts: 2, pick: function (q) { return q.type === 'mc' && q.k === 'c'; } },
       { label: 'Part B · numerical', short: 'Part B', n: 4, pts: 5, pick: function (q) { return q.type === 'mc' && q.k === 'n'; } },
@@ -484,6 +916,7 @@ COURSES.push({
     ] },
   how: ['Numeric answers are accepted within 1%, so small molar-mass rounding differences are fine.',
     'When a question asks for significant figures, give exactly that many, Mobius style: 1.0E4, not 1.0*10^4. The right value with the wrong sig figs earns half credit.',
-    'Do past midterms by hand too. These questions are written in the same style, not copied from them.']
+    'Do past midterms by hand too. These questions are written in the same style, not copied from them.',
+    'Units 3 to 6 follow your slides: integrated rate laws and half-lives carry the coefficient a (for example t½ = ln 2 / ak), Kp uses bar with R = 0.08314 L·bar/(mol·K), and Arrhenius, Clausius–Clapeyron, van \'t Hoff and Nernst use R = 8.314 J/(mol·K).']
 });
 })();

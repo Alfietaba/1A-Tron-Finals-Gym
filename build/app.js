@@ -565,6 +565,11 @@ function overlay(html, cls) {
 function addXP(n) {
   var before = lvlInfo(CUR.S.xp).L;
   CUR.S.xp += n;
+  var goal = xpGoal(), was = addDayXP(CUR.id, n);
+  if (was < goal && was + n >= goal) {
+    var cs = ringCourses(), all = cs.indexOf(CUR) >= 0 && cs.every(function (c) { return closedOn(dayKey(), c.id); });
+    ringToast(CUR, all);
+  }
   var after = lvlInfo(CUR.S.xp);
   if (after.L > before) levelUp(after);
 }
@@ -759,7 +764,7 @@ function candleTick() {
   sdSet('cd-sub', cd.paused ? 'Paused' : 'of ' + Math.round(cd.total / 60000) + ' min');
   sdSet('cd-pp', cd.paused ? 'Resume' : 'Pause');
   w.setAttribute('aria-label', 'Study timer, ' + txt + ' left' + (cd.paused ? ', paused' : ''));
-  sdSet('tmr-txt', txt); sdSet('cd-m-time', txt); sdSet('cd-m-pp', cd.paused ? 'Resume' : 'Pause');
+  sdSet('tmr-txt', txt); sdSet('tmr-big', txt); sdSet('cd-m-time', txt); sdSet('cd-m-pp', cd.paused ? 'Resume' : 'Pause');
   var mc = document.querySelector('.cd-modal'); if (mc) mc.classList.toggle('paused', !!cd.paused);
   var bar = document.querySelector('.bar'); w.style.setProperty('--cd-bottom', (bar ? bar.offsetHeight : 0) + 'px');
   if (left <= 0) candleDone();
@@ -841,38 +846,169 @@ function candleBoot() {
 }
 
 /* ---------- GYM (all courses) ---------- */
+/* ---------- GYM HOME (Apple Health style summary) ---------- */
+/* Each course gets a ring that fills with the XP earned in that course today. The goal is a setting (G.xpGoal).
+   G.xd keeps about ten weeks of { day: { courseId: xp, _g: goal that day } } for the week strip and ring streaks. */
+var XP_GOAL = 100;
+function xpGoal() { return G.xpGoal || XP_GOAL; }
+function dayXP(k) { return (G.xd && G.xd[k || dayKey()]) || {}; }
+function addDayXP(cid, n) {
+  G.xd = G.xd || {};
+  var k = dayKey(), d = G.xd[k] || (G.xd[k] = {}), before = d[cid] || 0;
+  d[cid] = before + n; d._g = xpGoal();
+  var keys = Object.keys(G.xd).sort(); while (keys.length > 70) delete G.xd[keys.shift()];
+  return before;
+}
+function dayShift(n) { var d = new Date(); d.setDate(d.getDate() + n); return d; }
+function closedOn(k, cid) { var d = dayXP(k); return (d[cid] || 0) >= (d._g || xpGoal()); }
+function ringCourses() { var live = sortedCourses().filter(function (c) { var d = daysTo(c); return d == null || d >= 0; }); return live.length ? live : sortedCourses(); }
+function ringStreak(test) {   /* consecutive days ending today (or yesterday, so an open day does not break it) */
+  var n = 0, i = test(dayKey()) ? 0 : -1;
+  for (; ; i--) { if (test(dayKey(dayShift(i)))) n++; else break; }
+  return n;
+}
+function courseStreak(c) { return ringStreak(function (k) { return closedOn(k, c.id); }); }
+function perfectStreak() { var cs = ringCourses(); return ringStreak(function (k) { return cs.every(function (c) { return closedOn(k, c.id); }); }); }
+var RINGC = { c1: ['#e0005a', '#ff3d7f'], c2: ['#5fd400', '#b8ff2b'], c3: ['#ff6a00', '#ffb340'], c4: ['#7a3cff', '#c792ff'], c5: ['#00c8e0', '#6bfff7'] };
+var ringUid = 0;
+function ringsSVG(rows, size, stroke, gap, cls) {
+  var id = 'rg' + (++ringUid), c0 = size / 2, defs = '', body = '';
+  /* shrink the rings to fit when there are more courses than the size was drawn for */
+  var need = stroke / 2 + (rows.length - 1) * (stroke + gap), room = c0 - Math.max(2, stroke * 0.75);
+  if (need > room) { var f = room / need; stroke *= f; gap *= f; }
+  rows.forEach(function (row, i) {
+    var r = c0 - stroke / 2 - i * (stroke + gap), circ = 2 * Math.PI * r, col = RINGC[row.hue] || RINGC.c1, p = Math.max(0, row.p);
+    defs += '<linearGradient id="' + id + i + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + col[0] + '"/><stop offset="1" stop-color="' + col[1] + '"/></linearGradient>';
+    body += '<circle cx="' + c0 + '" cy="' + c0 + '" r="' + r + '" fill="none" stroke="' + col[0] + '" stroke-opacity=".22" stroke-width="' + stroke + '"/>';
+    var arc = function (frac, extra) { return '<circle class="rg-arc" cx="' + c0 + '" cy="' + c0 + '" r="' + r + '" fill="none" stroke="url(#' + id + i + ')" stroke-width="' + stroke + '" stroke-linecap="round" stroke-dasharray="' + circ.toFixed(2) + '" data-off="' + (circ * (1 - frac)).toFixed(2) + '" stroke-dashoffset="' + circ.toFixed(2) + '" transform="rotate(-90 ' + c0 + ' ' + c0 + ')"' + (extra || '') + '/>'; };
+    if (p > 0) body += arc(Math.min(p, 1) - (p >= 1 ? 0 : 0));
+    if (p > 1) body += arc(Math.min(p - 1, 1) || 0.001, ' style="filter:drop-shadow(0 0 ' + (stroke / 3).toFixed(1) + 'px rgba(0,0,0,.6))"');
+  });
+  return '<svg class="' + (cls || 'rings') + '" viewBox="0 0 ' + size + ' ' + size + '" aria-hidden="true"><defs>' + defs + '</defs>' + body + '</svg>';
+}
+function animateRings(root) {
+  var arcs = (root || app).querySelectorAll('.rg-arc');
+  var go = function () { arcs.forEach(function (a) { a.style.strokeDashoffset = a.getAttribute('data-off'); }); };
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) { arcs.forEach(function (a) { a.style.transition = 'none'; }); go(); }
+  else requestAnimationFrame(function () { requestAnimationFrame(go); });
+}
+function ringRows(k) { var d = dayXP(k), g = d._g || xpGoal(); return ringCourses().map(function (c) { return { p: (d[c.id] || 0) / g, hue: c.hue }; }); }
+function shortDate(c) { return new Date(c.exam.at).toLocaleDateString('en-CA', { weekday: 'short', month: 'short', day: 'numeric' }); }
+function ringToast(c, all) {
+  FX.burst(all ? 140 : 70, 0.5, 0.3); Snd.done(); buzz([20, 40, 20, 40, 60]);
+  var col = RINGC[c.hue] || RINGC.c1, t = h('div', 'toast', '<span class="toast-ring" style="--a:' + col[0] + ';--b:' + col[1] + '"></span><span><b>' + (all ? 'All rings closed' : c.code + ' ring closed') + '</b><small>' + (all ? 'A perfect day. Streak: ' + perfectStreak() + ' day' + (perfectStreak() === 1 ? '' : 's') + '.' : xpGoal() + ' XP today in ' + c.code + '.') + '</small></span>');
+  document.body.appendChild(t);
+  setTimeout(function () { t.classList.add('out'); setTimeout(function () { t.remove(); }, 400); }, 2600);
+}
+function weekHTML() {
+  var letters = ['S', 'M', 'T', 'W', 'T', 'F', 'S'], out = '';
+  for (var i = -6; i <= 0; i++) {
+    var d = dayShift(i), k = dayKey(d);
+    out += '<div class="wk-d' + (i === 0 ? ' today' : '') + '">' + ringsSVG(ringRows(k), 44, 4, 1.4, 'rings mini') + '<span>' + letters[d.getDay()] + '</span></div>';
+  }
+  return out;
+}
+function backupKeys() { return [GKEY].concat(COURSES.map(function (c) { return c.key; })); }
+function exportProgress(btn) {
+  save();
+  var o = { app: 'midterm-gym', v: 1, at: new Date().toISOString(), keys: {} };
+  backupKeys().forEach(function (k) { var v = load(k); if (v) o.keys[k] = v; });
+  var json = JSON.stringify(o), name = 'midterm-gym-progress-' + dayKey() + '.json', blob = new Blob([json], { type: 'application/json' });
+  var label = btn.textContent, say = function (t) { btn.textContent = t; setTimeout(function () { if (btn.isConnected) btn.textContent = label; }, 2400); };
+  var plain = function () {
+    try { var u = URL.createObjectURL(blob), a = document.createElement('a'); a.href = u; a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(u); }, 4000); say('Saved'); }
+    catch (e) { showBackupText(json); }
+  };
+  aidDownloads().then(function (dl) {
+    if (!dl) return plain();
+    return dl.save({ filename: name, data: blob }).then(function () { say('Saved'); }, function (e) { if (!(e && e.code === 'declined')) showBackupText(json); });
+  });
+}
+function showBackupText(json) {
+  var m = overlay('<h3>Your progress backup</h3><p class="muted">This browser blocked the download. Copy all of this text, keep it somewhere safe, and paste it into Import on your other device.</p><textarea class="bk-txt" readonly>' + esc(json) + '</textarea><div class="aid-acts"><button class="btn" type="button" id="bk-ok">Done</button></div>', 'wide');
+  var ta = m.m.querySelector('.bk-txt'); ta.focus(); ta.select();
+  m.m.querySelector('#bk-ok').addEventListener('click', m.close);
+}
+function importProgress() {
+  var m = overlay('<h3>Import progress</h3><p class="muted">Choose a backup file from Export, or paste its text. This replaces the progress in this browser.</p>' +
+    '<input type="file" id="bk-file" accept="application/json,.json"><textarea class="bk-txt" id="bk-paste" placeholder="…or paste the backup text here"></textarea>' +
+    '<p class="bk-msg" id="bk-msg" role="status"></p><div class="aid-acts"><button class="btn" type="button" id="bk-go">Import</button><button class="btn ghost" type="button" id="bk-x">Cancel</button></div>', 'wide');
+  var msg = m.m.querySelector('#bk-msg'), file = m.m.querySelector('#bk-file'), paste = m.m.querySelector('#bk-paste');
+  file.addEventListener('change', function () { var f = file.files && file.files[0]; if (!f) return; f.text().then(function (t) { paste.value = t; msg.textContent = 'Loaded ' + f.name + '.'; }); });
+  m.m.querySelector('#bk-x').addEventListener('click', m.close);
+  m.m.querySelector('#bk-go').addEventListener('click', function () {
+    var o; try { o = JSON.parse(paste.value); } catch (e) { msg.textContent = 'That is not a Midterm Gym backup.'; return; }
+    if (!o || o.app !== 'midterm-gym' || !o.keys || typeof o.keys !== 'object') { msg.textContent = 'That is not a Midterm Gym backup.'; return; }
+    var ok = backupKeys(), n = 0;
+    Object.keys(o.keys).forEach(function (k) { if (ok.indexOf(k) >= 0) { store(k, o.keys[k]); n++; } });
+    if (!n) { msg.textContent = 'The backup had no progress in it.'; return; }
+    G = load(GKEY) || G;
+    COURSES.forEach(function (c) { var s = load(c.key) || {}; c.S = { xp: s.xp || 0, q: s.q || {}, code: s.code || {} }; });
+    m.close(); showGym();
+  });
+}
 function showGym() {
   dropBars(); leaveQuestions(); clearTimer(); run = null; exam = null; CUR = null;
   touchDay();
-  var tn = todayN(), list = sortedCourses();
+  var tn = todayN(), list = sortedCourses(), rc = ringCourses(), d0 = dayXP(), goal = xpGoal();
   var next = list.filter(function (c) { var d = daysTo(c); return d != null && d >= 0; })[0];
-  var cards = list.map(function (c) {
-    var li = lvlInfo(c.S.xp, c), d = daysTo(c), m = Math.round(mastery(null, c) * 100), due = dueIds(coreQ(c), c).length, rec = infRec(c.id);
-    return '<button class="course" type="button" data-course="' + c.id + '" style="--hue:var(--' + c.hue + ')"><span class="stripe" aria-hidden="true"></span><span class="cb">' +
-      '<span class="r1"><span class="code">' + c.code + '</span><span class="cd' + (d != null && d >= 0 && d <= 3 ? ' soon' : '') + (d != null && d < 0 ? ' past' : '') + '">' + cdText(d) + '</span></span>' +
-      '<span class="nm">' + c.name + ' · ' + c.exam.label + '</span>' +
-      '<span class="r3"><span class="lv">Lv ' + li.L + ' · ' + li.title + '</span><span class="mbar" aria-hidden="true"><i style="width:' + m + '%"></i></span><span class="mono">' + m + '%</span>' +
-      (due ? '<span class="badge">' + due + ' due</span>' : '') + (c.formula ? '<span class="badge sb">formula sheet</span>' : '') + '</span>' +
-      '<span class="r4"><span>' + solidN(c) + ' of ' + coreQ(c).length + ' mastered</span>' + (c.gens ? '<span>+ ' + c.gens.length + ' question generators</span>' : '') + (rec.st ? '<span class="best">' + flame() + 'best streak ' + rec.st + '</span>' : '') + '</span></span></button>';
+  var closedN = rc.filter(function (c) { return closedOn(dayKey(), c.id); }).length, ps = perfectStreak();
+  var legend = rc.map(function (c) {
+    var x = d0[c.id] || 0, d = daysTo(c), st = courseStreak(c), col = RINGC[c.hue] || RINGC.c1;
+    return '<div class="lg-row" style="--a:' + col[0] + ';--b:' + col[1] + '"><span class="lg-dot"></span><span class="lg-main"><b>' + c.code + '</b><span class="lg-x"><b>' + x + '</b>/' + goal + ' XP</span></span>' +
+      '<span class="lg-side"><span>' + (c.exam.name || 'Exam') + ' ' + shortDate(c) + '</span><span class="lg-cd' + (d != null && d >= 0 && d <= 3 ? ' soon' : '') + '">' + cdText(d) + (st > 1 ? ' · ' + flame() + st : '') + '</span></span></div>';
   }).join('');
-  var mixRec = infRec('mix');
+  var cards = list.map(function (c) {
+    var li = lvlInfo(c.S.xp, c), d = daysTo(c), m = Math.round(mastery(null, c) * 100), due = dueIds(coreQ(c), c).length, col = RINGC[c.hue] || RINGC.c1;
+    return '<button class="course hl" type="button" data-course="' + c.id + '" style="--hue:var(--' + c.hue + ');--a:' + col[0] + ';--b:' + col[1] + '">' +
+      '<span class="hl-ch"><span class="hl-ic">' + ringsSVG([{ p: (d0[c.id] || 0) / goal, hue: c.hue }], 26, 5, 0, 'rings tiny') + '</span><span class="code">' + c.code + '</span><span class="hl-when">' + (c.exam.name || 'Exam') + ' ' + shortDate(c) + ' · ' + cdText(d) + '<span aria-hidden="true"> ›</span></span></span>' +
+      '<span class="hl-big"><b>' + m + '</b><small>% mastered</small><span class="hl-lv">Lv ' + li.L + ' · ' + li.title + '</span></span>' +
+      '<span class="mbar" aria-hidden="true"><i style="width:' + m + '%"></i></span>' +
+      '<span class="hl-meta"><span>' + c.name + '</span><span>' + solidN(c) + ' of ' + coreQ(c).length + ' mastered</span>' + (due ? '<span class="badge">' + due + ' due</span>' : '') + (c.gens ? '<span>+ ' + c.gens.length + ' generators</span>' : '') + '</span></button>';
+  }).join('');
+  var mixRec = infRec('mix'), cd = G.candle && !G.candle.done ? G.candle : null;
+  var today = new Date().toLocaleDateString('en-CA', { weekday: 'long', month: 'long', day: 'numeric' });
   app.innerHTML =
-    '<header class="top"><div><p class="eyebrow">Fall 2026 · Midterm season</p><h1>Midterm Gym</h1></div>' + togglesHTML() + '</header>' +
-    '<section class="stats" aria-label="Your stats">' +
-      '<div class="stat"><span class="lab">Next exam</span>' + (next ? '<div class="next-n"><span class="hue-chip" style="--hue:var(--' + next.hue + ')"></span>' + next.code + ' ' + cdText(daysTo(next)) + '</div><div class="muted" style="font-size:.85rem;margin-top:.2rem">' + next.exam.label + '</div>' : '<div class="next-n">All done</div>') + '</div>' +
-      '<div class="stat"><span class="lab">Streak</span><div class="big-n">' + G.streak + '<span class="muted" style="font-size:.8rem;font-family:var(--font-ui)"> day' + (G.streak === 1 ? '' : 's') + '</span></div></div>' +
-      '<div class="stat"><span class="lab">Today</span>' + ringHTML(tn) + '</div>' +
+    '<header class="hl-top"><div><p class="hl-date">' + today + '</p><h1>Summary</h1></div><button class="hl-av" type="button" id="hl-set" aria-label="Settings">' + gearIcon() + '</button></header>' +
+    '<section class="hl-card hl-act" aria-label="Today\'s rings">' +
+      '<div class="hl-cardh"><span class="hl-tag">' + ringsSVG([{ p: 1, hue: 'c1' }], 14, 3, 0, 'rings tiny') + 'Activity</span><span class="hl-sub">Today</span></div>' +
+      '<div class="hl-ringbox">' + ringsSVG(ringRows(), 240, 17, 3.5, 'rings big') + '<div class="lg">' + legend + '</div></div>' +
+      '<p class="hl-goal">Close a ring by earning <b>' + goal + ' XP</b> in that course today. ' + closedN + ' of ' + rc.length + ' closed.</p>' +
+      '<div class="wk">' + weekHTML() + '</div>' +
     '</section>' +
-    '<section class="cta"><button class="btn big inf" type="button" id="mix"><span class="bl">' + infIcon() + 'Infinite mix</span><small>' + (mixRec.st ? 'best streak ' + mixRec.st : 'sooner exams first') + '</small></button></section>' +
-    '<section class="block"><h2>Your courses</h2><div class="courses">' + cards + '</div><p class="due-note" style="margin-top:.7rem">Sorted by exam date. The bar is your mastery. A question turns green only when it is 100% mastered: four right answers in a row. Any miss sends it back to red.</p></section>' +
-    '<details class="how"><summary>How this works</summary><ul><li>You answer before you see anything. Pulling the answer out of your head is what builds memory.</li><li>Missed questions come back in the same run, then again after 8 hours, 1 day, 2 days and 4 days.</li><li>Smart runs mix topics, like the exam does. Tap a topic on a course page to drill just that topic.</li><li>Infinite mode never runs out. Generators write new versions of the calculation questions with fresh numbers each time.</li><li>The streak and the daily goal of ' + GOAL + ' questions count every course.</li><li>The formula sheet button sits at the top of every question for courses that have one.</li><li>On a keyboard: 1 to 5 picks an option, Enter checks or moves on, H opens a hint, F opens the formula sheet.</li></ul></details>' +
-    '<div class="foot"><span>Progress saves in this browser.</span></div>';
-  animateRing(tn);
+    '<section class="hl-tiles">' +
+      '<div class="hl-card hl-tile"><span class="hl-tag fl">' + flame() + 'Streak</span><div class="hl-n">' + G.streak + '<small> day' + (G.streak === 1 ? '' : 's') + '</small></div><p class="hl-s">Study streak. Perfect days in a row: ' + ps + '.</p></div>' +
+      '<div class="hl-card hl-tile"><span class="hl-tag nx">' + calIcon() + 'Next exam</span>' + (next ? '<div class="hl-n">' + Math.max(0, daysTo(next)) + '<small> day' + (daysTo(next) === 1 ? '' : 's') + '</small></div><p class="hl-s">' + next.code + ' ' + (next.exam.name || 'exam').toLowerCase() + ', ' + next.exam.label + '.</p>' : '<div class="hl-n">–</div><p class="hl-s">No exams ahead.</p>') + '</div>' +
+      '<div class="hl-card hl-tile"><span class="hl-tag qs">' + boltIcon() + 'Questions</span><div class="hl-n">' + tn + '<small>/' + GOAL + '</small></div><p class="hl-s">Today\'s goal across every course.</p></div>' +
+      '<div class="hl-card hl-tile"><span class="hl-tag tm">' + candleIcon() + 'Focus</span><div class="hl-n" id="tmr-big">' + (cd ? fmtClock(cdLeft(cd)) : '25:00') + '</div><button class="hl-link" type="button" id="tmr-pill">' + (cd ? 'Open timer' : 'Start the study timer') + '</button></div>' +
+    '</section>' +
+    '<button class="btn big inf hl-mix" type="button" id="mix"><span class="bl">' + infIcon() + 'Infinite mix</span><small>' + (mixRec.st ? 'best streak ' + mixRec.st : 'sooner exams first') + '</small></button>' +
+    '<h2 class="hl-sec">Courses</h2><div class="courses">' + cards + '</div>' +
+    '<h2 class="hl-sec" id="settings">Settings</h2>' +
+    '<div class="hl-card hl-list">' +
+      '<div class="hl-li"><span>Daily XP to close a ring</span><span class="stepper hl-step"><button type="button" id="xg-m" aria-label="Lower the goal">−</button><b id="xg-v">' + goal + '</b><button type="button" id="xg-p" aria-label="Raise the goal">+</button></span></div>' +
+      '<div class="hl-li"><span>Sound</span><button class="tgl sw" type="button" data-tgl="snd" aria-pressed="' + G.snd + '" aria-label="Sound"><i></i></button></div>' +
+      '<div class="hl-li"><span>Haptics</span><button class="tgl sw" type="button" data-tgl="hap" aria-pressed="' + G.hap + '" aria-label="Haptics"><i></i></button></div>' +
+      '<div class="hl-li"><span>Back up progress<small>Saves a file you can import on another device.</small></span><button class="hl-link" type="button" id="bk-out">Export</button></div>' +
+      '<div class="hl-li"><span>Restore progress<small>From an export, on this device.</small></span><button class="hl-link" type="button" id="bk-in">Import</button></div>' +
+    '</div>' +
+    '<details class="how"><summary>How this works</summary><ul><li>You answer before you see anything. Pulling the answer out of your head is what builds memory.</li><li>Missed questions come back in the same run, then again after 8 hours, 1 day, 2 days and 4 days.</li><li>Each ring is one course. It fills with the XP you earn in that course today, and closes at your daily XP goal (change it in Settings). A ring streak counts the days in a row you closed it.</li><li>Smart runs mix topics, like the exam does. Tap a topic on a course page to drill just that topic.</li><li>Infinite mode never runs out. Generators write new versions of the calculation questions with fresh numbers each time.</li><li>The formula sheet button sits at the top of every question for courses that have one.</li><li>On a keyboard: 1 to 5 picks an option, Enter checks or moves on, H opens a hint, F opens the formula sheet.</li></ul></details>' +
+    '<div class="foot"><span>Progress saves in this browser. Use Export in Settings to move it to another device.</span></div>';
+  animateRings(app);
   bindToggles();
   app.querySelectorAll('[data-course]').forEach(function (b) { b.addEventListener('click', function () { Snd.tap(); showHome(CBY[b.getAttribute('data-course')]); }); });
   document.getElementById('mix').addEventListener('click', function () { Snd.tap(); showInfIntro(true); });
+  document.getElementById('hl-set').addEventListener('click', function () { document.getElementById('settings').scrollIntoView({ behavior: 'smooth' }); });
+  var setGoal = function (v) { G.xpGoal = Math.max(25, Math.min(500, v)); var dd = G.xd && G.xd[dayKey()]; if (dd) dd._g = G.xpGoal; save(); var y = window.scrollY; showGym(); window.scrollTo(0, y); };
+  document.getElementById('xg-m').addEventListener('click', function () { Snd.tap(); setGoal(goal - 25); });
+  document.getElementById('xg-p').addEventListener('click', function () { Snd.tap(); setGoal(goal + 25); });
+  document.getElementById('bk-out').addEventListener('click', function (e) { Snd.tap(); exportProgress(e.currentTarget); });
+  document.getElementById('bk-in').addEventListener('click', function () { Snd.tap(); importProgress(); });
   window.scrollTo(0, 0);
 }
+function gearIcon() { return '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M12 8.6a3.4 3.4 0 1 0 0 6.8 3.4 3.4 0 0 0 0-6.8zm7.4 4.6.1-1.2-.1-1.2 2-1.6-2-3.4-2.4.9c-.6-.5-1.3-.9-2-1.2L14.6 3h-4l-.4 2.5c-.7.3-1.4.7-2 1.2l-2.4-.9-2 3.4 2 1.6-.1 1.2.1 1.2-2 1.6 2 3.4 2.4-.9c.6.5 1.3.9 2 1.2l.4 2.5h4l.4-2.5c.7-.3 1.4-.7 2-1.2l2.4.9 2-3.4z"/></svg>'; }
+function calIcon() { return '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M5 5h14v15H5zM5 10h14M9 3v4M15 3v4"/></svg>'; }
+function boltIcon() { return '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>'; }
 
 /* ---------- COURSE HOME ---------- */
 function showHome(c) {
@@ -891,7 +1027,7 @@ function showHome(c) {
   var mockSub = CUR.mock.sections.map(function (s) { return (s.n || s.lps.length) + ' ' + s.short; }).join(' + ') + ', timed';
   app.innerHTML =
     '<button class="back" type="button" id="gym"><span aria-hidden="true">←</span> All courses</button>' +
-    '<header class="top"><div><p class="eyebrow"><span class="hue-chip" style="--hue:var(--' + CUR.hue + ')"></span>' + CUR.scope + ' · Midterm ' + cdText(d) + '</p><h1>' + CUR.code + '</h1><p class="sub">' + CUR.name + ' · ' + CUR.exam.label + '</p></div>' + togglesHTML() + '</header>' +
+    '<header class="top"><div><p class="eyebrow"><span class="hue-chip" style="--hue:var(--' + CUR.hue + ')"></span>' + CUR.scope + ' · ' + (CUR.exam.name || 'Exam') + ' ' + cdText(d) + '</p><h1>' + CUR.code + '</h1><p class="sub">' + CUR.name + ' · ' + CUR.exam.label + '</p></div>' + togglesHTML() + '</header>' +
     '<section class="stats" aria-label="Your stats">' +
       '<div class="stat"><span class="lab">Level</span><div class="lvl"><b>' + li.L + '</b><span>' + li.title + '</span></div><div class="xpbar" aria-label="' + li.rem + ' of ' + li.need + ' XP"><i id="xpfill"></i></div><div class="muted mono" style="font-size:.72rem;margin-top:.3rem">' + li.rem + ' / ' + li.need + ' XP</div></div>' +
       '<div class="stat"><span class="lab">Streak</span><div class="big-n">' + G.streak + '<span class="muted" style="font-size:.8rem;font-family:var(--font-ui)"> day' + (G.streak === 1 ? '' : 's') + '</span></div></div>' +
@@ -901,9 +1037,9 @@ function showHome(c) {
       '<p class="due-note">' + (dueN ? '<b>' + dueN + ' due for review</b> go first, then new questions from your weakest topics.' : (newN ? 'Nothing due. You get new questions from your weakest topics.' : 'Everything is on a review schedule. Mixed practice from all topics.')) + '</p>' +
       '<button class="btn big inf" type="button" data-act="inf"><span class="bl">' + infIcon() + 'Infinite mode</span><small>' + (rec.st || rec.lv ? 'best streak ' + rec.st + (rec.lv ? ' · 3-lives best ' + rec.lv : '') : 'endless or 3 lives') + '</small></button>' +
       (missed.length ? '<button class="btn ghost big fix" type="button" data-act="fix"><span>Fix my mistakes</span><small class="muted">' + missed.length + ' missed last time</small></button>' : '') +
-      '<div class="cta2' + (CUR.formula ? '' : ' one') + '"><button class="btn ghost" type="button" data-act="mock">Mock midterm<small class="muted">' + mockSub + '</small></button>' +
+      '<div class="cta2' + (CUR.formula ? '' : ' one') + '"><button class="btn ghost" type="button" data-act="mock">Mock exam<small class="muted">' + mockSub + '</small></button>' +
       (CUR.formula ? '<button class="btn ghost" type="button" data-act="formula">Formula sheet<small class="muted">' + (CUR.formula.sub || (CUR.formula.kind === 'img' ? 'The real sheet, ' + CUR.formula.pages.length + ' page' + (CUR.formula.pages.length > 1 ? 's' : '') : 'What you get on the exam')) + '</small></button>' : '') +
-      (CUR.progs ? '<button class="btn ghost aidb codeb" type="button" data-act="code"><span class="bl">' + codeIcon() + 'Write the code</span><small class="muted">' + CUR.progs.length + ' full programs like the real midterm, ' + (codeHasClaude() ? 'marked by Claude' : 'with a rubric and model solution') + codeBestNote() + '</small></button>' : '') +
+      (CUR.progs ? '<button class="btn ghost aidb codeb" type="button" data-act="code"><span class="bl">' + codeIcon() + 'Write the code</span><small class="muted">' + CUR.progs.length + ' full programs like the real exam, ' + (codeHasClaude() ? 'marked by Claude' : 'with a rubric and model solution') + codeBestNote() + '</small></button>' : '') +
       (CUR.aid ? '<button class="btn ghost aidb" type="button" data-act="aid"><span class="bl">' + sheetIcon() + CUR.aid.title + '</span><small class="muted">Two sides, ready to print. Also in the Formulas panel while you practise.</small></button>' : '') + '</div></section>' +
     '<section class="block"><h2>Topic map</h2><div class="map">' + mapHTML + '</div><p class="due-note" style="margin-top:.6rem">Each square is a question: grey is unseen, red is missed, amber is in progress (darker as it gets closer), and green is 100% mastered. +∞ means the topic also has generators that write fresh versions in infinite mode. Tap a topic to drill it.</p></section>' +
     '<details class="how"><summary>How this course works</summary><ul>' + (CUR.how || []).map(function (x) { return '<li>' + x + '</li>'; }).join('') + '<li>Missed questions come back within the same run, then again after 8 hours, 1 day, 2 days and 4 days.</li></ul></details>' +
@@ -930,10 +1066,13 @@ function showHome(c) {
   });
   window.scrollTo(0, 0);
 }
+function typedItems(items) { return items.map(function (f) { return '<h4>' + f[0] + '</h4><div>' + fmt(f[1]) + '</div>'; }).join(''); }
 function formulaBody(F) {
-  if (F.kind === 'img') return '<p class="sheet-note">Tap a page to zoom in.</p>' +
+  /* extra: newer units typed from the slides, shown above the sheet itself */
+  var extra = F.extra ? '<div class="fs"><h4 class="fx-h">' + (F.extraTitle || 'More equations') + '</h4>' + typedItems(F.extra) + '</div><h4 class="sheet-h">' + (F.sheetTitle || 'Data sheet') + '</h4>' : '';
+  if (F.kind === 'img') return extra + '<p class="sheet-note">Tap a page to zoom in.</p>' +
     F.pages.map(function (p) { return '<div class="sheet"><img src="' + p.src + '" alt="' + p.alt + '" width="' + p.w + '" height="' + p.h + '" loading="lazy"></div>'; }).join('');
-  return '<div class="fs">' + F.items.map(function (f) { return '<h4>' + f[0] + '</h4><div>' + fmt(f[1]) + '</div>'; }).join('') + '</div>';
+  return extra + '<div class="fs">' + typedItems(F.items) + '</div>';
 }
 function bindZoom(root) { root.querySelectorAll('.sheet').forEach(function (s) { s.addEventListener('click', function () { s.classList.toggle('zoom'); }); }); }
 /* full-screen view, used from the course page */
@@ -1060,7 +1199,7 @@ function showCodeList() {
   dropBars(); leaveQuestions();
   var o = CUR.S.code || {};
   app.innerHTML = '<button class="back" type="button" id="cw-home"><span aria-hidden="true">←</span> ' + CUR.code + '</button>' +
-    '<header class="top"><div><p class="eyebrow">Separate section · not part of mastery</p><h1>Write the code</h1><p class="sub">Whole programs, written the way the real midterm asks. ' + (codeHasClaude() ? 'Type your answer, then Claude marks it out of 10 against a rubric and traces it on test files.' : 'Type your answer, then mark it out of 10 against the rubric, with the model solution beside it.') + '</p></div></header>' +
+    '<header class="top"><div><p class="eyebrow">Separate section · not part of mastery</p><h1>Write the code</h1><p class="sub">Whole programs, written the way the real exam asks. ' + (codeHasClaude() ? 'Type your answer, then Claude marks it out of 10 against a rubric and traces it on test files.' : 'Type your answer, then mark it out of 10 against the rubric, with the model solution beside it.') + '</p></div></header>' +
     '<section class="cw-list">' + CUR.progs.map(function (p) {
       var r = o[p.id], st = r && r.best != null ? '<span class="cw-score' + (r.best >= 8 ? ' good' : '') + '">Best ' + r.best + '/10</span>' : (r && r.draft ? '<span class="cw-score">Draft saved</span>' : '<span class="cw-score muted">Not tried</span>');
       return '<button class="cw-item" type="button" data-p="' + p.id + '"><div class="cw-it"><b>' + p.title + '</b>' + st + '</div><div class="muted cw-tags">' + p.tags + ' · about ' + p.mins + ' min</div></button>';
@@ -1133,7 +1272,7 @@ function codePrompt(p, code) {
     s += 'Expected output:\n' + t.out + '\n';
     return s;
   }).join('\n');
-  return 'You are a fair but careful TA marking a first-year engineering C++ midterm question (University of Waterloo, MTE 121, Digital Computation). ' +
+  return 'You are a fair but careful TA marking a first-year engineering C++ exam question (University of Waterloo, MTE 121, Digital Computation). ' +
     'Mark the student program the way a written exam is marked. It must be a complete program. ' + (p.vex ? 'It is VEXcode IQ C++: the names in the question (LeftMotor, RightMotor, TouchLED10, Distance7, configureAllSensors, wait, rotateRobot) exist and need no declaration, and #include "vex.h" with using namespace vex is the normal header. Do not take marks off for the header or for not defining rotateRobot. Trace what the robot does instead of program output.' : 'Assume it is compiled with g++ (C++11) and run in a folder where the test files exist as described.') +
     ' Minor style differences, extra blank lines and different variable names cost nothing. Prompts or output text that differ from the question cost marks only where the rubric mentions output.\n\n' +
     'QUESTION\n' + specText + '\n\nTESTS\n' + tests + '\nMARKING RUBRIC (10 marks total)\n' +
@@ -1761,7 +1900,7 @@ function showMockIntro() {
   var mins = CUR.mockMin || CUR.mock.minutes;
   app.innerHTML =
     '<button class="back" type="button" id="back0"><span aria-hidden="true">←</span> ' + CUR.code + '</button>' +
-    '<p class="eyebrow">' + CUR.code + ' · Mock midterm</p><h1>Exam conditions</h1>' +
+    '<p class="eyebrow">' + CUR.code + ' · Mock exam</p><h1>Exam conditions</h1>' +
     '<div class="stat" style="margin-top:1rem"><p style="margin:0">' + CUR.mock.blurb + ' No feedback until you submit.' + (CUR.formula ? ' You can open the formula sheet, like the real thing.' : '') + '</p>' +
     '<div class="stepper"><span class="lab mono" style="font-size:.75rem">TIME LIMIT</span><button type="button" id="mm" aria-label="Less time">−</button><b class="timer" id="mv">' + mins + ' min</b><button type="button" id="mp" aria-label="More time">+</button></div>' +
     '<p class="muted" style="font-size:.85rem;margin:.6rem 0 0">Misses go into your review schedule.</p></div>' +
@@ -1853,7 +1992,7 @@ function finishMock() {
     return '<div class="ritem"><button type="button" data-rv="' + r.id + '" aria-expanded="false"><span class="st' + cls + '">' + stIcon(r) + '</span><span class="nm"><b>Q' + (i + 1) + '</b> · ' + T.name + '</span><span class="muted mono">' + (Math.round(r.frac * r.w * 10) / 10) + '/' + r.w + '</span></button><div class="rv" hidden></div></div>';
   }).join('');
   app.innerHTML =
-    '<div class="sum-top"><p class="eyebrow">' + CUR.code + ' · Mock midterm result</p><div class="score" id="acc">0%</div><p class="muted">' + (Math.round(got * 10) / 10) + ' of ' + max + ' points · ' + fmtTime(used) + ' used of ' + exam.mins + ':00</p></div>' +
+    '<div class="sum-top"><p class="eyebrow">' + CUR.code + ' · Mock exam result</p><div class="score" id="acc">0%</div><p class="muted">' + (Math.round(got * 10) / 10) + ' of ' + max + ' points · ' + fmtTime(used) + ' used of ' + exam.mins + ':00</p></div>' +
     '<div class="kpis"><div class="stat"><span class="lab">XP earned</span><div class="big-n" id="kxp">0</div></div><div class="stat"><span class="lab">Missed</span><div class="big-n">' + rows.filter(function (r) { return !r.ok; }).length + '</div></div><div class="stat"><span class="lab">Level</span><div class="big-n">' + lvlInfo(CUR.S.xp).L + '</div></div></div>' +
     secHTML +
     '<p class="due-note" style="margin-top:1rem">Tap a question to see your answer and the full solution. Anything you missed is now in your review schedule.</p>' +

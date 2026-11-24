@@ -11,6 +11,16 @@ var TOPICS = [
   { id: 't8', name: 'Matrix algebra and Ax', sec: '3.1 to 3.3' },
   { id: 't9', name: 'Matrix multiplication', sec: '3.4' },
   { id: 't10', name: 'Matrix inverses', sec: '3.5' },
+  { id: 't11', name: 'Spanning sets and independence', sec: '4.1 to 4.3' },
+  { id: 't12', name: 'Subspaces', sec: '4.4' },
+  { id: 't13', name: 'Bases and dimension', sec: '4.5' },
+  { id: 't14', name: 'Fundamental subspaces', sec: '4.6 to 4.7' },
+  { id: 't15', name: 'Linear transformations', sec: '5.1 to 5.3' },
+  { id: 't16', name: 'Inverses, kernel and range', sec: '5.4 to 5.5' },
+  { id: 't17', name: 'Determinants', sec: '6.1 to 6.3' },
+  { id: 't18', name: 'Complex numbers', sec: '7.1 to 7.5' },
+  { id: 't19', name: 'Eigenvalues and eigenvectors', sec: '8.1 to 8.3' },
+  { id: 't20', name: 'Diagonalization', sec: '8.4 to 8.5' },
   { id: 'tw', name: 'Pre-test warm-up', sec: 'In your head', extra: 'Quick mental questions. Not counted in mastery.' }
 ];
 
@@ -499,7 +509,234 @@ mc('w-26', 'tw', 'Which equals (AB)<sup>T</sup>?', ['B<sup>T</sup>A<sup>T</sup>'
 mc('w-27', 'tw', 'Is [[1,2;2,4]] invertible?', ['No', 'Yes'], 0, 'Its rank is 1, not 2 (row 2 = 2 × row 1). Equivalently ad − bc = 4 − 4 = 0.'),
 num('w-28', 'tw', 'For which <i>k</i> is [[1,k;2,6]] NOT invertible?', '3', 'ad − bc = 0.', '6 − 2<i>k</i> = 0 gives <i>k</i> = 3.'),
 mc('w-29', 'tw', 'If A is invertible, what is (A<sup>−1</sup>)<sup>−1</sup>?', ['A', 'A<sup>T</sup>', 'I', '−A'], 0, 'A undoes A<sup>−1</sup>, so the inverse of A<sup>−1</sup> is A.'),
-mc('w-30', 'tw', 'Nonzero ~x~ and ~y~ have ~x~·~y~ = 0. What is the angle between them?', ['π/2', '0', 'π', 'π/4'], 0, 'cos θ = 0, so θ = π/2: they are orthogonal.')
+mc('w-30', 'tw', 'Nonzero ~x~ and ~y~ have ~x~·~y~ = 0. What is the angle between them?', ['π/2', '0', 'π', 'π/4'], 0, 'cos θ = 0, so θ = π/2: they are orthogonal.'),
+
+/* ---------- 4.1 to 4.3 · spanning sets and linear independence ---------- */
+mc('t11-1', 't11', 'Does { {{1,2}}, {{2,4}} } span ℝ²?',
+  ['No, both vectors lie on one line through the origin', 'Yes, any two nonzero vectors span ℝ²', 'Yes, because the set has 2 vectors and ℝ² has dimension 2', 'No, because a spanning set of ℝ² needs 3 vectors'], 0,
+  '{{2,4}} = 2{{1,2}}, so every linear combination is a multiple of {{1,2}}. The span is the line through the origin in that direction, not the whole plane. Two vectors span ℝ² only when they are linearly independent.'),
+num('t11-2', 't11', 'For which value of <i>k</i> is { {{1,2,1}}, {{0,1,3}}, {{1,k,4}} } linearly dependent?', '3',
+  'Three vectors in ℝ³ are dependent exactly when the matrix with them as columns has determinant 0 (or a row of zeros after row reduction).',
+  'det [[1,0,1;2,1,k;1,3,4]] = 1(4 − 3k) − 0 + 1(6 − 1) = 9 − 3k. This is 0 when k = 3. Then {{1,3,4}} = {{1,2,1}} + {{0,1,3}}, a clear dependency.'),
+mc('t11-3', 't11', 'Which statement about a set of 4 vectors in ℝ³ is always true?',
+  ['It is linearly dependent', 'It spans ℝ³', 'It is linearly independent', 'It contains the zero vector'], 0,
+  'A matrix with 3 rows has at most 3 pivots, so 4 columns leave at least one free variable: a nontrivial combination gives ~0~. The set may or may not span ℝ³ (four copies of the same vector do not).'),
+num('t11-4', 't11', 'Find <i>a</i> and <i>b</i> so that {{1,0,1}} = <i>a</i>{{1,1,0}} + <i>b</i>{{0,1,-1}}.', '(1,-1)',
+  'Write one equation per row and solve the first two, then check the third.',
+  'Row 1: a = 1. Row 2: a + b = 0, so b = −1. Row 3 checks: −b = 1. So {{1,0,1}} is in the span, with a = 1 and b = −1.', ['a', 'b']),
+mc('t11-5', 't11', 'What is Span{ {{1,2,3}}, {{2,4,6}} } geometrically?',
+  ['A line through the origin', 'A plane through the origin', 'All of ℝ³', 'A line that misses the origin'], 0,
+  'The second vector is twice the first, so it adds nothing new (Reduction Theorem). The span of one nonzero vector is a line through the origin.'),
+mc('t11-6', 't11', 'True or false: any set of vectors that contains the zero vector is linearly dependent.',
+  ['True', 'False'], 0,
+  '1·~0~ + 0(every other vector) = ~0~ is a combination equal to ~0~ with a coefficient that is not zero. That is exactly what dependent means.'),
+multi('t11-7', 't11', 'Let ~v~<sub>1</sub> = {{1,1,0,1}}, ~v~<sub>2</sub> = {{2,1,1,0}} and ~v~<sub>3</sub> = {{1,0,1,-1}}.', [
+  { ask: 'Write ~v~<sub>3</sub> = a~v~<sub>1</sub> + b~v~<sub>2</sub>. Find a and b.', ans: '(-1,1)', labels: ['a', 'b'], hint: 'Row 3 only involves b.', why: 'Row 3: b = 1. Row 1: a + 2 = 1, so a = −1. Rows 2 and 4 check: −1 + 1 = 0 and −1 + 0 = −1.' },
+  { ask: 'What is the dimension of Span{~v~<sub>1</sub>, ~v~<sub>2</sub>, ~v~<sub>3</sub>}?', ans: '2', hint: 'Remove the dependent vector, then check the rest.', why: '~v~<sub>3</sub> is a combination of the other two, so remove it. ~v~<sub>1</sub> and ~v~<sub>2</sub> are not multiples of each other, so they form a basis: dimension 2.' }
+], 'sub'),
+
+/* ---------- 4.4 · subspaces ---------- */
+mc('t12-1', 't12', 'Which of these is a subspace of ℝ³?',
+  ['{~x~ : x<sub>1</sub> + 2x<sub>2</sub> − x<sub>3</sub> = 0}', '{~x~ : x<sub>1</sub> + x<sub>2</sub> = 1}', '{~x~ : x<sub>1</sub>x<sub>2</sub> = 0}', '{~x~ : x<sub>1</sub> ≥ 0}'], 0,
+  'A plane through the origin passes the subspace test. x<sub>1</sub> + x<sub>2</sub> = 1 misses ~0~. x<sub>1</sub>x<sub>2</sub> = 0 is not closed under addition: {{1,0,0}} + {{0,1,0}} = {{1,1,0}}. x<sub>1</sub> ≥ 0 is not closed under multiplying by −1.'),
+mc('t12-2', 't12', 'Is S = { {{a,b,a+b+1}} : a, b ∈ ℝ} a subspace of ℝ³?',
+  ['No, it does not contain the zero vector', 'Yes, it is the span of two vectors', 'Yes, it is a plane', 'No, it is not closed under scalar multiplication only'], 0,
+  'The zero vector needs a = 0 and b = 0 (the first two entries), but then the third entry is 0 + 0 + 1 = 1, not 0. So ~0~ is not in S and it fails the first part of the test. It is a plane, but one that misses the origin.'),
+mc('t12-3', 't12', 'True or false: every line in ℝ² is a subspace of ℝ².',
+  ['False', 'True'], 0,
+  'Only lines through the origin are subspaces. A line like x<sub>2</sub> = x<sub>1</sub> + 1 does not contain ~0~.'),
+mc('t12-4', 't12', 'True or false: the span of any set of vectors in ℝⁿ is a subspace of ℝⁿ.',
+  ['True', 'False'], 0,
+  'A span contains ~0~ (all coefficients 0), and adding or scaling linear combinations gives linear combinations. That is the subspace test.'),
+proof('t12-5', 't12', 'Prove that S = {~x~ ∈ ℝ³ : x<sub>1</sub> = 2x<sub>3</sub>} is a subspace of ℝ³. Build the proof in order. Some tiles are wrong.',
+  ['~0~ ∈ S, since 0 = 2(0)',
+   'Let ~x~, ~y~ ∈ S, so x<sub>1</sub> = 2x<sub>3</sub> and y<sub>1</sub> = 2y<sub>3</sub>',
+   'Then x<sub>1</sub> + y<sub>1</sub> = 2x<sub>3</sub> + 2y<sub>3</sub> = 2(x<sub>3</sub> + y<sub>3</sub>), so ~x~ + ~y~ ∈ S',
+   'For c ∈ ℝ, cx<sub>1</sub> = c(2x<sub>3</sub>) = 2(cx<sub>3</sub>), so c~x~ ∈ S',
+   'By the Subspace Test, S is a subspace of ℝ³'],
+  ['Since {{1,0,0}} ∉ S, S is not a subspace', 'Let ~x~, ~y~ ∈ S, so x<sub>1</sub> + x<sub>3</sub> = 0 and y<sub>1</sub> + y<sub>3</sub> = 0'],
+  'The Subspace Test has three parts: ~0~ is in S, S is closed under addition, and S is closed under scalar multiplication. Check each one directly from the condition x<sub>1</sub> = 2x<sub>3</sub>.'),
+
+/* ---------- 4.5 · bases and dimension ---------- */
+num('t13-1', 't13', 'What is the dimension of Span{ {{1,2,-1}}, {{2,4,-2}}, {{0,1,1}} }?', '2',
+  'Remove any vector that is a combination of the others, then count.',
+  '{{2,4,-2}} = 2{{1,2,-1}}, so drop it. {{1,2,-1}} and {{0,1,1}} are not multiples, so they are a basis: dimension 2.'),
+mc('t13-2', 't13', 'Which set is a basis for the plane x<sub>1</sub> − 2x<sub>2</sub> + x<sub>3</sub> = 0?',
+  ['{ {{2,1,0}}, {{-1,0,1}} }', '{ {{1,-2,1}} }', '{ {{2,1,0}} }', '{ {{2,1,0}}, {{-1,0,1}}, {{1,1,1}} }'], 0,
+  'Solve with x<sub>2</sub> = s and x<sub>3</sub> = t free: x<sub>1</sub> = 2s − t, so ~x~ = s{{2,1,0}} + t{{-1,0,1}}. Those two vectors are independent and span the plane. {{1,-2,1}} is the normal, which is not in the plane, and {{1,1,1}} is not in the plane either.'),
+num('t13-3', 't13', 'What is the dimension of {~x~ ∈ ℝ⁴ : x<sub>1</sub> + x<sub>2</sub> + x<sub>3</sub> + x<sub>4</sub> = 0}?', '3',
+  'One equation in four unknowns: count the free variables.',
+  'The coefficient matrix [[1,1,1,1]] has rank 1, so there are 4 − 1 = 3 free variables and the solution space has dimension 3.'),
+mc('t13-4', 't13', 'True or false: any 3 linearly independent vectors in ℝ³ form a basis for ℝ³.',
+  ['True', 'False'], 0,
+  'In a space of dimension n, n independent vectors automatically span, so they are a basis. You only need to check one of the two conditions.'),
+mc('t13-5', 't13', 'Which set extends { {{1,1,0}} } to a basis for ℝ³?',
+  ['{ {{1,1,0}}, {{1,-1,0}}, {{0,0,1}} }', '{ {{1,1,0}}, {{2,2,0}}, {{0,0,1}} }', '{ {{1,1,0}}, {{0,0,1}} }', '{ {{1,1,0}}, {{1,0,0}}, {{0,1,0}} }'], 0,
+  'You need 3 independent vectors. {{2,2,0}} is a multiple of {{1,1,0}}. Two vectors cannot span ℝ³. And {{1,1,0}} = {{1,0,0}} + {{0,1,0}}, so the last set is dependent.'),
+mc('t13-6', 't13', 'For which values of <i>k</i> is { {{1,k}}, {{k,4}} } not a basis for ℝ²?',
+  ['k = 2 or k = −2', 'k = 4 only', 'k = 0 only', 'It is a basis for every k'], 0,
+  'Two vectors in ℝ² are a basis exactly when det [[1,k;k,4]] = 4 − k² ≠ 0. That fails at k = ±2, where one vector is a multiple of the other.'),
+
+/* ---------- 4.6 to 4.7 · fundamental subspaces ---------- */
+multi('t14-1', 't14', 'Let A = [[1,2,1,0;2,4,3,1;1,2,2,1]]. Its RREF is [[1,2,0,-1;0,0,1,1;0,0,0,0]].', [
+  { ask: 'What is rank(A)?', ans: '2', hint: 'Count the leading ones.', why: 'Two leading ones, so rank(A) = 2.' },
+  { ask: 'What is the nullity of A?', ans: '2', hint: 'Rank–Nullity: rank + nullity = number of columns.', why: '4 columns − rank 2 = 2. The null space has basis {{-2,1,0,0}} and {{1,0,-1,1}}.' },
+  { ask: 'For which k is {{1,1,k}} in Col(A)?', ans: '0', hint: 'Col(A) is spanned by the pivot columns of A itself: {{1,2,1}} and {{1,3,2}}.', why: 'Solve a{{1,2,1}} + b{{1,3,2}} = {{1,1,k}}: a + b = 1 and 2a + 3b = 1 give b = −1, a = 2. Then k = a + 2b = 0.' }
+], 'sub'),
+num('t14-2', 't14', 'A is a 4 × 6 matrix with rank 3. What is the nullity of A?', '3',
+  'Rank–Nullity: rank(A) + nullity(A) = n, the number of columns.',
+  'n = 6, so nullity = 6 − 3 = 3.'),
+num('t14-3', 't14', 'A is a 5 × 7 matrix with rank 4. What is dim Null(Aᵀ)?', '1',
+  'Aᵀ is 7 × 5 and has the same rank as A.',
+  'Rank–Nullity for Aᵀ: 4 + dim Null(Aᵀ) = 5 (its number of columns), so dim Null(Aᵀ) = 1.'),
+mc('t14-4', 't14', 'For an n × n matrix A, which statement is NOT equivalent to "A is invertible"?',
+  ['The RREF of A has a row of zeros', 'Null(A) = {~0~}', 'rank(A) = n', 'The columns of A span ℝⁿ'], 0,
+  'A row of zeros in the RREF means rank(A) < n, which is exactly when A is not invertible. The other three are all on the invertible matrix list.'),
+mc('t14-5', 't14', 'A is 4 × 6 and A~x~ = ~b~ is consistent for every ~b~ in ℝ⁴. What are rank(A) and the nullity?',
+  ['rank 4, nullity 2', 'rank 6, nullity 0', 'rank 4, nullity 0', 'rank 2, nullity 4'], 0,
+  'Consistent for every ~b~ means Col(A) = ℝ⁴, so rank(A) = 4. Then nullity = 6 − 4 = 2: there are always infinitely many solutions.'),
+
+/* ---------- 5.1 to 5.3 · linear transformations ---------- */
+num('t15-1', 't15', 'Find the standard matrix of T(x<sub>1</sub>, x<sub>2</sub>) = (x<sub>1</sub> − 2x<sub>2</sub>, 3x<sub>1</sub>, x<sub>1</sub> + x<sub>2</sub>).', '1,-2;3,0;1,1',
+  'The columns are T(~e~<sub>1</sub>) and T(~e~<sub>2</sub>).',
+  'T(~e~<sub>1</sub>) = {{1,3,1}} and T(~e~<sub>2</sub>) = {{-2,0,1}}, so [T] = [[1,-2;3,0;1,1]]. It is 3 × 2 because T goes from ℝ² to ℝ³.'),
+mc('t15-2', 't15', 'Which of these maps is linear?',
+  ['T(~x~) = (2x<sub>1</sub> − x<sub>2</sub>, x<sub>3</sub>)', 'T(~x~) = (x<sub>1</sub> + 1, x<sub>2</sub>)', 'T(~x~) = (x<sub>1</sub>x<sub>2</sub>, 0)', 'T(~x~) = (|x<sub>1</sub>|, x<sub>2</sub>)'], 0,
+  'A linear map sends ~0~ to ~0~ and keeps sums and scalar multiples. The +1 moves ~0~, the product x<sub>1</sub>x<sub>2</sub> is not additive, and |x<sub>1</sub>| breaks scaling by −1. Only the first is a matrix times ~x~.'),
+num('t15-3', 't15', 'Find the standard matrix of the rotation of ℝ² by π/2 counterclockwise.', '0,-1;1,0',
+  '[R<sub>θ</sub>] = [[cos θ,−sin θ;sin θ,cos θ]].',
+  'cos(π/2) = 0 and sin(π/2) = 1, so [[0,-1;1,0]]. Check: ~e~<sub>1</sub> goes to ~e~<sub>2</sub>, a quarter turn counterclockwise.'),
+num('t15-4', 't15', 'Find the standard matrix of proj<sub>~d~</sub> for ~d~ = {{1,2}}. Fractions are fine.', '1/5,2/5;2/5,4/5',
+  'proj<sub>~d~</sub>(~x~) = ((~x~·~d~)/‖~d~‖²) ~d~. Apply it to ~e~<sub>1</sub> and ~e~<sub>2</sub>.',
+  'proj(~e~<sub>1</sub>) = (1/5){{1,2}} and proj(~e~<sub>2</sub>) = (2/5){{1,2}}. So [proj] = (1/5)[[1,2;2,4]].'),
+mc('t15-5', 't15', 'S is the reflection in the line x<sub>2</sub> = x<sub>1</sub> and T is the rotation by π/2 counterclockwise. What is S∘T?',
+  ['The reflection in the x<sub>1</sub>-axis', 'The reflection in the x<sub>2</sub>-axis', 'The rotation by −π/2', 'The identity'], 0,
+  '[S∘T] = [S][T] = [[0,1;1,0]][[0,-1;1,0]] = [[1,0;0,-1]], which keeps x<sub>1</sub> and flips x<sub>2</sub>: reflection in the x<sub>1</sub>-axis. Order matters: T acts first.'),
+num('t15-6', 't15', 'T : ℝ³ → ℝ² is linear with T(~e~<sub>1</sub>) = {{1,2}}, T(~e~<sub>2</sub>) = {{0,-1}} and T(~e~<sub>3</sub>) = {{3,1}}. Find T(2, 1, −1).', '(-1,2)',
+  '{{2,1,-1}} = 2~e~<sub>1</sub> + ~e~<sub>2</sub> − ~e~<sub>3</sub>, and T keeps linear combinations.',
+  'T(2, 1, −1) = 2{{1,2}} + {{0,-1}} − {{3,1}} = {{-1,2}}.'),
+multi('t15-7', 't15', 'T is the reflection of ℝ³ in the plane x<sub>1</sub> + x<sub>2</sub> + x<sub>3</sub> = 0, so T(~x~) = ~x~ − 2 proj<sub>~n~</sub>(~x~) with ~n~ = {{1,1,1}}.', [
+  { ask: 'Find T(1, 0, 0). Fractions are fine.', ans: '(1/3,-2/3,-2/3)', hint: 'proj<sub>~n~</sub>(~e~<sub>1</sub>) = (1/3){{1,1,1}}.', why: '{{1,0,0}} − (2/3){{1,1,1}} = {{1/3,-2/3,-2/3}}. This is the first column of [T].' },
+  { ask: 'Find T(1, 1, 1).', ans: '(-1,-1,-1)', hint: '{{1,1,1}} is the normal itself.', why: 'proj<sub>~n~</sub>(~n~) = ~n~, so T(~n~) = ~n~ − 2~n~ = −~n~. A reflection flips the normal and fixes the plane.' }
+], 'lt'),
+
+/* ---------- 5.4 to 5.5 · inverses, kernel and range ---------- */
+mc('t16-1', 't16', 'Is the linear map with standard matrix [[1,2;3,6]] invertible?',
+  ['No, its determinant is 0', 'Yes, every square matrix is invertible', 'Yes, because no entry is 0', 'No, because it is not square'], 0,
+  'det = 6 − 6 = 0. The columns are parallel, so T squashes ℝ² onto a line and cannot be undone.'),
+num('t16-2', 't16', 'T has standard matrix [[2,1;5,3]]. Find the standard matrix of T⁻¹.', '3,-1;-5,2',
+  '[[a,b;c,d]]⁻¹ = (1/(ad − bc))[[d,−b;−c,a]].',
+  'det = 6 − 5 = 1, so [T⁻¹] = [[3,-1;-5,2]]. Check: [[2,1;5,3]][[3,-1;-5,2]] = I.'),
+multi('t16-3', 't16', 'T : ℝ³ → ℝ² is T(x<sub>1</sub>, x<sub>2</sub>, x<sub>3</sub>) = (x<sub>1</sub> + x<sub>3</sub>, x<sub>2</sub> − x<sub>3</sub>).', [
+  { ask: 'Ker(T) is a line. Give the spanning vector whose third entry is 1.', ans: '(-1,1,1)', hint: 'Solve x<sub>1</sub> + x<sub>3</sub> = 0 and x<sub>2</sub> − x<sub>3</sub> = 0 with x<sub>3</sub> = t.', why: 'x<sub>1</sub> = −t and x<sub>2</sub> = t, so Ker(T) = Span{ {{-1,1,1}} }.' },
+  { ask: 'What is dim Range(T)?', ans: '2', hint: 'Rank–Nullity with the 3 columns of [T].', why: 'dim Ker = 1, so dim Range = 3 − 1 = 2. Range(T) is all of ℝ², so T is onto.' }
+], 'lt'),
+mc('t16-4', 't16', 'What is the kernel of a rotation of ℝ²?',
+  ['{~0~}', 'The x<sub>1</sub>-axis', 'All of ℝ²', 'The line of the rotation angle'], 0,
+  'A rotation only sends ~0~ to ~0~; every other vector keeps its length. Its kernel is {~0~}, which is also why rotations are invertible.'),
+mc('t16-5', 't16', 'P is the projection of ℝ² onto the line spanned by ~d~. What is Ker(P)?',
+  ['The line through the origin perpendicular to ~d~', 'The line spanned by ~d~', '{~0~}', 'All of ℝ²'], 0,
+  'Vectors perpendicular to ~d~ project to ~0~. The range is the line spanned by ~d~, and the dimensions add to 2.'),
+
+/* ---------- 6.1 to 6.3 · determinants ---------- */
+num('t17-1', 't17', 'Compute det [[2,-1,3;0,4,1;1,2,-2]].', '-33',
+  'Expand along the first column: it has a 0.',
+  'Along column 1: 2 det[[4,1;2,-2]] + 1 det[[-1,3;4,1]] = 2(−10) + 1(−13) = −33. (The (3,1) cofactor sign is +.)'),
+num('t17-2', 't17', 'Compute det [[3,1,4,2;0,-2,5,1;0,0,1,7;0,0,0,4]].', '-24',
+  'The matrix is upper triangular.',
+  'For a triangular matrix the determinant is the product of the diagonal: 3(−2)(1)(4) = −24.'),
+multi('t17-3', 't17', 'A is a 3 × 3 matrix with det A = 5.', [
+  { ask: 'What is det(2A)?', ans: '40', hint: 'Each of the 3 rows is multiplied by 2.', why: 'det(cA) = cⁿ det A = 2³ × 5 = 40.' },
+  { ask: 'What is det(A⁻¹)? Fractions are fine.', ans: '1/5', hint: 'det(A) det(A⁻¹) = det(I).', why: 'det(A⁻¹) = 1/det(A) = 1/5.' },
+  { ask: 'What is det(A³Aᵀ)?', ans: '625', hint: 'det(AB) = det(A)det(B) and det(Aᵀ) = det(A).', why: '5³ × 5 = 625.' }
+], 'det'),
+mc('t17-4', 't17', 'Swapping two rows of a square matrix does what to its determinant?',
+  ['Multiplies it by −1', 'Leaves it unchanged', 'Makes it 0', 'Squares it'], 0,
+  'A row swap flips the sign. Adding a multiple of one row to another leaves it unchanged, and multiplying a row by c multiplies it by c.'),
+mc('t17-5', 't17', 'For which values of <i>k</i> is [[1,k,0;k,1,0;0,0,2]] not invertible?',
+  ['k = 1 or k = −1', 'k = 0 only', 'k = 2 only', 'It is invertible for every k'], 0,
+  'Expand along row 3: det = 2(1 − k²). It is 0 exactly when k = ±1.'),
+num('t17-6', 't17', 'Let A = [[1,2,3;4,5,6;7,8,10]]. Find the cofactor C<sub>23</sub>.', '6',
+  'C<sub>ij</sub> = (−1)<sup>i+j</sup> times the determinant with row i and column j removed.',
+  'Remove row 2 and column 3: det[[1,2;7,8]] = 8 − 14 = −6. The sign is (−1)⁵ = −1, so C<sub>23</sub> = 6.'),
+mc('t17-7', 't17', 'For a square matrix A, det A = 0 exactly when…',
+  ['the columns of A are linearly dependent', 'A has a zero entry', 'A is symmetric', 'A is upper triangular'], 0,
+  'det A ≠ 0 is on the invertible matrix list, along with independent columns. A single zero entry, symmetry or triangular shape says nothing by itself.'),
+num('t17-8', 't17', 'Compute det [[1,1,1;1,2,4;1,3,9]]. Row operations make it quick.', '2',
+  'Subtract row 1 from rows 2 and 3 first (that does not change the determinant).',
+  'R2 − R1 and R3 − R1 give [[1,1,1;0,1,3;0,2,8]]. Expanding down column 1: 1(8 − 6) = 2.'),
+
+/* ---------- 7.1 to 7.5 · complex numbers ---------- */
+num('t18-1', 't18', 'Write (3 − 2i)(1 + 4i) in standard form a + bi.', '(11,10)',
+  'Expand and use i² = −1.',
+  '3 + 12i − 2i − 8i² = 3 + 10i + 8 = 11 + 10i.', ['a', 'b']),
+num('t18-2', 't18', 'Write (2 + i)/(1 − i) in standard form a + bi. Fractions are fine.', '(1/2,3/2)',
+  'Multiply the top and bottom by the conjugate of the bottom.',
+  '(2 + i)(1 + i) / ((1 − i)(1 + i)) = (2 + 3i + i²) / 2 = (1 + 3i)/2. So a = 1/2 and b = 3/2.', ['a', 'b']),
+num('t18-3', 't18', 'Compute |3 − 4i|.', '5',
+  '|a + bi| = √(a² + b²).',
+  '√(9 + 16) = √25 = 5.'),
+num('t18-4', 't18', 'Write i<sup>27</sup> in standard form a + bi.', '(0,-1)',
+  'Powers of i repeat every 4: i, −1, −i, 1.',
+  '27 = 4(6) + 3, so i²⁷ = i³ = −i = 0 − 1i.', ['a', 'b']),
+mc('t18-5', 't18', 'What is the polar form of −1 + √3 i?',
+  ['2(cos(2π/3) + i sin(2π/3))', '2(cos(π/3) + i sin(π/3))', '4(cos(2π/3) + i sin(2π/3))', '2(cos(−π/3) + i sin(−π/3))'], 0,
+  'r = √(1 + 3) = 2. The point (−1, √3) is in the second quadrant, so θ = π − π/3 = 2π/3. A calculator arctan(√3/−1) gives −π/3, which is in the wrong quadrant.'),
+num('t18-6', 't18', 'Use de Moivre\'s Theorem to write (1 + i)<sup>8</sup> in standard form a + bi.', '(16,0)',
+  '1 + i = √2 e<sup>iπ/4</sup>.',
+  '(√2)⁸ e<sup>i8π/4</sup> = 16 e<sup>i2π</sup> = 16. So a = 16, b = 0.', ['a', 'b']),
+mc('t18-7', 't18', 'What are the cube roots of −8?',
+  ['−2, 1 + √3 i and 1 − √3 i', '2, −2 and 2i', '−2 only', '2, −1 + √3 i and −1 − √3 i'], 0,
+  '−8 = 8e<sup>iπ</sup>, so the roots are 2e<sup>i(π + 2kπ)/3</sup> for k = 0, 1, 2: 2e<sup>iπ/3</sup> = 1 + √3 i, 2e<sup>iπ</sup> = −2 and 2e<sup>i5π/3</sup> = 1 − √3 i. The other option lists the cube roots of +8.'),
+mc('t18-8', 't18', 'A polynomial with real coefficients has 1 + 2i as a root. Which number must also be a root?',
+  ['1 − 2i', '−1 − 2i', '−1 + 2i', '2 + i'], 0,
+  'Non-real roots of real polynomials come in conjugate pairs (the Conjugate Root Theorem), so 1 − 2i is also a root.'),
+num('t18-9', 't18', 'For z = 2 − 3i, compute z z̄.', '13',
+  'z z̄ = |z|².',
+  '(2 − 3i)(2 + 3i) = 4 + 9 = 13, a real number, as z z̄ always is.'),
+multi('t18-10', 't18', 'Solve z² − 4z + 13 = 0 over ℂ.', [
+  { ask: 'Give the root with positive imaginary part, as a + bi.', ans: '(2,3)', labels: ['a', 'b'], hint: 'Quadratic formula: the discriminant is negative.', why: 'z = (4 ± √(16 − 52))/2 = (4 ± √−36)/2 = 2 ± 3i.' },
+  { ask: 'What is the product of the two roots?', ans: '13', hint: 'For z² + bz + c, the product of the roots is c.', why: '(2 + 3i)(2 − 3i) = 4 + 9 = 13, which matches the constant term.' }
+], 'cplx'),
+
+/* ---------- 8.1 to 8.3 · eigenvalues and eigenvectors ---------- */
+multi('t19-1', 't19', 'Let A = [[4,1;2,3]].', [
+  { ask: 'What is the larger eigenvalue?', ans: '5', hint: 'Solve det(A − λI) = 0.', why: 'det(A − λI) = (4 − λ)(3 − λ) − 2 = λ² − 7λ + 10 = (λ − 2)(λ − 5).' },
+  { ask: 'What is the smaller eigenvalue?', ans: '2', hint: 'Same polynomial.', why: 'The roots are 2 and 5. Check: their sum 7 is the trace and their product 10 is det A.' }
+]),
+mc('t19-2', 't19', 'Is {{1,1}} an eigenvector of [[2,1;1,2]]?',
+  ['Yes, with eigenvalue 3', 'Yes, with eigenvalue 1', 'No, A{{1,1}} is not a multiple of {{1,1}}', 'No, eigenvectors cannot have equal entries'], 0,
+  'A{{1,1}} = {{3,3}} = 3{{1,1}}, so it is an eigenvector with λ = 3.'),
+num('t19-3', 't19', '{{1,1}} is an eigenvector of [[1,2;3,0]]. What is its eigenvalue?', '3',
+  'Multiply A by the vector and compare.',
+  'A{{1,1}} = {{3,3}} = 3{{1,1}}, so λ = 3.'),
+mc('t19-4', 't19', 'What are the eigenvalues of [[2,5,-1;0,3,4;0,0,-1]]?',
+  ['2, 3 and −1', '2, 5 and −1', '6 only', '2, 3 and 4'], 0,
+  'For a triangular matrix, det(A − λI) is the product of the diagonal entries minus λ, so the eigenvalues are the diagonal entries.'),
+multi('t19-5', 't19', 'Let A = [[2,0,0;1,3,0;-1,1,1]].', [
+  { ask: 'What is the sum of the eigenvalues?', ans: '6', hint: 'A is lower triangular.', why: 'The eigenvalues are the diagonal entries 2, 3 and 1, which add to 6 (the trace).' },
+  { ask: 'Find an eigenvector for λ = 3 with third entry 1.', ans: '(0,2,1)', hint: 'Solve (A − 3I)~x~ = ~0~.', why: 'A − 3I = [[-1,0,0;1,0,0;-1,1,-2]]. Row 1 gives x<sub>1</sub> = 0, then row 3 gives x<sub>2</sub> = 2x<sub>3</sub>. With x<sub>3</sub> = 1: {{0,2,1}}.' }
+], 'eig'),
+mc('t19-6', 't19', 'For a square matrix A, 0 is an eigenvalue exactly when…',
+  ['A is not invertible', 'A is the zero matrix', 'A has a zero on its diagonal', 'A is symmetric'], 0,
+  'λ = 0 means A~x~ = ~0~ for some ~x~ ≠ ~0~, so Null(A) is not {~0~}: A is not invertible.'),
+num('t19-7', 't19', 'What is the geometric multiplicity of λ = 3 for A = [[3,1;0,3]]?', '1',
+  'Geometric multiplicity = dim Null(A − 3I).',
+  'A − 3I = [[0,1;0,0]] has rank 1, so its null space has dimension 2 − 1 = 1. The algebraic multiplicity is 2.'),
+
+/* ---------- 8.4 to 8.5 · diagonalization ---------- */
+mc('t20-1', 't20', 'Is A = [[3,1;0,3]] diagonalizable?',
+  ['No, λ = 3 has only one independent eigenvector', 'Yes, it is upper triangular', 'Yes, its eigenvalues are real', 'No, because det A = 0'], 0,
+  'A needs 2 independent eigenvectors. λ = 3 has algebraic multiplicity 2 but geometric multiplicity 1, so it is not diagonalizable. (det A = 9.)'),
+multi('t20-2', 't20', 'A = [[1,2;2,1]] has eigenvalues 3 and −1 with eigenvectors {{1,1}} and {{1,-1}}, so A = PDP⁻¹.', [
+  { ask: 'Find A⁵.', ans: '121,122;122,121', hint: 'A⁵ = PD⁵P⁻¹ with D⁵ = diag(243, −1).', why: 'P = [[1,1;1,-1]] and P⁻¹ = (1/2)[[1,1;1,-1]]. PD⁵P⁻¹ = (1/2)[[243 − 1,243 + 1;243 + 1,243 − 1]] = [[121,122;122,121]].' }
+], 'eig'),
+mc('t20-3', 't20', 'A 3 × 3 matrix has 3 distinct eigenvalues. What can you conclude?',
+  ['It is diagonalizable', 'It is not invertible', 'It is symmetric', 'Nothing about diagonalizing it'], 0,
+  'Eigenvectors for distinct eigenvalues are independent, so there are 3 independent eigenvectors: A is diagonalizable. (It is invertible only if none of the eigenvalues is 0.)'),
+num('t20-4', 't20', 'A = PDP⁻¹ with D = [[2,0;0,-1]]. What is det A?', '-2',
+  'det(PDP⁻¹) = det P det D det P⁻¹.',
+  'det P and det P⁻¹ cancel, so det A = det D = 2(−1) = −2: the product of the eigenvalues.')
 ];
 var QBY = {};
 Q.forEach(function (q) { QBY[q.id] = q; });
@@ -516,14 +753,14 @@ var FORMULAS = [
 
 COURSES.push({
   id: 'math115', code: 'MATH 115', name: 'Linear Algebra for Engineering', key: 'math115-midterm-gym-v1', hue: 'c1',
-  exam: { at: '2026-10-26T20:00:00-04:00', label: 'Mon Oct 26, 8:00 PM' },
-  scope: 'Sections 1.1 to 3.5',
+  exam: { at: '2026-12-10T09:00:00-05:00', label: 'Thu Dec 10, 9:00 AM', name: 'Final' },
+  scope: 'Sections 1.1 to 8.5',
   topics: TOPICS, Q: Q, titles: TITLES,
   formula: { kind: 'html', title: 'MATH 115 formula sheet', note: 'What the midterm formula sheet gives you.', items: FORMULAS },
-  mock: { minutes: 50, blurb: '6 multiple choice (1 point each) and 4 long answer (4 points each), drawn from sections 1.1 to 3.5.',
+  mock: { minutes: 150, blurb: 'A final-length mock: 8 multiple choice (1 point each) and 8 long answer (4 points each), one from each part of the course, sections 1.1 to 8.5. The real final\'s layout is not posted yet, so this is modelled on the midterm.',
     sections: [
-      { label: 'Multiple choice', short: 'multiple choice', n: 6, pts: 1, pick: function (q) { return q.type === 'mc'; } },
-      { label: 'Long answer', short: 'long answer', lps: ['geo', 'sys', 'mat', 'proof'], pts: 4 }
+      { label: 'Multiple choice', short: 'multiple choice', n: 8, pts: 1, pick: function (q) { return q.type === 'mc'; } },
+      { label: 'Long answer', short: 'long answer', lps: ['geo', 'sys', 'mat', 'sub', 'lt', 'det', 'cplx', 'eig'], pts: 4 }
     ] },
   how: ['Long answers go in as numbers, vectors or matrices. Proofs are built from tiles, and some tiles are wrong.',
     'Do the two real sample midterms by hand on paper as well. These questions are new ones written in the same style.']

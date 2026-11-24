@@ -18,7 +18,7 @@ async def main():
         await pg.goto('http://127.0.0.1:8767/docs/index.html')
         await pg.wait_for_timeout(400)
         card = await pg.locator('[data-course="math115"]').inner_text()
-        streak = await pg.locator('.stats .stat').nth(1).inner_text()
+        streak = await pg.locator('.hl-tile', has_text='Streak').first.inner_text()
         snd = await pg.locator('[data-tgl="snd"]').get_attribute('aria-pressed')
         print('MATH 115 card after migration:', card.replace('\n', ' | '))
         print('streak tile:', streak.replace('\n', ' '), '| sound toggle:', snd)

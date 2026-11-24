@@ -25,7 +25,7 @@ async def main():
                 if vpn == 'desk' and name == 'claude':
                     await pg.locator('[data-act="code"]').scroll_into_view_if_needed(); await pg.screenshot(path=str(OUT/f'cw-home-{vpn}.png'))
                 await pg.click('[data-act="code"]'); await pg.wait_for_timeout(200)
-                n = await pg.locator('.cw-item').count(); assert n == 4, n
+                n = await pg.locator('.cw-item').count(); assert n == 5, n
                 await pg.screenshot(path=str(OUT/f'cw-list-{name}-{vpn}.png'))
                 await pg.click('.cw-item[data-p="w1"]'); await pg.wait_for_timeout(300)
                 ed = pg.locator('#cw-ed'); await ed.click()

@@ -5,7 +5,11 @@ var T = [
   { id: 'c2', name: 'Decisions', sec: 'if, else, logic' },
   { id: 'c3', name: 'Loops and file reading', sec: 'for, while, do' },
   { id: 'c4', name: 'Functions', sec: 'Value and reference' },
-  { id: 'c5', name: 'VEX robot programming', sec: 'Motors and sensors' }
+  { id: 'c5', name: 'VEX robot programming', sec: 'Motors and sensors' },
+  { id: 'c6', name: 'Arrays', sec: 'Indexes, loops, functions' },
+  { id: 'c7', name: '2D arrays and structs', sec: 'Rows, columns, members' },
+  { id: 'c8', name: 'Classes', sec: 'Private data, getters, setters' },
+  { id: 'c9', name: 'Class files and operators', sec: 'Headers, ::, operator overloading' }
 ];
 var W = 'The code runs inside main(). Type the exact output.';
 var P = 'Assume ' + K`#include <iostream>` + ' and ' + K`using namespace std;` + ' Type the exact output.';
@@ -1137,7 +1141,587 @@ order('c5-25', 'c5', 'The beet juice valve opens with juiceMotor at 50% forward 
   { code: true, label: 'Your code, top to bottom' }),
 mc('c5-26', 'c5', 'The driveway has green artificial turf on each side. The robot crosses the driveway "until it reaches the other side". Which loop does that?',
   [K`while (Optical3.color() != green) {}`, K`while (Optical3.color() == green) {}`, K`if (Optical3.color() != green) {}`, K`while (Distance7.objectDistance(mm) < 200) {}`], 0,
-  'Start the motors, then wait while the sensor does NOT see green. The loop ends on reaching the turf, then stop. Looping while it IS green would end immediately, since the robot starts on the driveway.')
+  'Start the motors, then wait while the sensor does NOT see green. The loop ends on reaching the turf, then stop. Looping while it IS green would end immediately, since the robot starts on the driveway.'),
+
+/* ---------- Arrays ---------- */
+txt('c6-1', 'c6', W + C`
+int a[5] = {4, 8, 15, 16, 23};
+int sum = 0;
+for (int i = 0; i < 5; i += 2)
+    sum += a[i];
+cout << sum << " " << a[5 - 1];`,
+  '42 23',
+  'Indexes start at 0, and i goes 0, 2, 4.',
+  'The loop adds a[0] + a[2] + a[4] = 4 + 15 + 23 = 42. a[5 − 1] is a[4], the last element, 23. a[5] would be past the end.'),
+mc('c6-2', 'c6', 'What does this print?' + C`
+int nums[4] = {1, 2};
+cout << nums[3];`,
+  [K`0`, 'An unknown garbage value', K`2`, 'It does not compile'], 0,
+  'When an array has an initializer list, every element without a value is set to 0. So nums is {1, 2, 0, 0}. Only an array declared with no initializer at all, like int nums[4];, holds garbage.', { test: { expect: true } }),
+txt('c6-3', 'c6', P + C`
+void doubleAll(int arr[], int size)
+{
+    for (int i = 0; i < size; i++)
+        arr[i] *= 2;
+}
+
+int main()
+{
+    int v[3] = {1, 5, 7};
+    doubleAll(v, 3);
+    cout << v[0] << " " << v[1] << " " << v[2];
+    return 0;
+}`,
+  '2 10 14',
+  'An array parameter is not a copy. Which array does arr refer to?',
+  'Arrays are never copied into a function. arr refers to the same memory as v, so the changes stay after the call, as with a reference parameter. The size has to be passed separately because the function cannot work it out.'),
+txt('c6-4', 'c6', W + C`
+double t[6] = {3.5, 9.1, 2.0, 9.1, 7.4, 1.2};
+int best = 0;
+for (int i = 1; i < 6; i++)
+{
+    if (t[i] > t[best])
+        best = i;
+}
+cout << best << " " << t[best];`,
+  '1 9.1',
+  'The test is strictly greater. What happens when the second 9.1 is reached?',
+  'best becomes 1 at 9.1. At index 3, 9.1 > 9.1 is false, so best stays 1. Keeping the index rather than the value means you know where the maximum is as well as what it is.'),
+mc('c6-5', 'c6', 'What is wrong with this loop?' + C`
+int a[5] = {2, 4, 6, 8, 10};
+for (int i = 0; i <= 5; i++)
+    cout << a[i] << " ";`,
+  ['It reads a[5], past the end of the array', 'It skips the first element of the array', 'It prints only four of the five values', 'Nothing: it prints all five values'], 0,
+  'A 5-element array has indexes 0 to 4. With i <= 5 the last pass reads a[5]. C++ does not check bounds, so it prints whatever is in memory after the array (or crashes). Use i < 5.'),
+txt('c6-6', 'c6', W + C`
+int a[6] = {1, 2, 3, 4, 5, 6};
+for (int i = 0; i < 3; i++)
+{
+    int temp = a[i];
+    a[i] = a[5 - i];
+    a[5 - i] = temp;
+}
+for (int i = 0; i < 6; i++)
+    cout << a[i] << " ";`,
+  '6 5 4 3 2 1',
+  'Each pass swaps a[i] with its mirror a[5 − i].',
+  'Pass 0 swaps a[0] and a[5], pass 1 swaps a[1] and a[4], pass 2 swaps a[2] and a[3]. The loop stops at the middle. Running it to i < 6 would swap everything back.'),
+txt('c6-7', 'c6', 'numbers.txt contains:' + C`
+5
+12 7 30 7 18` + P + C`
+int main()
+{
+    ifstream fin("numbers.txt");
+    int n = 0;
+    fin >> n;
+    int data[10] = {0};
+    for (int i = 0; i < n; i++)
+        fin >> data[i];
+    int count = 0;
+    for (int i = 0; i < n; i++)
+    {
+        if (data[i] > data[0])
+            count++;
+    }
+    cout << n << " " << count << " " << data[n - 1];
+    fin.close();
+    return 0;
+}`,
+  '5 2 18',
+  'The first number is the count, not data. Then compare each value with data[0].',
+  'n = 5 and data holds {12, 7, 30, 7, 18}. Values bigger than 12: 30 and 18, so count = 2. data[n − 1] = data[4] = 18. The array has room for 10, and n says how many are used.', { test: { file: '5\n12 7 30 7 18\n' } }),
+
+/* ---------- 2D arrays and structs ---------- */
+txt('c7-1', 'c7', W + C`
+const int NUM_R = 2, NUM_C = 3;
+int g[NUM_R][NUM_C] = {{1, 2, 3}, {4, 5, 6}};
+int total = 0;
+for (int r = 0; r < NUM_R; r++)
+    total += g[r][NUM_C - 1];
+cout << total << " " << g[1][0];`,
+  '9 4',
+  'The first index is the row, the second is the column.',
+  'g[r][2] is the last column of each row: 3 + 6 = 9. g[1][0] is row 1 (the second row), column 0: 4.'),
+txt('c7-2', 'c7', W + C`
+const int NUM_R = 3, NUM_C = 2;
+int m[NUM_R][NUM_C] = {{2, 7}, {5, 1}, {8, 3}};
+for (int r = 0; r < NUM_R; r++)
+{
+    int rowSum = 0;
+    for (int c = 0; c < NUM_C; c++)
+        rowSum += m[r][c];
+    cout << rowSum << " ";
+}`,
+  '9 6 11',
+  'rowSum is reset to 0 at the start of every row.',
+  'Row 0: 2 + 7 = 9. Row 1: 5 + 1 = 6. Row 2: 8 + 3 = 11. Declaring rowSum inside the outer loop resets it for each row. Declared outside, it would print 9 15 26.'),
+mc('c7-3', 'c7', 'Which function header can take a 2D array declared as ' + K`int grid[NUM_R][NUM_C];` + ' (with ' + K`const int NUM_R = 4, NUM_C = 5;` + ' declared globally)?',
+  [K`void show(int grid[][NUM_C], int rows)`, K`void show(int grid[][], int rows, int cols)`, K`void show(int grid[NUM_R][], int cols)`, K`void show(int grid, int rows, int cols)`], 0,
+  'The compiler needs the number of columns to find grid[r][c] in memory, so every size except the first must be given. The row count can be left empty and passed in as a parameter.'),
+txt('c7-4', 'c7', W + C`
+const int N = 3;
+int a[N][N] = {{2, 0, 1}, {3, 5, 4}, {6, 1, 8}};
+int diag = 0, anti = 0;
+for (int i = 0; i < N; i++)
+{
+    diag += a[i][i];
+    anti += a[i][N - 1 - i];
+}
+cout << diag << " " << anti;`,
+  '15 12',
+  'a[i][N − 1 − i] runs from the top-right corner to the bottom-left.',
+  'Main diagonal: a[0][0] + a[1][1] + a[2][2] = 2 + 5 + 8 = 15. Other diagonal: a[0][2] + a[1][1] + a[2][0] = 1 + 5 + 6 = 12.'),
+txt('c7-5', 'c7', P + C`
+struct Motor
+{
+    int port;
+    double speed;
+};
+
+int main()
+{
+    Motor m1 = {3, 40.5};
+    Motor m2 = m1;
+    m2.speed = m2.speed * 2;
+    m1.port = 7;
+    cout << m1.port << " " << m1.speed << " " << m2.port << " " << m2.speed;
+    return 0;
+}`,
+  '7 40.5 3 81',
+  'Motor m2 = m1; copies every member. After that, are they linked?',
+  'Assigning a struct copies all its members, so m2 starts as {3, 40.5} and is separate from m1. Doubling m2.speed gives 81 and leaves m1.speed at 40.5. Changing m1.port to 7 leaves m2.port at 3.'),
+txt('c7-6', 'c7', P + C`
+struct Reading
+{
+    string label;
+    int value;
+};
+
+int main()
+{
+    Reading r[3] = {{"left", 12}, {"front", 45}, {"right", 30}};
+    int hi = 0;
+    for (int i = 1; i < 3; i++)
+    {
+        if (r[i].value > r[hi].value)
+            hi = i;
+    }
+    cout << r[hi].label << " " << r[hi].value;
+    return 0;
+}`,
+  'front 45',
+  'r[i].value is the value member of element i.',
+  'The array index picks the struct, then the dot picks the member. The largest value is 45 at index 1, so it prints that struct\'s label and value.'),
+mc('c7-7', 'c7', 'What does this print?' + C`
+struct Point
+{
+    int x;
+    int y;
+};
+
+void moveRight(Point p)
+{
+    p.x += 5;
+}
+
+void moveUp(Point & p)
+{
+    p.y += 5;
+}
+
+int main()
+{
+    Point a = {1, 1};
+    moveRight(a);
+    moveUp(a);
+    cout << a.x << " " << a.y;
+    return 0;
+}`,
+  [K`1 6`, K`6 6`, K`6 1`, K`1 1`], 0,
+  'Structs are passed by value like ints, unless the parameter has an &. moveRight changes its own copy, so a.x stays 1. moveUp gets a reference, so a.y becomes 6. (Arrays are the exception: they are never copied.)', { test: { expect: true } }),
+
+/* ---------- Classes ---------- */
+txt('c8-1', 'c8', P + C`
+class Song
+{
+private:
+    string title;
+    int seconds;
+public:
+    Song()
+    {
+        title = "none";
+        seconds = 0;
+    }
+    Song(string t, int s)
+    {
+        title = t;
+        seconds = abs(s);
+    }
+    int getSeconds() const
+    {
+        return seconds;
+    }
+    void setSeconds(int s)
+    {
+        seconds = abs(s);
+    }
+    string getTitle() const
+    {
+        return title;
+    }
+};
+
+int main()
+{
+    Song a;
+    Song b("Hey", -200);
+    a.setSeconds(-95);
+    cout << a.getTitle() << " " << a.getSeconds() << " ";
+    cout << b.getSeconds() / 60 << ":" << b.getSeconds() % 60;
+    return 0;
+}`,
+  'none 95 3:20',
+  'Song a; uses the default constructor. The constructor and the setter both use abs.',
+  'a gets title "none", then setSeconds(−95) stores 95. b stores abs(−200) = 200 seconds, and 200 / 60 = 3 with 200 % 60 = 20 left over. Setters and constructors are where a class keeps its data valid.'),
+mc('c8-2', 'c8', 'What happens with this program?' + C`
+class Battery
+{
+private:
+    double voltage;
+public:
+    Battery()
+    {
+        voltage = 7.2;
+    }
+    double getVoltage() const
+    {
+        return voltage;
+    }
+};
+
+int main()
+{
+    Battery b;
+    cout << b.voltage;
+    return 0;
+}`,
+  ['It does not compile, because voltage is private', 'It prints 7.2', 'It prints 0', 'It prints garbage, because voltage was never set'], 0,
+  'Private members can only be used inside the class\'s own member functions. main has to go through the public getter: cout << b.getVoltage();', { test: { err: true } }),
+mc('c8-3', 'c8', 'Why is ' + K`int getSeconds() const` + ' marked const?',
+  ['It promises not to change the object, so it works on a const Song', 'It makes the return value a constant that the caller cannot change', 'It makes seconds a constant that can never be changed again', 'It makes the function run faster, but it is optional style'], 0,
+  'const after the parameter list means the function does not change any member. The compiler enforces it, and only const functions can be called on a const object or through a const reference, like const Song & s.'),
+txt('c8-4', 'c8', 'songs.txt contains:' + C`
+Run 210
+Fly 185
+Sky 240` + P + C`
+class Song
+{
+private:
+    string title;
+    int seconds;
+public:
+    Song()
+    {
+        title = "";
+        seconds = 0;
+    }
+    bool input(istream & in)
+    {
+        in >> title >> seconds;
+        return !in.fail();
+    }
+    void output(ostream & out) const
+    {
+        out << title << ": " << seconds << " s" << endl;
+    }
+    int getSeconds() const
+    {
+        return seconds;
+    }
+};
+
+int main()
+{
+    ifstream fin("songs.txt");
+    Song list[10];
+    int n = 0;
+    while (n < 10 && list[n].input(fin))
+        n++;
+    int longest = 0;
+    for (int i = 1; i < n; i++)
+    {
+        if (list[i].getSeconds() > list[longest].getSeconds())
+            longest = i;
+    }
+    cout << n << endl;
+    list[longest].output(cout);
+    fin.close();
+    return 0;
+}`,
+  '3 Sky: 240 s',
+  'input returns false once a read fails. How many times does it succeed?',
+  'Three reads succeed, so n = 3. The fourth call fails at the end of the file and the loop stops without counting it. The longest is Sky at 240 s. Because output takes an ostream &, the same function can write to cout or to an ofstream.', { test: { file: 'Run 210\nFly 185\nSky 240\n', fname: 'songs.txt' } }),
+txt('c8-5', 'c8', P + C`
+class Wheel
+{
+private:
+    double diameter;
+    int turns;
+public:
+    Wheel(double d)
+    {
+        diameter = d;
+        turns = 0;
+    }
+    void spin(int n)
+    {
+        if (n > 0)
+            turns += n;
+    }
+    double distance() const
+    {
+        return 3.14 * diameter * turns;
+    }
+};
+
+int main()
+{
+    Wheel w(10);
+    w.spin(3);
+    w.spin(-2);
+    w.spin(2);
+    cout << w.distance();
+    return 0;
+}`,
+  '157',
+  'spin ignores anything that is not positive.',
+  'turns = 3 + 2 = 5 (the −2 is ignored). 3.14 × 10 × 5 = 157, and cout prints a whole-number double without a decimal point. The object remembers turns between calls, which a plain function could not.'),
+mc('c8-6', 'c8', 'The Wheel class above has only the constructor ' + K`Wheel(double d)` + '. What happens to ' + K`Wheel spare;` + '?',
+  ['It does not compile: there is no Wheel() constructor', 'spare gets diameter 0 and turns 0 automatically', 'spare is created, but its members hold garbage values', 'It compiles, but calling spare.distance() crashes'], 0,
+  'C++ only writes a default constructor for you when the class has no constructors at all. Once you write Wheel(double), Wheel spare; and Wheel arr[5]; both need a Wheel() you write yourself.', { test: { err: true, pre: 'class Wheel { double diameter; int turns; public: Wheel(double d) { diameter = d; turns = 0; } };', code: 'Wheel spare;' } }),
+txt('c8-7', 'c8', P + C`
+class Sensor
+{
+private:
+    int port;
+    int value;
+public:
+    Sensor()
+    {
+        port = 0;
+        value = -1;
+    }
+    void setPort(int p)
+    {
+        port = p;
+    }
+    void setValue(int v)
+    {
+        value = abs(v);
+    }
+    int getPort() const
+    {
+        return port;
+    }
+    int getValue() const
+    {
+        return value;
+    }
+};
+
+int main()
+{
+    Sensor s[4];
+    for (int i = 0; i < 4; i++)
+    {
+        s[i].setPort(i + 1);
+        if (i % 2 == 0)
+            s[i].setValue(i * 10 - 15);
+    }
+    for (int i = 0; i < 4; i++)
+        cout << s[i].getPort() << ":" << s[i].getValue() << " ";
+    return 0;
+}`,
+  '1:15 2:-1 3:5 4:-1',
+  'Every element starts from the default constructor. Only even i gets a new value.',
+  'Sensor s[4]; runs Sensor() four times, so every value starts at −1. i = 0 sets abs(−15) = 15 and i = 2 sets abs(5) = 5. Elements 1 and 3 keep −1. Every element gets its port.'),
+order('c8-8', 'c8', 'Write a class Battery with a private voltage, a default constructor that sets it to 0, a const getter, and a setter that stores the size of the value given (no negatives). Some tiles are decoys.',
+  ['class Battery\n{',
+   'private:\n    double voltage;',
+   'public:\n    Battery()\n    {\n        voltage = 0;\n    }',
+   '    double getVoltage() const\n    {\n        return voltage;\n    }',
+   '    void setVoltage(double v)\n    {\n        voltage = abs(v);\n    }',
+   '};'],
+  ['}', '    void getVoltage() const\n    {\n        return voltage;\n    }'],
+  'Data goes under private and the functions under public. A getter returns the member\'s type and is const. A class definition ends with }; and leaving out the semicolon is a classic compile error.',
+  { code: true, label: 'Your code, top to bottom', test: { top: true } }),
+
+/* ---------- Class files and operators ---------- */
+mc('c9-1', 'c9', 'Song.h starts with ' + K`#ifndef SONG_H` + ' and ' + K`#define SONG_H` + ', and ends with ' + K`#endif` + '. Why?',
+  ['So the class is not defined twice if the header is included twice', 'So that Song.cpp is always compiled before main.cpp is compiled', 'So that every member of Song becomes private unless marked public', 'So that other files can use the class without writing #include'], 0,
+  'The first time the file is read, SONG_H is not defined, so the class goes in and SONG_H gets defined. If the same file is included again, through another header for example, everything is skipped. Defining a class twice is a compile error.'),
+mc('c9-2', 'c9', 'A class is split into Song.h, Song.cpp and main.cpp. Where does this go?' + C`
+int Song::getSeconds() const
+{
+    return seconds;
+}`,
+  ['Song.cpp', 'Song.h, inside the class', 'main.cpp, before main', 'Any of the three files'], 0,
+  'Song.h holds the class declaration: members and function prototypes. Song.cpp includes "Song.h" and defines each function with Song:: in front. main.cpp also includes "Song.h" and only uses the class.'),
+mc('c9-3', 'c9', 'What happens with this code?' + C`
+class Song
+{
+private:
+    int seconds;
+public:
+    Song();
+    int getSeconds() const;
+};
+
+Song::Song()
+{
+    seconds = 0;
+}
+
+int getSeconds() const
+{
+    return seconds;
+}
+
+int main()
+{
+    Song s;
+    cout << s.getSeconds();
+    return 0;
+}`,
+  ['It does not compile: getSeconds needs Song:: in front', 'It compiles and prints 0, the value from the constructor', 'It compiles and prints a garbage value for seconds', 'It compiles, but the free getSeconds is never called'], 0,
+  'Without Song:: the compiler reads a new free function called getSeconds. A free function cannot be const and cannot see seconds, so it is an error. Every member defined outside the class needs ClassName:: before its name.', { test: { err: true } }),
+txt('c9-4', 'c9', P + C`
+class Box
+{
+private:
+    int w, h;
+public:
+    Box(int width, int height);
+    int area() const;
+    void grow(int amount);
+};
+
+Box::Box(int width, int height)
+{
+    w = width;
+    h = height;
+}
+
+int Box::area() const
+{
+    return w * h;
+}
+
+void Box::grow(int amount)
+{
+    w += amount;
+    h += amount;
+}
+
+int main()
+{
+    Box b(2, 3);
+    cout << b.area() << " ";
+    b.grow(2);
+    cout << b.area();
+    return 0;
+}`,
+  '6 20',
+  'grow adds to both sides, not to the area.',
+  'At first the area is 2 × 3 = 6. grow(2) makes it 4 × 5, so the area becomes 20. Box:: means these definitions belong to the class, so they can use w and h directly.'),
+txt('c9-5', 'c9', P + C`
+class Vec
+{
+private:
+    int x, y;
+public:
+    Vec(int a, int b)
+    {
+        x = a;
+        y = b;
+    }
+    Vec operator+(const Vec & other) const
+    {
+        return Vec(x + other.x, y + other.y);
+    }
+    bool operator==(const Vec & other) const
+    {
+        return x == other.x && y == other.y;
+    }
+    void output(ostream & out) const
+    {
+        out << "(" << x << "," << y << ")";
+    }
+};
+
+int main()
+{
+    Vec a(1, 2), b(3, -1);
+    Vec c = a + b + a;
+    c.output(cout);
+    cout << " " << (c == Vec(5, 3)) << " " << (a == b);
+    return 0;
+}`,
+  '(5,3) 1 0',
+  'a + b calls a.operator+(b). A bool prints as 1 or 0.',
+  'a + b = (4, 1), then + a gives (5, 3). c == Vec(5, 3) is true, which cout prints as 1. a == b is false, printed as 0. In a member operator the left operand is the object itself and the right one is the parameter.'),
+txt('c9-6', 'c9', P + C`
+class Time
+{
+private:
+    int mins, secs;
+public:
+    Time(int m, int s)
+    {
+        mins = m;
+        secs = s;
+    }
+    Time operator+(const Time & t) const
+    {
+        int total = (mins + t.mins) * 60 + secs + t.secs;
+        return Time(total / 60, total % 60);
+    }
+    void output(ostream & out) const
+    {
+        out << mins << "m" << secs << "s";
+    }
+};
+
+ostream & operator<<(ostream & out, const Time & t)
+{
+    t.output(out);
+    return out;
+}
+
+int main()
+{
+    Time a(3, 45), b(1, 30);
+    cout << a + b << " " << a;
+    return 0;
+}`,
+  '5m15s 3m45s',
+  'Add everything in seconds first, then split it into minutes and seconds.',
+  'total = 4 × 60 + 75 = 315 s, which is 5 min 15 s. operator<< lets you cout a Time directly. It is a free function because the left operand is cout, not a Time. a itself is unchanged, since + made a new object.'),
+mc('c9-7', 'c9', 'Why does ' + K`ostream & operator<<(ostream & out, const Time & t)` + ' return out?',
+  ['So that calls chain: cout << a << " " << b', 'Because every operator has to return something', 'So the Time object gets printed twice', 'To close the stream after printing'], 0,
+  'cout << a << b runs as (cout << a) << b. The first call has to hand back the same stream, by reference, so the next << has something to print to. A void operator<< would only allow one item per statement.'),
+mc('c9-8', 'c9', 'Inside class Song, which declaration lets you write ' + K`if (s1 < s2)` + ' for two Song objects?',
+  [K`bool operator<(const Song & other) const;`, K`bool operator<(const Song & a, const Song & b) const;`, K`Song operator<(Song other);`, K`bool <(const Song & other) const;`], 0,
+  'A member operator takes one parameter: the right operand. The left one is the object itself. It should return bool for a comparison, take a const reference so nothing is copied, and be const because it changes nothing.'),
+order('c9-9', 'c9', 'Class Money has private int dollars and int cents, and declares ' + K`Money operator+(const Money & other) const;` + '. Define it outside the class so that cents never goes over 99. Some tiles are decoys.',
+  ['Money Money::operator+(const Money & other) const\n{',
+   '    int total = (dollars + other.dollars) * 100 + cents + other.cents;',
+   '    return Money(total / 100, total % 100);',
+   '}'],
+  ['Money operator+(const Money & other) const\n{', '    return Money(dollars + other.dollars, cents + other.cents);'],
+  'Outside the class, the name needs Money:: in front, after the return type. Adding dollars and cents separately can give 150 cents, so convert to cents, add, then split with / 100 and % 100.',
+  { code: true, label: 'Your code, top to bottom', test: { top: true, pre: 'class Money\n{\n    int dollars, cents;\npublic:\n    Money(int d, int c) { dollars = d; cents = c; }\n    Money operator+(const Money & other) const;\n};' } })
 ];
 
 /* ---------- WRITE THE CODE: whole programs, marked by Claude (separate section) ---------- */
@@ -1353,17 +1937,156 @@ var CODE = [
           rotateRobot(90, 40);
           driveDistance(400, 50);
           return 0;
+      }` },
+  { id: 'w5', title: 'Parts inventory (classes)', mins: 20, tags: 'Classes · arrays of objects · files',
+    q: '<p>The robotics lab keeps its parts in <code>parts.txt</code>. Each line has a part name (one word), a quantity (integer) and a unit price (decimal), separated by spaces. There are at most 50 parts.</p>' +
+      '<p>Write a <b>complete C++ program</b> with a class <code>Part</code> that has:</p><ol>' +
+      '<li>Private members: <code>string name</code>, <code>int qty</code> and <code>double price</code>.</li>' +
+      '<li>A default constructor that sets the name to an empty string and both numbers to 0.</li>' +
+      '<li><code>bool input(istream &amp; in)</code>, which reads one part and returns true only if the read worked.</li>' +
+      '<li><code>void output(ostream &amp; out) const</code>, which writes <code>name: qty @ $price</code> with the price to 2 decimal places, then ends the line.</li>' +
+      '<li><code>double value() const</code>, which returns qty × price, and <code>int getQty() const</code>.</li></ol>' +
+      '<p>In <code>main</code>: open <code>parts.txt</code> (output <code>Error opening file</code> and end if it fails), read the parts into an array of <code>Part</code>, output every part with <code>output</code>, then output <code>Total value: $X</code> (2 decimals) and <code>Low stock: N</code>, where N counts the parts with fewer than 5 in stock.</p>',
+    tests: [
+      { name: 'Sample file', show: true, files: [['parts.txt', 'motor 12 24.99\nbumper 3 4.50\ngear 40 0.75\nbattery 2 39.95\n']], out: 'motor: 12 @ $24.99\nbumper: 3 @ $4.50\ngear: 40 @ $0.75\nbattery: 2 @ $39.95\nTotal value: $423.28\nLow stock: 2' },
+      { name: 'Empty file', files: [['parts.txt', '']], out: 'Total value: $0.00\nLow stock: 0' },
+      { name: 'One part, no newline at the end', files: [['parts.txt', 'sensor 5 18.00']], out: 'sensor: 5 @ $18.00\nTotal value: $90.00\nLow stock: 0' },
+      { name: 'Missing file', files: [], out: 'Error opening file' }
+    ],
+    rubric: [[1, 'Includes iostream, fstream, string and iomanip, and main returns an int'], [2, 'Class with the three private members, and the getter and value() marked const'], [1, 'Default constructor sets all three members'],
+      [2, 'input reads name, qty and price from the stream it is given and returns whether the read worked'], [1, 'output writes to the stream parameter (not cout) with 2 decimals and ends the line'],
+      [1, 'Opens the file, checks it, prints the error and stops if it failed'], [2, 'Reads into an array with a counter that stops at a failed read and never goes past 50'],
+      [2, 'Prints every part, the total value and the low-stock count (fewer than 5, so 5 is not low) exactly as shown']],
+    model: RAW`
+      #include <iostream>
+      #include <fstream>
+      #include <string>
+      #include <iomanip>
+      using namespace std;
+
+      class Part
+      {
+      private:
+          string name;
+          int qty;
+          double price;
+      public:
+          Part()
+          {
+              name = "";
+              qty = 0;
+              price = 0;
+          }
+          bool input(istream & in)
+          {
+              in >> name >> qty >> price;
+              return !in.fail();
+          }
+          void output(ostream & out) const
+          {
+              out << name << ": " << qty << " @ $" << fixed << setprecision(2) << price << endl;
+          }
+          double value() const
+          {
+              return qty * price;
+          }
+          int getQty() const
+          {
+              return qty;
+          }
+      };
+
+      int main()
+      {
+          const int MAX_PARTS = 50;
+          ifstream fin("parts.txt");
+          if (fin.fail())
+          {
+              cout << "Error opening file" << endl;
+              return 1;
+          }
+          Part parts[MAX_PARTS];
+          int n = 0;
+          while (n < MAX_PARTS && parts[n].input(fin))
+              n++;
+          fin.close();
+
+          double total = 0;
+          int low = 0;
+          for (int i = 0; i < n; i++)
+          {
+              parts[i].output(cout);
+              total += parts[i].value();
+              if (parts[i].getQty() < 5)
+                  low++;
+          }
+          cout << fixed << setprecision(2);
+          cout << "Total value: $" << total << endl;
+          cout << "Low stock: " << low << endl;
+          return 0;
       }` }
 ];
 
+var CX = [
+  ['Arrays', C`
+const int SIZE = 5;
+int a[SIZE] = {4, 8, 15};   // the rest are 0
+a[0]  ...  a[SIZE - 1]      // no bounds check
+void f(int arr[], int size); // arrays are never copied
+f(a, SIZE);`],
+  ['2D arrays', C`
+const int NUM_R = 3, NUM_C = 4;
+int g[NUM_R][NUM_C];
+g[row][col]
+void f(int g[][NUM_C], int rows); // columns required`],
+  ['Structs', C`
+struct Point
+{
+    int x;
+    double y;
+};                       // semicolon
+Point p = {1, 2.5};
+p.x = 3;                 // copied when assigned or passed by value`],
+  ['Classes', C`
+class Song
+{
+private:
+    string title;
+    int seconds;
+public:
+    Song();                          // default constructor
+    Song(string t, int s);
+    int getSeconds() const;          // getter: const
+    void setSeconds(int s);          // setter: seconds = abs(s);
+    bool input(istream & in);
+    void output(ostream & out) const;
+};`],
+  ['Class files', C`
+// Song.h
+#ifndef SONG_H
+#define SONG_H
+class Song { ... };
+#endif
+// Song.cpp
+#include "Song.h"
+int Song::getSeconds() const { return seconds; }`],
+  ['Operator overloading', C`
+Vec Vec::operator+(const Vec & other) const;
+bool Vec::operator==(const Vec & other) const;
+ostream & operator<<(ostream & out, const Vec & v)
+{
+    v.output(out);
+    return out;
+}`]
+];
 COURSES.push({
   id: 'mte121', code: 'MTE 121', name: 'Digital Computation', key: 'mte121-midterm-gym-v1', hue: 'c3',
-  exam: { at: '2026-10-27T16:30:00-04:00', label: 'Tue Oct 27, 4:30 PM' },
-  scope: 'C++ fundamentals to VEX IQ',
+  exam: { at: '2026-12-12T09:00:00-05:00', label: 'Sat Dec 12, 9:00 AM', name: 'Final' },
+  scope: 'C++ fundamentals to classes and operator overloading',
   progs: CODE,
   topics: T, Q: Q,
   titles: ['Hello World', 'Semicolon Survivor', 'Integer Divider', 'Branch Manager', 'Loop Wrangler', 'Off-by-One Hunter', 'Reference Ranger', 'Function Smith', 'Encoder Whisperer', 'Midterm Compiler'],
-  formula: { kind: 'html', title: 'C++ syntax sheet', sub: 'C++ syntax quick reference', note: 'A C++ syntax quick reference, plus the VEX IQ calls this gym uses. It is not an official exam sheet.',
+  formula: { kind: 'html', title: 'C++ syntax sheet', sub: 'C++ syntax quick reference', extra: CX, extraTitle: 'Final topics: arrays, structs and classes', sheetTitle: 'Syntax sheet', note: 'A C++ syntax quick reference, plus the VEX IQ calls this gym uses. It is not an official exam sheet.',
     items: [
       ['Libraries', K`iostream` + ', ' + K`fstream` + ', ' + K`cmath` + ', ' + K`using namespace std`],
       ['Function definition and call', C`
@@ -1402,14 +2125,14 @@ wait(20, msec);   wait(2, seconds);
 rotateRobot(angle, speed);            // given on the exams
 // 1 wheel turn = 200 mm:  degrees = mm / 200 * 360`]
     ] },
-  mock: { minutes: 60, blurb: '6 multiple choice (2 points each), 2 output traces (5 points each) and 2 build-the-code puzzles (10 points each). Like the real midterm, the trace questions reward careful step-by-step tracking.',
+  mock: { minutes: 120, blurb: 'Final length: 10 multiple choice (2 points each), 4 output traces (5 points each) and 3 build-the-code puzzles (10 points each). Traces now include arrays, structs and classes, so track every member of every object.',
     sections: [
-      { label: 'Multiple choice', short: 'multiple choice', n: 6, pts: 2, pick: function (q) { return q.type === 'mc'; } },
-      { label: 'Output trace', short: 'output trace', n: 2, pts: 5, pick: function (q) { return q.type === 'txt'; } },
-      { label: 'Build the code', short: 'build the code', n: 2, pts: 10, pick: function (q) { return q.type === 'order'; } }
+      { label: 'Multiple choice', short: 'multiple choice', n: 10, pts: 2, pick: function (q) { return q.type === 'mc'; } },
+      { label: 'Output trace', short: 'output trace', n: 4, pts: 5, pick: function (q) { return q.type === 'txt'; } },
+      { label: 'Build the code', short: 'build the code', n: 3, pts: 10, pick: function (q) { return q.type === 'order'; } }
     ] },
   how: ['Output questions accept any spacing at the ends of lines, and a line break counts as a space. Spaces between values still matter.',
-    'Writing questions turn into build-the-code puzzles: tap the lines in order, and leave the decoys out. On the real midterm you write the whole program, so also write the past-midterm programs out on paper.',
+    'Writing questions turn into build-the-code puzzles: tap the lines in order, and leave the decoys out. On the real exam you write the whole program, so also write the past-exam programs out on paper.',
     'The VEX questions follow the robot questions on past exams: a VEX IQ robot in the standard configuration, configureAllSensors(), a given rotateRobot(angle, speed), and parts asking for an assumption, an issue and functions with parameters. Device names follow VEXcode IQ defaults. The logic carries over if your lab names them differently.']
 });
 })();

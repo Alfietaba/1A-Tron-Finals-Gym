@@ -31,7 +31,7 @@ function vexCheck(q) {
   else { const mm = /\u0001([\s\S]*?)\u0002/.exec(q.q); if (!mm) { skip++; return; } code = mm[1]; }
   code = strip(code);
   const pre = (q.x.test && q.x.test.pre) || '';
-  const isDef = /^\s*(void|int|bool|double)\s+\w+\s*\(/.test(code);
+  const isDef = (q.x.test && q.x.test.top) || /^\s*(void|int|bool|double)\s+\w+\s*\(/.test(code);
   const prog = MOCK + '\n' + (isDef ? pre + '\n' + code : 'void test_fn() {\n' + pre + '\n' + code + '\n}') + '\n';
   const src = path.join(dir, 'v_' + q.id.replace(/\W/g, '') + '.cpp');
   fs.writeFileSync(src, prog);
@@ -45,13 +45,13 @@ course.Q.forEach(q => {
   const all = [...q.q.matchAll(/\u0001([\s\S]*?)\u0002/g)], m = all.length ? all[all.length - 1] : null; /* the program is the last code block; earlier ones are file contents */
   const test = q.x.test;
   if (q.t === 'c5' || q.type === 'order') { vexCheck(q); return; }
-  if (!m || (q.type !== 'txt' && !test)) { skip++; return; }
-  let code = m[1];
+  if ((!m && !(test && test.code)) || (q.type !== 'txt' && !test)) { skip++; return; }
+  let code = test && test.code ? (test.pre || '') + '\n' + test.code : m[1];
   if (test && test.print) code += '\ncout << ' + test.print + ';';
   const prog = HDR + (/int main/.test(code) ? code : 'int main() {\n' + code + '\nreturn 0;\n}');
   const src = path.join(dir, q.id.replace(/\W/g, '') + '.cpp'), exe = src.replace('.cpp', '');
   fs.writeFileSync(src, prog);
-  if (test && test.file) fs.writeFileSync(path.join(dir, 'numbers.txt'), test.file);
+  if (test && test.file) fs.writeFileSync(path.join(dir, test.fname || 'numbers.txt'), test.file);
   let compiled = true;
   try { cp.execSync(`g++ -std=c++17 -w -o ${exe} ${src}`, { stdio: 'pipe' }); } catch (e) { compiled = false; }
   if (test && test.err) { if (!compiled) { pass++; } else { fail++; console.log('FAIL (should not compile)', q.id); } return; }

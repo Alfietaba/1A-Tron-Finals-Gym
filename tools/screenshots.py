@@ -28,8 +28,12 @@ today = datetime.date.today().isoformat()
 m115 = demo_progress('math115.js', r't\d+-\d+', {
     't1': [5, 5, 5, 4, 5, 4, 3], 't2': [5, 4, 5, 5, 3, 4, 2, 4], 't3': [4, 5, 3, 4, 2, 3], 't4': [4, 3, 1, 4, 2, 3, 2],
     't5': [3, 2, 4, 1, 3], 't6': [3, 2, 2, 1, 3], 't7': [2, 1, 2], 't8': [2, 1], 't9': [1], 't10': []})
+def day(n): return (datetime.date.today() + datetime.timedelta(days=n)).isoformat()
+# a week of daily XP per course, so the home rings and the week strip have something to show
+XD = {day(-i): {'math115': 120 if i % 2 == 0 else 60, 'mte121': 100 if i < 3 else 40, 'mte100': 80, 'math116': 30 + 20 * i, 'che102': 110 if i < 4 else 20, '_g': 100} for i in range(1, 7)}
+XD[today] = {'math115': 135, 'mte121': 70, 'mte100': 100, 'math116': 45, 'che102': 20, '_g': 100}
 SEED = {
-    'midterm-gym-global-v1': {'streak': 6, 'last': today, 'today': {'d': today, 'n': 14, 'hit': False}, 'snd': False, 'hap': False},
+    'midterm-gym-global-v1': {'streak': 6, 'last': today, 'today': {'d': today, 'n': 14, 'hit': False}, 'snd': False, 'hap': False, 'xd': XD},
     'math115-midterm-gym-v1': {'xp': 1180, 'q': m115},
 }
 INIT = 'try { ' + ' '.join(f'localStorage.setItem({json.dumps(k)}, {json.dumps(json.dumps(v))});' for k, v in SEED.items()) + ' } catch (e) {}'
@@ -65,6 +69,9 @@ async def main():
         pg = await ctx.new_page()
         await pg.goto(url); await pg.wait_for_timeout(700)
         await pg.screenshot(path=str(OUT / 'home.png'))
+        ph = await br.new_context(viewport={'width': 390, 'height': 844}, device_scale_factor=2)
+        await ph.add_init_script(INIT); pp = await ph.new_page(); await pp.goto(url); await pp.wait_for_timeout(700)
+        await pp.screenshot(path=str(OUT / 'home-phone.png')); await ph.close()
         await open_course(pg, 'math115')
         await pg.evaluate("() => document.querySelector('.map').scrollIntoView({block: 'center'})"); await pg.wait_for_timeout(200)
         await pg.screenshot(path=str(OUT / 'course.png'))
