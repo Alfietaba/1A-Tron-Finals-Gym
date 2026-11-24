@@ -9,7 +9,8 @@ var T = [
   { id: 'c6', name: 'Arrays', sec: 'Indexes, loops, functions' },
   { id: 'c7', name: '2D arrays and structs', sec: 'Rows, columns, members' },
   { id: 'c8', name: 'Classes', sec: 'Private data, getters, setters' },
-  { id: 'c9', name: 'Class files and operators', sec: 'Headers, ::, operator overloading' }
+  { id: 'c9', name: 'Class files and operators', sec: 'Headers, ::, operator overloading' },
+  { id: 'tw', name: 'Pre-exam warm-up', sec: 'In your head', extra: 'Quick, easy questions on the basics to settle your nerves before the exam. Not counted in mastery or mock exams.' }
 ];
 var W = 'The code runs inside main(). Type the exact output.';
 var P = 'Assume ' + K`#include <iostream>` + ' and ' + K`using namespace std;` + ' Type the exact output.';
@@ -1721,7 +1722,458 @@ order('c9-9', 'c9', 'Class Money has private int dollars and int cents, and decl
    '}'],
   ['Money operator+(const Money & other) const\n{', '    return Money(dollars + other.dollars, cents + other.cents);'],
   'Outside the class, the name needs Money:: in front, after the return type. Adding dollars and cents separately can give 150 cents, so convert to cents, add, then split with / 100 and % 100.',
-  { code: true, label: 'Your code, top to bottom', test: { top: true, pre: 'class Money\n{\n    int dollars, cents;\npublic:\n    Money(int d, int c) { dollars = d; cents = c; }\n    Money operator+(const Money & other) const;\n};' } })
+  { code: true, label: 'Your code, top to bottom', test: { top: true, pre: 'class Money\n{\n    int dollars, cents;\npublic:\n    Money(int d, int c) { dollars = d; cents = c; }\n    Money operator+(const Money & other) const;\n};' } }),
+
+/* ---------- more practice: arrays, structs, classes, operators ---------- */
+txt('c6-8', 'c6', W + C`
+int v[6] = {3, 8, 5, 12, 7, 4};
+int evens = 0, sum = 0;
+for (int i = 0; i < 6; i++)
+{
+    if (v[i] % 2 == 0)
+    {
+        evens++;
+        sum += v[i];
+    }
+}
+cout << evens << " " << sum;`,
+  '3 24',
+  'v[i] % 2 == 0 tests the value, not the index.',
+  'The even values are 8, 12 and 4: three of them, adding to 24.'),
+txt('c6-9', 'c6', W + C`
+int a[5] = {10, 20, 30, 40, 50};
+int first = a[0];
+for (int i = 0; i < 4; i++)
+    a[i] = a[i + 1];
+a[4] = first;
+for (int i = 0; i < 5; i++)
+    cout << a[i] << " ";`,
+  '20 30 40 50 10',
+  'Each element takes the value of the one after it. What happens to the old a[0]?',
+  'The loop shifts everything one place left, and the saved first value goes on the end: a rotation. The loop stops at i < 4 so a[i + 1] never reads past a[4].'),
+txt('c6-10', 'c6', P + C`
+int find(const int arr[], int size, int target)
+{
+    for (int i = 0; i < size; i++)
+    {
+        if (arr[i] == target)
+            return i;
+    }
+    return -1;
+}
+
+int main()
+{
+    int data[5] = {7, 2, 9, 2, 5};
+    cout << find(data, 5, 2) << " " << find(data, 5, 4);
+    return 0;
+}`,
+  '1 -1',
+  'return leaves the function immediately, at the first match.',
+  'The first 2 is at index 1, so the search stops there. 4 is not in the array, so the loop finishes and the function returns −1, a common "not found" signal.'),
+mc('c6-11', 'c6', 'Why does the parameter in ' + K`int find(const int arr[], int size, int target)` + ' say const?',
+  ['The function promises not to change the array', 'It makes a copy of the array so the original stays safe', 'It fixes the size of the array so it cannot grow', 'It is required on every array parameter in C++'], 0,
+  'Arrays are never copied into functions, so a function could change the caller\'s array. const turns any accidental change, like arr[i] = 0, into a compile error.'),
+txt('c6-12', 'c6', W + C`
+int a[5] = {1, 2, 3, 4, 5};
+for (int i = 1; i < 5; i++)
+    a[i] += a[i - 1];
+cout << a[2] << " " << a[4];`,
+  '6 15',
+  'Each element adds the already updated element before it.',
+  'The array becomes the running totals {1, 3, 6, 10, 15}, so a[2] = 6 and a[4] = 15.'),
+mc('c6-13', 'c6', 'What happens with this code?' + C`
+int a[3] = {1, 2, 3};
+int b[3];
+b = a;`,
+  ['It does not compile: arrays cannot be assigned', 'b becomes a separate copy of a, holding {1, 2, 3}', 'b and a now share the same memory', 'It compiles, but b is left holding garbage'], 0,
+  'Unlike structs, arrays cannot be assigned with =. Use for (int i = 0; i < 3; i++) b[i] = a[i];', { test: { err: true } }),
+
+txt('c7-8', 'c7', W + C`
+const int NUM_R = 2, NUM_C = 3;
+int g[NUM_R][NUM_C] = {{4, 1, 7}, {2, 6, 3}};
+for (int c = 0; c < NUM_C; c++)
+{
+    int colSum = 0;
+    for (int r = 0; r < NUM_R; r++)
+        colSum += g[r][c];
+    cout << colSum << " ";
+}`,
+  '6 7 10',
+  'The outer loop is now the column, so each pass adds down one column.',
+  'Column 0: 4 + 2 = 6. Column 1: 1 + 6 = 7. Column 2: 7 + 3 = 10. Swapping which loop is outside switches between row totals and column totals.'),
+txt('c7-9', 'c7', W + C`
+const int NUM_R = 3, NUM_C = 3;
+int m[NUM_R][NUM_C] = {{5, 9, 2}, {8, 1, 9}, {3, 7, 4}};
+int bestR = 0, bestC = 0;
+for (int r = 0; r < NUM_R; r++)
+{
+    for (int c = 0; c < NUM_C; c++)
+    {
+        if (m[r][c] > m[bestR][bestC])
+        {
+            bestR = r;
+            bestC = c;
+        }
+    }
+}
+cout << bestR << "," << bestC;`,
+  '0,1',
+  'There are two 9s. Which one is found first, and does the second beat it?',
+  'Row by row, the first 9 is at row 0, column 1. The 9 at (1, 2) is not greater than 9, so the position stays 0,1.'),
+txt('c7-10', 'c7', P + C`
+struct Robot
+{
+    string name;
+    int x, y;
+};
+
+void drive(Robot & r, int dx, int dy)
+{
+    r.x += dx;
+    r.y += dy;
+}
+
+int main()
+{
+    Robot bot = {"Rex", 0, 0};
+    drive(bot, 3, 1);
+    drive(bot, -1, 4);
+    cout << bot.name << " " << bot.x << " " << bot.y;
+    return 0;
+}`,
+  'Rex 2 5',
+  'Robot & r means the function changes the caller\'s struct.',
+  'x = 0 + 3 − 1 = 2 and y = 0 + 1 + 4 = 5. Without the &, drive would move a copy and bot would stay at 0 0.'),
+mc('c7-11', 'c7', 'What does this print?' + C`
+struct Point
+{
+    int x;
+    int y;
+};
+
+Point mid(Point a, Point b)
+{
+    Point m = {(a.x + b.x) / 2, (a.y + b.y) / 2};
+    return m;
+}
+
+int main()
+{
+    Point p = mid({0, 0}, {5, 3});
+    cout << p.x << " " << p.y;
+    return 0;
+}`,
+  [K`2 1`, K`2.5 1.5`, K`3 2`, 'It does not compile'], 0,
+  'A function can return a whole struct. The members are ints, so 5 / 2 = 2 and 3 / 2 = 1: integer division drops the decimals.', { test: { expect: true } }),
+txt('c7-12', 'c7', P + C`
+const int NUM_C = 3;
+
+int rowTotal(const int g[][NUM_C], int row)
+{
+    int t = 0;
+    for (int c = 0; c < NUM_C; c++)
+        t += g[row][c];
+    return t;
+}
+
+int main()
+{
+    int g[2][NUM_C] = {{1, 2, 3}, {4, 5, 6}};
+    cout << rowTotal(g, 1) - rowTotal(g, 0);
+    return 0;
+}`,
+  '9',
+  'Work out each row\'s total separately.',
+  'Row 1 adds to 15 and row 0 adds to 6, so it prints 15 − 6 = 9. The column count NUM_C must appear in the parameter.'),
+mc('c7-13', 'c7', K`Reading r[50];` + ' is an array of structs with a member value. How do you get the value of the 4th reading?',
+  [K`r[3].value`, K`r.value[3]`, K`r[4].value`, K`value.r[3]`], 0,
+  'The index picks the struct (the 4th is index 3), then the dot picks the member.'),
+
+txt('c8-9', 'c8', P + C`
+class Account
+{
+private:
+    double balance;
+public:
+    Account(double start)
+    {
+        balance = start;
+    }
+    bool withdraw(double amt)
+    {
+        if (amt > balance)
+            return false;
+        balance -= amt;
+        return true;
+    }
+    double getBalance() const
+    {
+        return balance;
+    }
+};
+
+int main()
+{
+    Account a(50);
+    bool first = a.withdraw(20);
+    bool second = a.withdraw(40);
+    cout << first << " " << second << " " << a.getBalance();
+    return 0;
+}`,
+  '1 0 30',
+  'A bool prints as 1 or 0. Track the balance after each call.',
+  'The first withdrawal works: 50 − 20 = 30. The second asks for 40 &gt; 30, so it returns false and leaves the balance at 30. The class refuses to go negative, which plain variables could not enforce.'),
+mc('c8-10', 'c8', 'Using the Account class above, which line compiles?' + C`
+const Account c(100);`,
+  [K`cout << c.getBalance();`, K`cout << c.withdraw(5);`, K`c.balance = c.balance - 5;`, 'None of them'], 0,
+  'A const object can only call const member functions. getBalance is const, withdraw changes the object so it is not, and balance is private anyway.'),
+txt('c8-11', 'c8', P + C`
+class Counter
+{
+private:
+    int n;
+public:
+    Counter()
+    {
+        n = 0;
+    }
+    void tick()
+    {
+        n++;
+    }
+    int get() const
+    {
+        return n;
+    }
+};
+
+void tickTwice(Counter c)
+{
+    c.tick();
+    c.tick();
+}
+
+void tickThrice(Counter & c)
+{
+    c.tick();
+    c.tick();
+    c.tick();
+}
+
+int main()
+{
+    Counter k;
+    tickTwice(k);
+    tickThrice(k);
+    k.tick();
+    cout << k.get();
+    return 0;
+}`,
+  '4',
+  'Objects are passed like ints: copied unless the parameter has an &.',
+  'tickTwice ticks a copy, so k is still 0. tickThrice gets a reference: 3. Then k.tick() makes 4.'),
+txt('c8-12', 'c8', P + C`
+class Motor
+{
+private:
+    int power;
+public:
+    Motor()
+    {
+        power = 0;
+    }
+    void setPower(int p)
+    {
+        if (p > 100)
+            power = 100;
+        else if (p < -100)
+            power = -100;
+        else
+            power = p;
+    }
+    int getPower() const
+    {
+        return power;
+    }
+};
+
+int main()
+{
+    Motor m;
+    m.setPower(150);
+    cout << m.getPower() << " ";
+    m.setPower(-30);
+    cout << m.getPower() << " ";
+    m.setPower(-250);
+    cout << m.getPower();
+    return 0;
+}`,
+  '100 -30 -100',
+  'The setter clamps the value into −100 to 100.',
+  '150 is capped at 100, −30 is allowed, and −250 is capped at −100. Because power is private, every change goes through this check.'),
+mc('c8-13', 'c8', 'What is the return type of a constructor?',
+  ['It has none: not even void', 'void', 'The class type', 'bool, to say whether it worked'], 0,
+  'A constructor has the class\'s name and no return type. Writing void Rect(...) makes an ordinary member function called Rect, not a constructor.'),
+order('c8-14', 'c8', 'Write a class Rect with private width and height, a constructor that takes both, and a const function area(). Some tiles are decoys.',
+  ['class Rect\n{',
+   'private:\n    double w, h;',
+   'public:\n    Rect(double width, double height)\n    {\n        w = width;\n        h = height;\n    }',
+   '    double area() const\n    {\n        return w * h;\n    }',
+   '};'],
+  ['    void Rect(double width, double height)\n    {\n        w = width;\n        h = height;\n    }', '    double area()\n    {\n        w = w * h;\n        return w;\n    }'],
+  'A constructor has no return type. area() only reads the members, so it is const and must not change w.',
+  { code: true, label: 'Your code, top to bottom', test: { top: true } }),
+
+txt('c9-10', 'c9', P + C`
+class Vec
+{
+private:
+    int x, y;
+public:
+    Vec(int a, int b)
+    {
+        x = a;
+        y = b;
+    }
+    Vec operator-(const Vec & o) const
+    {
+        return Vec(x - o.x, y - o.y);
+    }
+    Vec operator*(int k) const
+    {
+        return Vec(x * k, y * k);
+    }
+    int dot(const Vec & o) const
+    {
+        return x * o.x + y * o.y;
+    }
+};
+
+int main()
+{
+    Vec a(3, 4), b(1, 2);
+    Vec c = (a - b) * 3;
+    cout << c.dot(Vec(1, 1));
+    return 0;
+}`,
+  '12',
+  'Do the brackets first, then the scaling, then the dot product.',
+  'a − b = (2, 2), times 3 is (6, 6), and the dot product with (1, 1) is 6 + 6 = 12. operator* takes an int on the right, so (a − b) * 3 works but 3 * (a − b) would not.'),
+txt('c9-11', 'c9', P + C`
+class Card
+{
+private:
+    int rank;
+    char suit;
+public:
+    Card(int r, char s)
+    {
+        rank = r;
+        suit = s;
+    }
+    bool operator==(const Card & o) const
+    {
+        return rank == o.rank && suit == o.suit;
+    }
+    bool operator!=(const Card & o) const
+    {
+        return rank != o.rank || suit != o.suit;
+    }
+};
+
+int main()
+{
+    Card a(10, 'H'), b(10, 'S'), c(10, 'H');
+    cout << (a == c) << (a != b) << (b == c);
+    return 0;
+}`,
+  '110',
+  'Each comparison prints 1 or 0, with no spaces between them.',
+  'a and c match in rank and suit: 1. a and b differ in suit: a != b is 1. b and c differ: 0.'),
+mc('c9-12', 'c9', 'Why is the parameter in ' + K`Vec operator+(const Vec & other) const` + ' a const reference?',
+  ['It avoids a copy and promises not to change other', 'Operators must always take reference parameters', 'It makes the result of the addition const', 'It lets the operator change other in place'], 0,
+  'A reference avoids a copy, and const promises other is only read. The const at the end promises the left operand is not changed either.'),
+txt('c9-13', 'c9', P + C`
+class Song
+{
+private:
+    string title;
+    int secs;
+public:
+    Song()
+    {
+        title = "";
+        secs = 0;
+    }
+    Song(string t, int s)
+    {
+        title = t;
+        secs = s;
+    }
+    bool operator<(const Song & o) const
+    {
+        return secs < o.secs;
+    }
+    string getTitle() const
+    {
+        return title;
+    }
+};
+
+int main()
+{
+    Song list[4] = {Song("Glow", 200), Song("Rush", 145), Song("Echo", 310), Song("Spin", 145)};
+    int best = 0;
+    for (int i = 1; i < 4; i++)
+    {
+        if (list[i] < list[best])
+            best = i;
+    }
+    cout << list[best].getTitle();
+    return 0;
+}`,
+  'Rush',
+  'operator< compares lengths. Is Spin shorter than Rush?',
+  'Rush (145) is the first shortest song. Spin is also 145, but 145 &lt; 145 is false, so best stays at Rush. Overloading &lt; lets the min-search code read naturally.'),
+mc('c9-14', 'c9', 'Why write ' + K`#include "Song.h"` + ' with quotes instead of ' + K`#include <Song.h>` + '?',
+  ['Quotes search your project\'s folder first', 'Quotes make the header private to this file', 'Angle brackets are only allowed in .cpp files', 'There is no difference between the two at all'], 0,
+  'Angle brackets search the system\'s standard library folders (like &lt;iostream&gt;). Quotes search next to your source files first, which is where Song.h lives.'),
+order('c9-15', 'c9', 'Class Vec has a member ' + K`void output(ostream & out) const` + '. Write operator<< so that ' + K`cout << v;` + ' works. Some tiles are decoys.',
+  ['ostream & operator<<(ostream & out, const Vec & v)\n{',
+   '    v.output(out);',
+   '    return out;',
+   '}'],
+  ['void operator<<(ostream & out, const Vec & v)\n{', '    return v;'],
+  'operator<< is a free function because cout is on the left. It returns the stream by reference so calls can chain, like cout << a << b.',
+  { code: true, label: 'Your code, top to bottom', test: { top: true, pre: '#include <iostream>\nusing namespace std;\nclass Vec\n{\n    int x, y;\npublic:\n    Vec(int a, int b) { x = a; y = b; }\n    void output(ostream & out) const { out << "(" << x << "," << y << ")"; }\n};' } }),
+
+txt('w-1', 'tw', W + C`
+cout << 7 / 2 << " " << 7 % 2;`, '3 1', 'Integer division drops the remainder; % gives the remainder.', '7 / 2 = 3 with remainder 1.'),
+txt('w-2', 'tw', W + C`
+int x = 5;
+x += 3;
+cout << x;`, '8', 'x += 3 means x = x + 3.', '5 + 3 = 8.'),
+mc('w-3', 'tw', 'What is the index of the last element of ' + K`int a[10];` + '?', ['9', '10', '11', '1'], 0, 'Indexes start at 0, so a 10-element array runs from a[0] to a[9].'),
+txt('w-4', 'tw', W + C`
+for (int i = 0; i < 3; i++)
+    cout << i;`, '012', 'The loop stops before i reaches 3.', 'i takes the values 0, 1 and 2, printed with no spaces.'),
+mc('w-5', 'tw', 'What does this print?' + C`
+cout << (3 > 2 && 1 > 2);`, [K`0`, K`1`, K`true`, K`false`], 0, '1 &gt; 2 is false, and && needs both sides true. cout prints false as 0.', { test: { expect: true } }),
+txt('w-6', 'tw', W + C`
+double d = 7 / 2;
+cout << d;`, '3', 'Which division happens first: int or double?', '7 / 2 is integer division, giving 3, which is then stored as 3.0 and printed as 3. Write 7.0 / 2 to get 3.5.'),
+mc('w-7', 'tw', 'Which keyword makes a class member usable only inside the class\'s own functions?', ['private', 'public', 'const', 'virtual'], 0, 'private hides data so only member functions can touch it. public members are open to everyone.'),
+mc('w-8', 'tw', 'What does the & do in ' + K`void addOne(int & x)` + '?', ['x is the caller\'s variable, so changes stick', 'x is a separate copy of the caller\'s variable', 'x can never change inside the function', 'It prints the address of x'], 0, 'A reference parameter is another name for the caller\'s variable. Without &, the function works on a copy.'),
+txt('w-9', 'tw', W + C`
+string s = "Hi";
+s += "!";
+cout << s.length();`, '3', '+= adds characters to the end.', 's becomes "Hi!", which has 3 characters.'),
+mc('w-10', 'tw', 'What does ' + K`#include <fstream>` + ' give you?', ['ifstream and ofstream, for files', 'cout and cin, for the console', 'The string type and its functions', 'Math functions such as sqrt and pow'], 0, 'fstream provides file streams. cout and cin come from iostream, sqrt from cmath.'),
+txt('w-11', 'tw', W + C`
+bool b = 0;
+cout << !b;`, '1', '! flips true and false.', 'b is false, so !b is true, which cout prints as 1.'),
+mc('w-12', 'tw', 'What does const after a member function\'s brackets promise, as in ' + K`int getSeconds() const` + '?', ['The function does not change the object', 'The returned value can never be changed', 'The function can only run once per object', 'Nothing: it is optional decoration'], 0, 'A const member function only reads the object, and the compiler checks it. Getters should be const.')
 ];
 
 /* ---------- WRITE THE CODE: whole programs, marked by Claude (separate section) ---------- */

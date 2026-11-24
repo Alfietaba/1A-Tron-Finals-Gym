@@ -27,8 +27,9 @@ Moxie, a small duckling named after my first dog, sits in the corner. Click it a
 - **Answer first, then see why.** Every question has a full explanation, but it only appears after you commit to an answer. Hints are there if you're stuck, and using one halves your XP for that question.
 - **Mastery means four in a row.** Questions move through a spaced-repetition schedule (8 hours, 1 day, 2 days, 4 days). A question only turns green after four correct answers in a row, and one miss sends it back to red.
 - **Misses come back in the same session,** a few questions later, then again on the schedule.
-- **You can't game the multiple choice.** I noticed the right answer was often just the longest option, so every option set was rewritten and checked by a script. Across the 479 multiple-choice questions with three or more options, the right answer is the longest one 19% of the time, about what you'd get by chance.
+- **You can't game the multiple choice.** I noticed the right answer was often just the longest option, so every option set was rewritten and checked by a script. Across the 574 multiple-choice questions with three or more options, the right answer is the longest one 16% of the time, no better than guessing.
 - **It only covers what's on the exam.** Anything that didn't fit a category on the course outline was removed.
+- **A pre-exam warm-up in every course.** Easy questions on the basics that you can do in your head, to settle your nerves right before an exam. They don't count toward mastery or mock exams.
 - **Mock exams have the same shape as the real ones:** the same sections, point weights and time limit. There's no feedback until you submit, then you get a breakdown by section and a "Fix my mistakes" run.
 - **Fresh questions on demand.** 117 generators write new versions with new numbers, so infinite mode (endless, or three lives) never runs out.
 - **The formula sheet sits beside the question,** like it does on the exam.
@@ -56,7 +57,7 @@ I used Claude (Anthropic) as a pair programmer and question writer. I decided wh
 
 AI-written answers can be wrong, so nothing ships unchecked:
 
-- **Every stored answer is regraded** by the app's own grader (934 questions).
+- **Every stored answer is regraded** by the app's own grader (1,188 questions).
 - **Generated math is checked** against an independent solver (10,800 checks), and the generators are sampled 35,100 times for broken or ungradable output. The chemistry and design-course generators were also checked against separate Python recalculations.
 - **Every C++ question is compiled with g++ and run.** Code puzzles are compile-checked, VEX robot code is checked against a mock of the VEX API, and the write-the-code model solutions are run against their test files, including a missing file and an empty file.
 - **Browser tests** (Playwright) drive the real interface at desktop and phone sizes.
@@ -67,11 +68,11 @@ GitHub Actions runs the non-browser checks on every push.
 
 | Course | Topics | Questions | Generators |
 | --- | --- | --- | --- |
-| MATH 115 Linear Algebra | vectors to diagonalization (sections 1.1 to 8.5) | 215 | 15 |
-| MTE 121 Digital Computation (C++) | fundamentals, loops and files, functions, VEX IQ robots, arrays, structs, classes, operator overloading | 147, plus 5 full programs | 23 |
-| CHE 102 Chemistry for Engineers | stoichiometry and gases (Units 1 and 2), kinetics, phase changes and solutions, equilibrium, electrochemistry | 224 | 42 |
-| MATH 116 Calculus 1 | functions to derivatives, then applications of derivatives and integrals | 191 | 24 |
-| MTE 100 Mechatronics Concepts | design, ethics, drawings, tolerancing and GD&T, machine elements, actuators, sensors, project management | 157 | 13 |
+| MATH 115 Linear Algebra | vectors to diagonalization (sections 1.1 to 8.5) | 276 | 15 |
+| MTE 121 Digital Computation (C++) | fundamentals, loops and files, functions, VEX IQ robots, arrays, structs, classes, operator overloading | 183, plus 5 full programs | 23 |
+| CHE 102 Chemistry for Engineers | stoichiometry and gases (Units 1 and 2), kinetics, phase changes and solutions, equilibrium, electrochemistry | 272 | 42 |
+| MATH 116 Calculus 1 | functions to derivatives, then applications of derivatives and integrals | 253 | 24 |
+| MTE 100 Mechatronics Concepts | design, ethics, drawings, tolerancing and GD&T, machine elements, actuators, sensors, project management | 204 | 13 |
 
 ## Tech
 

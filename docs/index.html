@@ -1029,6 +1029,9 @@ h2 { font-weight: 700; letter-spacing: -.01em; }
 .oops .bd .bd-dizzy { animation: bd-dzon 1.75s linear, bd-dzspin .6s linear infinite; }
 .scuffed .bd .bd-scuff { animation: bd-scuff 4.2s ease-out; }
 @media (prefers-reduced-motion: reduce) { .oops .bd .bd-dizzy, .oops .bd .bd-puff { animation: none; } }
+.btn.warm { display: flex; justify-content: space-between; align-items: center; gap: .6rem; color: var(--good); }
+.btn.warm span { white-space: nowrap; text-align: left; flex: none; }
+.btn.warm small { text-align: right; min-width: 0; }
 </style>
 
 <div class="app" id="app"></div>
@@ -1181,7 +1184,7 @@ var TOPICS = [
   { id: 't18', name: 'Complex numbers', sec: '7.1 to 7.5' },
   { id: 't19', name: 'Eigenvalues and eigenvectors', sec: '8.1 to 8.3' },
   { id: 't20', name: 'Diagonalization', sec: '8.4 to 8.5' },
-  { id: 'tw', name: 'Pre-test warm-up', sec: 'In your head', extra: 'Quick mental questions. Not counted in mastery.' }
+  { id: 'tw', name: 'Pre-exam warm-up', sec: 'In your head', extra: 'Quick, easy questions on the basics to settle your nerves before the exam. Not counted in mastery or mock exams.' }
 ];
 
 
@@ -1896,7 +1899,192 @@ mc('t20-3', 't20', 'A 3 × 3 matrix has 3 distinct eigenvalues. What can you con
   'Eigenvectors for distinct eigenvalues are independent, so there are 3 independent eigenvectors: A is diagonalizable. (It is invertible only if none of the eigenvalues is 0.)'),
 num('t20-4', 't20', 'A = PDP⁻¹ with D = [[2,0;0,-1]]. What is det A?', '-2',
   'det(PDP⁻¹) = det P det D det P⁻¹.',
-  'det P and det P⁻¹ cancel, so det A = det D = 2(−1) = −2: the product of the eigenvalues.')
+  'det P and det P⁻¹ cancel, so det A = det D = 2(−1) = −2: the product of the eigenvalues.'),
+
+/* ---------- more practice: 4.1 to 8.5 ---------- */
+mc('t11-8', 't11', 'Is { {{1,0,1}}, {{0,1,1}}, {{1,1,2}} } linearly independent?',
+  ['No: the third is the sum of the first two', 'Yes: no vector is a multiple of another one', 'Yes: three vectors in ℝ³ are always independent', 'No: three vectors in ℝ³ are always dependent'], 0,
+  '{{1,0,1}} + {{0,1,1}} = {{1,1,2}}, so 1·~v~<sub>1</sub> + 1·~v~<sub>2</sub> − 1·~v~<sub>3</sub> = ~0~ is a non-trivial solution. Not being multiples of each other only rules out dependence for two vectors.'),
+num('t11-9', 't11', 'For what value of k is { {{1,2}}, {{3,k}} } linearly dependent?', '6',
+  'Two vectors are dependent exactly when one is a multiple of the other.',
+  '{{3,k}} must be 3{{1,2}} = {{3,6}}, so k = 6. Equivalently, det [[1,3;2,k]] = k − 6 = 0.'),
+num('t11-10', 't11', 'Write {{4,5,6}} = a{{1,1,1}} + b{{1,2,3}}. Find a and b.', '(3,1)',
+  'Match entries: a + b = 4, a + 2b = 5, a + 3b = 6.',
+  'Subtracting the first two equations gives b = 1, so a = 3. The third equation checks: 3 + 3 = 6. So {{4,5,6}} is in the span.', ['a', 'b']),
+mc('t11-11', 't11', 'Which set spans ℝ²?',
+  ['{ {{1,1}}, {{1,-1}} }', '{ {{1,2}}, {{-2,-4}} }', '{ {{1,0}}, {{0,0}} }', '{ {{3,6}} }'], 0,
+  '{{1,1}} and {{1,-1}} are not multiples of each other, so two independent vectors in ℝ² span it. The others all lie on a single line.'),
+mc('t11-12', 't11', 'A set of vectors contains the zero vector. What can you say for sure?',
+  ['It is linearly dependent', 'It is linearly independent', 'It spans the whole space', 'It is a basis'], 0,
+  '1·~0~ = ~0~ is a non-trivial combination giving ~0~, so any set containing ~0~ is dependent.'),
+num('t11-13', 't11', 'What is the largest number of vectors a linearly independent set in ℝ⁴ can contain?', '4',
+  'Think about the pivots in a matrix with those vectors as columns.',
+  'A 4 × k matrix has at most 4 pivots, so more than 4 columns always leaves a free variable and a non-trivial solution.'),
+
+mc('t12-6', 't12', 'Which of these is a subspace of ℝ³?',
+  ['{~x~ ∈ ℝ³ : x<sub>1</sub> + 2x<sub>2</sub> − x<sub>3</sub> = 0}', '{~x~ ∈ ℝ³ : x<sub>1</sub> + x<sub>2</sub> + x<sub>3</sub> = 1}', '{~x~ ∈ ℝ³ : x<sub>1</sub> ≥ 0 and x<sub>2</sub> ≥ 0}', '{~x~ ∈ ℝ³ : x<sub>1</sub>x<sub>2</sub>x<sub>3</sub> = 0}'], 0,
+  'A homogeneous linear equation gives a plane through the origin, which is closed under addition and scalar multiplication. x<sub>1</sub> + x<sub>2</sub> + x<sub>3</sub> = 1 misses ~0~, the x ≥ 0 set fails for −1 times a vector, and x<sub>1</sub>x<sub>2</sub>x<sub>3</sub> = 0 fails for sums such as {{1,1,0}} + {{0,0,1}}.'),
+mc('t12-7', 't12', 'Why is S = {~x~ ∈ ℝ² : x<sub>1</sub>x<sub>2</sub> = 0} not a subspace?',
+  ['Not closed under addition: {{1,0}} + {{0,1}} = {{1,1}} ∉ S', 'It does not contain the zero vector {{0,0}}', 'It is not closed under scalar multiplication by negatives', 'It is a subspace, since it contains ~0~'], 0,
+  'S is the two coordinate axes. It contains ~0~ and any multiple of a point on an axis stays on that axis, but adding a point from each axis leaves S.'),
+mc('t12-8', 't12', 'A is a matrix and ~b~ ≠ ~0~. Is the solution set of A~x~ = ~b~ a subspace?',
+  ['No: A~0~ = ~0~ ≠ ~b~, so ~0~ is not a solution', 'Yes, always', 'Only when A is invertible', 'Only when the system has infinitely many solutions'], 0,
+  'Every subspace contains the zero vector. The solution set of a non-homogeneous system is a shifted copy of the null space, not a subspace.'),
+num('t12-9', 't12', 'What is the dimension of S = {~x~ ∈ ℝ³ : x<sub>1</sub> − x<sub>2</sub> + 2x<sub>3</sub> = 0}?', '2',
+  'Solve for one variable and count the free ones.',
+  'x<sub>1</sub> = x<sub>2</sub> − 2x<sub>3</sub> with x<sub>2</sub>, x<sub>3</sub> free, so S = Span{ {{1,1,0}}, {{-2,0,1}} }: a plane through the origin, dimension 2.'),
+mc('t12-10', 't12', '~u~ and ~v~ are in a subspace S. Which vector must also be in S?',
+  ['3~u~ − 2~v~', '~u~ + {{1,1,1}}', 'Only ~u~ and ~v~ themselves', '~u~ + ~v~, but only if they are parallel'], 0,
+  'Closure under scalar multiplication and addition means every linear combination of vectors in S is in S. Adding a fixed vector like {{1,1,1}} need not stay inside.'),
+
+mc('t13-7', 't13', 'Is { {{1,1,0}}, {{0,1,1}}, {{1,0,1}} } a basis for ℝ³?',
+  ['Yes: the matrix of these columns has det 2', 'No: the three vectors are linearly dependent', 'No: a basis of ℝ³ needs at least four vectors', 'Yes, but only because no entry is negative'], 0,
+  'det [[1,0,1;1,1,0;0,1,1]] = 1(1 − 0) − 0 + 1(1 − 0) = 2 ≠ 0, so the three vectors are independent. Three independent vectors in ℝ³ form a basis.'),
+num('t13-8', 't13', 'B = { {{1,1}}, {{1,-1}} } is a basis for ℝ². Find the coordinates of {{5,1}} with respect to B.', '(3,2)',
+  'Solve c<sub>1</sub>{{1,1}} + c<sub>2</sub>{{1,-1}} = {{5,1}}.',
+  'c<sub>1</sub> + c<sub>2</sub> = 5 and c<sub>1</sub> − c<sub>2</sub> = 1, so c<sub>1</sub> = 3 and c<sub>2</sub> = 2. Check: 3{{1,1}} + 2{{1,-1}} = {{5,1}}.', ['c₁', 'c₂']),
+num('t13-9', 't13', 'What is the dimension of the solution space of x<sub>1</sub> + x<sub>2</sub> + x<sub>3</sub> + x<sub>4</sub> = 0?', '3',
+  'One equation in four unknowns: count the free variables.',
+  'There is one pivot (x<sub>1</sub>) and three free variables, so the solution space has a basis of 3 vectors.'),
+mc('t13-10', 't13', 'You have 4 vectors in ℝ³. What must be true?',
+  ['They are linearly dependent', 'They span ℝ³', 'They form a basis for ℝ³', 'They are linearly independent'], 0,
+  'At most 3 vectors in ℝ³ can be independent. Four vectors might still fail to span ℝ³ if they all lie in a plane.'),
+num('t13-11', 't13', 'S = Span{ {{1,2,0,1}}, {{2,4,1,3}}, {{0,0,1,1}} }. What is dim S?', '2',
+  'Look for one vector that is a combination of the others.',
+  '{{2,4,1,3}} − 2{{1,2,0,1}} = {{0,0,1,1}}, so the third vector is redundant. The first two are not multiples, so dim S = 2.'),
+
+num('t14-6', 't14', 'A is a 5 × 3 matrix with rank 3. What is the dimension of Null(A)?', '0',
+  'Rank–Nullity uses the number of columns.',
+  'nullity = 3 − 3 = 0, so only ~x~ = ~0~ solves A~x~ = ~0~: the columns are independent.'),
+num('t14-7', 't14', 'A is a 3 × 7 matrix. What is the smallest possible nullity of A?', '4',
+  'How large can the rank of a 3 × 7 matrix be?',
+  'There are at most 3 pivots (one per row), so rank ≤ 3 and nullity = 7 − rank ≥ 4.'),
+mc('t14-8', 't14', 'What is the column space of A?',
+  ['All ~b~ for which A~x~ = ~b~ is consistent', 'The set of all solutions of A~x~ = ~0~', 'The span of the rows of A, written Row(A)', 'The set of pivot positions in the RREF of A'], 0,
+  'A~x~ is a linear combination of the columns with weights from ~x~, so A~x~ = ~b~ has a solution exactly when ~b~ is in the span of the columns.'),
+multi('t14-9', 't14', 'Let A = [[1,2,3;2,4,6]].', [
+  { ask: 'What is rank(A)?', ans: '1', hint: 'The second row is twice the first.', why: 'Row reducing leaves one non-zero row, so there is one pivot.' },
+  { ask: 'What is the nullity of A?', ans: '2', hint: 'Rank–Nullity with 3 columns.', why: '3 − 1 = 2.' },
+  { ask: 'What is the dimension of Row(A)?', ans: '1', hint: 'Compare with the rank.', why: 'dim Row(A) = dim Col(A) = rank(A) = 1.' }
+]),
+num('t14-10', 't14', 'A = [[1,0,2;0,1,-1]]. Null(A) is spanned by one vector {{a,b,1}}. Find a and b.', '(-2,1)',
+  'Set the free variable x<sub>3</sub> = 1.',
+  'x<sub>1</sub> + 2x<sub>3</sub> = 0 and x<sub>2</sub> − x<sub>3</sub> = 0, so with x<sub>3</sub> = 1: x<sub>1</sub> = −2 and x<sub>2</sub> = 1. Check: A{{-2,1,1}} = {{0,0}}.', ['a', 'b']),
+
+num('t15-8', 't15', 'Find the standard matrix of the reflection of ℝ² in the x<sub>1</sub>-axis.', '1,0;0,-1',
+  'Where do ~e~<sub>1</sub> and ~e~<sub>2</sub> go?',
+  '~e~<sub>1</sub> stays put and ~e~<sub>2</sub> flips to −~e~<sub>2</sub>, so the columns are {{1,0}} and {{0,-1}}.'),
+num('t15-9', 't15', 'T(x<sub>1</sub>, x<sub>2</sub>) = (2x<sub>1</sub> + x<sub>2</sub>, x<sub>1</sub> − 3x<sub>2</sub>). Find T(4, −1).', '(7,7)',
+  'Substitute x<sub>1</sub> = 4 and x<sub>2</sub> = −1.',
+  '2(4) + (−1) = 7 and 4 − 3(−1) = 7, so T(4, −1) = (7, 7).'),
+mc('t15-10', 't15', 'Which of these is not a linear transformation?',
+  ['T(x<sub>1</sub>, x<sub>2</sub>) = (x<sub>1</sub> + 1, x<sub>2</sub>)', 'T(x<sub>1</sub>, x<sub>2</sub>) = (x<sub>2</sub>, x<sub>1</sub>)', 'T(x<sub>1</sub>, x<sub>2</sub>) = (3x<sub>1</sub>, 0)', 'T(x<sub>1</sub>, x<sub>2</sub>) = (x<sub>1</sub> − x<sub>2</sub>, 2x<sub>1</sub>)'], 0,
+  'A linear map always sends ~0~ to ~0~, but T(0, 0) = (1, 0) for the first one. The others are matrix maps.'),
+num('t15-11', 't15', 'Find the standard matrix of the rotation of ℝ² by π/2 counterclockwise.', '0,-1;1,0',
+  'R<sub>θ</sub> = [[cos θ, −sin θ; sin θ, cos θ]].',
+  'cos(π/2) = 0 and sin(π/2) = 1. Check: ~e~<sub>1</sub> goes to {{0,1}} and ~e~<sub>2</sub> goes to {{-1,0}}.'),
+num('t15-12', 't15', '[S] = [[1,2;0,1]] and [T] = [[0,1;1,0]]. Find the standard matrix of S ∘ T.', '2,1;1,0',
+  '[S ∘ T] = [S][T]: T happens first, but its matrix goes on the right.',
+  '[[1,2;0,1]][[0,1;1,0]] = [[2,1;1,0]].'),
+
+num('t16-6', 't16', 'T has standard matrix [[1,2;2,4]]. What is the dimension of Ker(T)?', '1',
+  'Ker(T) = Null([T]).',
+  'The second row is twice the first, so the rank is 1 and the nullity is 2 − 1 = 1. Ker(T) = Span{ {{-2,1}} }.'),
+mc('t16-7', 't16', 'T : ℝ³ → ℝ² is linear. Which can T never be?',
+  ['Invertible', 'Onto', 'The zero map', 'Linear'], 0,
+  '[T] is 2 × 3, so it has a free variable and a non-trivial kernel. T is not one-to-one, so it cannot be invertible. It can still be onto.'),
+num('t16-8', 't16', 'T is the rotation of ℝ² by π/2 counterclockwise. Find the standard matrix of T⁻¹.', '0,1;-1,0',
+  'Undo a rotation by rotating the other way.',
+  'T⁻¹ is the rotation by −π/2, with matrix [[0,1;-1,0]]. Check: [[0,-1;1,0]][[0,1;-1,0]] = I.'),
+mc('t16-9', 't16', 'T(~x~) = A~x~. What is Range(T)?',
+  ['Col(A)', 'Null(A)', 'Row(A)', 'Always all of ℝ<sup>m</sup>'], 0,
+  'Every output A~x~ is a combination of the columns of A, and every combination is an output.'),
+num('t16-10', 't16', 'T : ℝ⁴ → ℝ³ has rank 2. What is the dimension of Ker(T)?', '2',
+  'Rank–Nullity for a linear map uses the dimension of the domain.',
+  'dim Ker(T) = 4 − 2 = 2.'),
+
+num('t17-9', 't17', 'Compute det [[2,0,1;1,3,-1;0,5,4]].', '39',
+  'Expand along the first row: the 0 saves a term.',
+  '2(3·4 − (−1)·5) − 0 + 1(1·5 − 3·0) = 2(17) + 5 = 39.'),
+num('t17-10', 't17', 'A is a 3 × 3 matrix with det A = 4. What is det(2A)?', '32',
+  'Each of the 3 rows is multiplied by 2.',
+  'det(2A) = 2³ det A = 8 × 4 = 32.'),
+num('t17-11', 't17', 'A is a 3 × 3 matrix with det A = 4. What is det(A⁻¹Aᵀ)?', '1',
+  'det(A⁻¹) = 1/det A and det(Aᵀ) = det A.',
+  '(1/4)(4) = 1.'),
+mc('t17-12', 't17', 'What does swapping two rows of A do to det A?',
+  ['Changes its sign', 'Leaves it the same', 'Doubles it', 'Makes it 0'], 0,
+  'A row swap multiplies the determinant by −1. Adding a multiple of one row to another leaves it unchanged.'),
+num('t17-13', 't17', 'For what positive value of k is [[1,k;k,4]] not invertible?', '2',
+  'Not invertible means determinant 0.',
+  'det = 4 − k² = 0, so k = ±2. The positive value is 2.'),
+num('t17-14', 't17', 'Use Cramer\'s rule to find x in 2x + y = 5, x − 3y = −1.', '2',
+  'x = det A<sub>1</sub> / det A, where A<sub>1</sub> has the first column replaced by the right-hand side.',
+  'det A = det [[2,1;1,-3]] = −7 and det A<sub>1</sub> = det [[5,1;-1,-3]] = −14, so x = 2. (Then y = 1.)'),
+
+num('t18-11', 't18', 'Write (2 + i)/(1 − i) in standard form a + bi.', '(1/2,3/2)',
+  'Multiply the top and bottom by the conjugate 1 + i.',
+  '(2 + i)(1 + i) = 2 + 3i + i² = 1 + 3i, and (1 − i)(1 + i) = 2. So the answer is 1/2 + (3/2)i.', ['a', 'b']),
+num('t18-12', 't18', 'What is |3 − 4i|?', '5',
+  '|a + bi| = √(a² + b²).',
+  '√(9 + 16) = 5.'),
+num('t18-13', 't18', 'Write (1 + i)⁸ in standard form a + bi.', '(16,0)',
+  'Put 1 + i in polar form and use de Moivre.',
+  '1 + i = √2 e<sup>iπ/4</sup>, so (1 + i)⁸ = (√2)⁸ e<sup>2πi</sup> = 16. (Or: (1 + i)² = 2i, and (2i)⁴ = 16.)', ['a', 'b']),
+mc('t18-14', 't18', 'What are the roots of z² + 2z + 5 = 0?',
+  ['−1 ± 2i', '1 ± 2i', '−1 ± 4i', '−2 ± i'], 0,
+  'z = (−2 ± √(4 − 20))/2 = (−2 ± 4i)/2 = −1 ± 2i. Real polynomials have roots in conjugate pairs.'),
+num('t18-15', 't18', 'What is the principal argument of −1 + i? (Answer in radians, between −π and π.)', '3pi/4',
+  'Plot the point: which quadrant is it in?',
+  'The point (−1, 1) is in the second quadrant at 45° above the negative real axis, so arg = π − π/4 = 3π/4.'),
+
+multi('t19-8', 't19', 'Let A = [[1,4;2,3]].', [
+  { ask: 'What is the larger eigenvalue?', ans: '5', hint: 'det(A − λI) = 0.', why: '(1 − λ)(3 − λ) − 8 = λ² − 4λ − 5 = (λ − 5)(λ + 1).' },
+  { ask: 'What is the smaller eigenvalue?', ans: '-1', hint: 'Same polynomial.', why: 'Check: 5 + (−1) = 4 is the trace and 5(−1) = −5 is det A.' }
+]),
+num('t19-9', 't19', 'A = [[3,1;1,3]] has eigenvalue 4. An eigenvector for λ = 4 has the form {{1,b}}. Find b.', '1',
+  'Solve (A − 4I)~v~ = ~0~.',
+  'A − 4I = [[-1,1;1,-1]], so −v<sub>1</sub> + v<sub>2</sub> = 0 and v<sub>2</sub> = v<sub>1</sub>. Check: A{{1,1}} = {{4,4}}.'),
+mc('t19-10', 't19', '0 is an eigenvalue of A. What follows?',
+  ['A is not invertible', 'A is the zero matrix', 'A is diagonalizable', 'Every eigenvector is ~0~'], 0,
+  'λ = 0 means A~v~ = ~0~ for some ~v~ ≠ ~0~, so Null(A) is non-trivial and det A = 0.'),
+multi('t19-11', 't19', 'A 3 × 3 matrix A has eigenvalues 1, 2 and 5.', [
+  { ask: 'What is det A?', ans: '10', hint: 'det A is the product of the eigenvalues.', why: '1 × 2 × 5 = 10.' },
+  { ask: 'What is the trace of A?', ans: '8', hint: 'The trace is the sum of the eigenvalues.', why: '1 + 2 + 5 = 8.' }
+]),
+num('t19-12', 't19', 'What is the geometric multiplicity of λ = 2 for A = [[2,1;0,2]]?', '1',
+  'Find dim Null(A − 2I).',
+  'A − 2I = [[0,1;0,0]] has rank 1, so its null space is Span{ {{1,0}} }, dimension 1. The algebraic multiplicity is 2.'),
+
+mc('t20-5', 't20', 'Is A = [[2,1;0,2]] diagonalizable?',
+  ['No: λ = 2 has only one independent eigenvector', 'Yes: every upper triangular matrix is diagonalizable', 'Yes: all of its eigenvalues are real numbers', 'No: its determinant is 0, so it is not invertible'], 0,
+  'Diagonalizing a 2 × 2 matrix needs 2 independent eigenvectors. Null(A − 2I) is only 1-dimensional. (det A = 4, not 0.)'),
+mc('t20-6', 't20', 'A 3 × 3 matrix has three different eigenvalues. Is it diagonalizable?',
+  ['Always', 'Never', 'Only if it is symmetric', 'Only if one eigenvalue is 0'], 0,
+  'Eigenvectors for different eigenvalues are independent, so three distinct eigenvalues give three independent eigenvectors.'),
+num('t20-7', 't20', 'A = PDP⁻¹ with D = [[2,0;0,-1]]. What is det(A⁴)?', '16',
+  'A⁴ = PD⁴P⁻¹.',
+  'det(A⁴) = det(D⁴) = 2⁴ × (−1)⁴ = 16.'),
+multi('t20-8', 't20', 'Diagonalize A = [[4,-2;1,1]].', [
+  { ask: 'What is the larger eigenvalue?', ans: '3', hint: 'λ² − (trace)λ + det = 0.', why: 'λ² − 5λ + 6 = (λ − 2)(λ − 3).' },
+  { ask: 'An eigenvector for λ = 3 is {{a,1}}. Find a.', ans: '2', hint: 'Solve (A − 3I)~v~ = ~0~.', why: 'A − 3I = [[1,-2;1,-2]], so v<sub>1</sub> = 2v<sub>2</sub>.' },
+  { ask: 'An eigenvector for λ = 2 is {{a,1}}. Find a.', ans: '1', hint: 'Solve (A − 2I)~v~ = ~0~.', why: 'A − 2I = [[2,-2;1,-1]], so v<sub>1</sub> = v<sub>2</sub>. Then P = [[2,1;1,1]] and D = [[3,0;0,2]].' }
+]),
+num('t20-9', 't20', 'A = PDP⁻¹ with P = [[1,1;1,2]] and D = [[1,0;0,2]]. Find A³.', '-6,7;-14,15',
+  'A³ = PD³P⁻¹, and P⁻¹ = [[2,-1;-1,1]].',
+  'D³ = [[1,0;0,8]]. PD³ = [[1,8;1,16]], then times P⁻¹ gives [[-6,7;-14,15]].'),
+mc('t20-10', 't20', 'A = PDP⁻¹ with D diagonal. What are the columns of P?',
+  ['Eigenvectors of A, in the order of D\'s diagonal', 'The rows of A, in the same order as they appear', 'The eigenvalues of A, one per column of P', 'Any basis of ℝ<sup>n</sup> you like, in any order'], 0,
+  'AP = PD says A times column i of P equals d<sub>ii</sub> times column i: each column is an eigenvector for the matching diagonal entry.'),
+
+num('w-31', 'tw', 'Compute det [[2,5;0,3]].', '6', 'The matrix is triangular.', 'For a triangular matrix the determinant is the product of the diagonal: 2 × 3 = 6.'),
+mc('w-32', 'tw', 'det A = 0. Is A invertible?', ['No', 'Yes'], 0, 'A square matrix is invertible exactly when its determinant is not 0.'),
+num('w-33', 'tw', 'A 3 × 5 matrix has rank 3. What is its nullity?', '2', 'Rank + nullity = number of columns.', '5 − 3 = 2.'),
+num('w-34', 'tw', 'What is |1 + i|²?', '2', '|a + bi|² = a² + b².', '1² + 1² = 2. It also equals (1 + i)(1 − i).'),
+num('w-35', 'tw', 'What is i²?', '-1', 'That is the definition of i.', 'i² = −1, so i³ = −i and i⁴ = 1.'),
+mc('w-36', 'tw', 'A~v~ = 3~v~ for a nonzero ~v~. What is ~v~?', ['An eigenvector of A with eigenvalue 3', 'The zero vector, since only it can work', 'A row of A, multiplied by 3', 'Unrelated to A in general'], 0, 'That is exactly the definition: A only stretches ~v~, here by a factor of 3.'),
+num('w-37', 'tw', 'What are the eigenvalues of [[4,0;0,-1]]? Enter the larger one.', '4', 'Diagonal matrix: read them off.', 'The eigenvalues of a diagonal (or triangular) matrix are its diagonal entries: 4 and −1.'),
+num('w-38', 'tw', 'How many vectors are in any basis of ℝ³?', '3', 'That number is the dimension.', 'Every basis of ℝ³ has exactly 3 vectors: independent and spanning.')
 ];
 var QBY = {};
 Q.forEach(function (q) { QBY[q.id] = q; });
@@ -1938,7 +2126,8 @@ var T = [
   { id: 'c6', name: 'Arrays', sec: 'Indexes, loops, functions' },
   { id: 'c7', name: '2D arrays and structs', sec: 'Rows, columns, members' },
   { id: 'c8', name: 'Classes', sec: 'Private data, getters, setters' },
-  { id: 'c9', name: 'Class files and operators', sec: 'Headers, ::, operator overloading' }
+  { id: 'c9', name: 'Class files and operators', sec: 'Headers, ::, operator overloading' },
+  { id: 'tw', name: 'Pre-exam warm-up', sec: 'In your head', extra: 'Quick, easy questions on the basics to settle your nerves before the exam. Not counted in mastery or mock exams.' }
 ];
 var W = 'The code runs inside main(). Type the exact output.';
 var P = 'Assume ' + K`#include <iostream>` + ' and ' + K`using namespace std;` + ' Type the exact output.';
@@ -3650,7 +3839,458 @@ order('c9-9', 'c9', 'Class Money has private int dollars and int cents, and decl
    '}'],
   ['Money operator+(const Money & other) const\n{', '    return Money(dollars + other.dollars, cents + other.cents);'],
   'Outside the class, the name needs Money:: in front, after the return type. Adding dollars and cents separately can give 150 cents, so convert to cents, add, then split with / 100 and % 100.',
-  { code: true, label: 'Your code, top to bottom', test: { top: true, pre: 'class Money\n{\n    int dollars, cents;\npublic:\n    Money(int d, int c) { dollars = d; cents = c; }\n    Money operator+(const Money & other) const;\n};' } })
+  { code: true, label: 'Your code, top to bottom', test: { top: true, pre: 'class Money\n{\n    int dollars, cents;\npublic:\n    Money(int d, int c) { dollars = d; cents = c; }\n    Money operator+(const Money & other) const;\n};' } }),
+
+/* ---------- more practice: arrays, structs, classes, operators ---------- */
+txt('c6-8', 'c6', W + C`
+int v[6] = {3, 8, 5, 12, 7, 4};
+int evens = 0, sum = 0;
+for (int i = 0; i < 6; i++)
+{
+    if (v[i] % 2 == 0)
+    {
+        evens++;
+        sum += v[i];
+    }
+}
+cout << evens << " " << sum;`,
+  '3 24',
+  'v[i] % 2 == 0 tests the value, not the index.',
+  'The even values are 8, 12 and 4: three of them, adding to 24.'),
+txt('c6-9', 'c6', W + C`
+int a[5] = {10, 20, 30, 40, 50};
+int first = a[0];
+for (int i = 0; i < 4; i++)
+    a[i] = a[i + 1];
+a[4] = first;
+for (int i = 0; i < 5; i++)
+    cout << a[i] << " ";`,
+  '20 30 40 50 10',
+  'Each element takes the value of the one after it. What happens to the old a[0]?',
+  'The loop shifts everything one place left, and the saved first value goes on the end: a rotation. The loop stops at i < 4 so a[i + 1] never reads past a[4].'),
+txt('c6-10', 'c6', P + C`
+int find(const int arr[], int size, int target)
+{
+    for (int i = 0; i < size; i++)
+    {
+        if (arr[i] == target)
+            return i;
+    }
+    return -1;
+}
+
+int main()
+{
+    int data[5] = {7, 2, 9, 2, 5};
+    cout << find(data, 5, 2) << " " << find(data, 5, 4);
+    return 0;
+}`,
+  '1 -1',
+  'return leaves the function immediately, at the first match.',
+  'The first 2 is at index 1, so the search stops there. 4 is not in the array, so the loop finishes and the function returns −1, a common "not found" signal.'),
+mc('c6-11', 'c6', 'Why does the parameter in ' + K`int find(const int arr[], int size, int target)` + ' say const?',
+  ['The function promises not to change the array', 'It makes a copy of the array so the original stays safe', 'It fixes the size of the array so it cannot grow', 'It is required on every array parameter in C++'], 0,
+  'Arrays are never copied into functions, so a function could change the caller\'s array. const turns any accidental change, like arr[i] = 0, into a compile error.'),
+txt('c6-12', 'c6', W + C`
+int a[5] = {1, 2, 3, 4, 5};
+for (int i = 1; i < 5; i++)
+    a[i] += a[i - 1];
+cout << a[2] << " " << a[4];`,
+  '6 15',
+  'Each element adds the already updated element before it.',
+  'The array becomes the running totals {1, 3, 6, 10, 15}, so a[2] = 6 and a[4] = 15.'),
+mc('c6-13', 'c6', 'What happens with this code?' + C`
+int a[3] = {1, 2, 3};
+int b[3];
+b = a;`,
+  ['It does not compile: arrays cannot be assigned', 'b becomes a separate copy of a, holding {1, 2, 3}', 'b and a now share the same memory', 'It compiles, but b is left holding garbage'], 0,
+  'Unlike structs, arrays cannot be assigned with =. Use for (int i = 0; i < 3; i++) b[i] = a[i];', { test: { err: true } }),
+
+txt('c7-8', 'c7', W + C`
+const int NUM_R = 2, NUM_C = 3;
+int g[NUM_R][NUM_C] = {{4, 1, 7}, {2, 6, 3}};
+for (int c = 0; c < NUM_C; c++)
+{
+    int colSum = 0;
+    for (int r = 0; r < NUM_R; r++)
+        colSum += g[r][c];
+    cout << colSum << " ";
+}`,
+  '6 7 10',
+  'The outer loop is now the column, so each pass adds down one column.',
+  'Column 0: 4 + 2 = 6. Column 1: 1 + 6 = 7. Column 2: 7 + 3 = 10. Swapping which loop is outside switches between row totals and column totals.'),
+txt('c7-9', 'c7', W + C`
+const int NUM_R = 3, NUM_C = 3;
+int m[NUM_R][NUM_C] = {{5, 9, 2}, {8, 1, 9}, {3, 7, 4}};
+int bestR = 0, bestC = 0;
+for (int r = 0; r < NUM_R; r++)
+{
+    for (int c = 0; c < NUM_C; c++)
+    {
+        if (m[r][c] > m[bestR][bestC])
+        {
+            bestR = r;
+            bestC = c;
+        }
+    }
+}
+cout << bestR << "," << bestC;`,
+  '0,1',
+  'There are two 9s. Which one is found first, and does the second beat it?',
+  'Row by row, the first 9 is at row 0, column 1. The 9 at (1, 2) is not greater than 9, so the position stays 0,1.'),
+txt('c7-10', 'c7', P + C`
+struct Robot
+{
+    string name;
+    int x, y;
+};
+
+void drive(Robot & r, int dx, int dy)
+{
+    r.x += dx;
+    r.y += dy;
+}
+
+int main()
+{
+    Robot bot = {"Rex", 0, 0};
+    drive(bot, 3, 1);
+    drive(bot, -1, 4);
+    cout << bot.name << " " << bot.x << " " << bot.y;
+    return 0;
+}`,
+  'Rex 2 5',
+  'Robot & r means the function changes the caller\'s struct.',
+  'x = 0 + 3 − 1 = 2 and y = 0 + 1 + 4 = 5. Without the &, drive would move a copy and bot would stay at 0 0.'),
+mc('c7-11', 'c7', 'What does this print?' + C`
+struct Point
+{
+    int x;
+    int y;
+};
+
+Point mid(Point a, Point b)
+{
+    Point m = {(a.x + b.x) / 2, (a.y + b.y) / 2};
+    return m;
+}
+
+int main()
+{
+    Point p = mid({0, 0}, {5, 3});
+    cout << p.x << " " << p.y;
+    return 0;
+}`,
+  [K`2 1`, K`2.5 1.5`, K`3 2`, 'It does not compile'], 0,
+  'A function can return a whole struct. The members are ints, so 5 / 2 = 2 and 3 / 2 = 1: integer division drops the decimals.', { test: { expect: true } }),
+txt('c7-12', 'c7', P + C`
+const int NUM_C = 3;
+
+int rowTotal(const int g[][NUM_C], int row)
+{
+    int t = 0;
+    for (int c = 0; c < NUM_C; c++)
+        t += g[row][c];
+    return t;
+}
+
+int main()
+{
+    int g[2][NUM_C] = {{1, 2, 3}, {4, 5, 6}};
+    cout << rowTotal(g, 1) - rowTotal(g, 0);
+    return 0;
+}`,
+  '9',
+  'Work out each row\'s total separately.',
+  'Row 1 adds to 15 and row 0 adds to 6, so it prints 15 − 6 = 9. The column count NUM_C must appear in the parameter.'),
+mc('c7-13', 'c7', K`Reading r[50];` + ' is an array of structs with a member value. How do you get the value of the 4th reading?',
+  [K`r[3].value`, K`r.value[3]`, K`r[4].value`, K`value.r[3]`], 0,
+  'The index picks the struct (the 4th is index 3), then the dot picks the member.'),
+
+txt('c8-9', 'c8', P + C`
+class Account
+{
+private:
+    double balance;
+public:
+    Account(double start)
+    {
+        balance = start;
+    }
+    bool withdraw(double amt)
+    {
+        if (amt > balance)
+            return false;
+        balance -= amt;
+        return true;
+    }
+    double getBalance() const
+    {
+        return balance;
+    }
+};
+
+int main()
+{
+    Account a(50);
+    bool first = a.withdraw(20);
+    bool second = a.withdraw(40);
+    cout << first << " " << second << " " << a.getBalance();
+    return 0;
+}`,
+  '1 0 30',
+  'A bool prints as 1 or 0. Track the balance after each call.',
+  'The first withdrawal works: 50 − 20 = 30. The second asks for 40 &gt; 30, so it returns false and leaves the balance at 30. The class refuses to go negative, which plain variables could not enforce.'),
+mc('c8-10', 'c8', 'Using the Account class above, which line compiles?' + C`
+const Account c(100);`,
+  [K`cout << c.getBalance();`, K`cout << c.withdraw(5);`, K`c.balance = c.balance - 5;`, 'None of them'], 0,
+  'A const object can only call const member functions. getBalance is const, withdraw changes the object so it is not, and balance is private anyway.'),
+txt('c8-11', 'c8', P + C`
+class Counter
+{
+private:
+    int n;
+public:
+    Counter()
+    {
+        n = 0;
+    }
+    void tick()
+    {
+        n++;
+    }
+    int get() const
+    {
+        return n;
+    }
+};
+
+void tickTwice(Counter c)
+{
+    c.tick();
+    c.tick();
+}
+
+void tickThrice(Counter & c)
+{
+    c.tick();
+    c.tick();
+    c.tick();
+}
+
+int main()
+{
+    Counter k;
+    tickTwice(k);
+    tickThrice(k);
+    k.tick();
+    cout << k.get();
+    return 0;
+}`,
+  '4',
+  'Objects are passed like ints: copied unless the parameter has an &.',
+  'tickTwice ticks a copy, so k is still 0. tickThrice gets a reference: 3. Then k.tick() makes 4.'),
+txt('c8-12', 'c8', P + C`
+class Motor
+{
+private:
+    int power;
+public:
+    Motor()
+    {
+        power = 0;
+    }
+    void setPower(int p)
+    {
+        if (p > 100)
+            power = 100;
+        else if (p < -100)
+            power = -100;
+        else
+            power = p;
+    }
+    int getPower() const
+    {
+        return power;
+    }
+};
+
+int main()
+{
+    Motor m;
+    m.setPower(150);
+    cout << m.getPower() << " ";
+    m.setPower(-30);
+    cout << m.getPower() << " ";
+    m.setPower(-250);
+    cout << m.getPower();
+    return 0;
+}`,
+  '100 -30 -100',
+  'The setter clamps the value into −100 to 100.',
+  '150 is capped at 100, −30 is allowed, and −250 is capped at −100. Because power is private, every change goes through this check.'),
+mc('c8-13', 'c8', 'What is the return type of a constructor?',
+  ['It has none: not even void', 'void', 'The class type', 'bool, to say whether it worked'], 0,
+  'A constructor has the class\'s name and no return type. Writing void Rect(...) makes an ordinary member function called Rect, not a constructor.'),
+order('c8-14', 'c8', 'Write a class Rect with private width and height, a constructor that takes both, and a const function area(). Some tiles are decoys.',
+  ['class Rect\n{',
+   'private:\n    double w, h;',
+   'public:\n    Rect(double width, double height)\n    {\n        w = width;\n        h = height;\n    }',
+   '    double area() const\n    {\n        return w * h;\n    }',
+   '};'],
+  ['    void Rect(double width, double height)\n    {\n        w = width;\n        h = height;\n    }', '    double area()\n    {\n        w = w * h;\n        return w;\n    }'],
+  'A constructor has no return type. area() only reads the members, so it is const and must not change w.',
+  { code: true, label: 'Your code, top to bottom', test: { top: true } }),
+
+txt('c9-10', 'c9', P + C`
+class Vec
+{
+private:
+    int x, y;
+public:
+    Vec(int a, int b)
+    {
+        x = a;
+        y = b;
+    }
+    Vec operator-(const Vec & o) const
+    {
+        return Vec(x - o.x, y - o.y);
+    }
+    Vec operator*(int k) const
+    {
+        return Vec(x * k, y * k);
+    }
+    int dot(const Vec & o) const
+    {
+        return x * o.x + y * o.y;
+    }
+};
+
+int main()
+{
+    Vec a(3, 4), b(1, 2);
+    Vec c = (a - b) * 3;
+    cout << c.dot(Vec(1, 1));
+    return 0;
+}`,
+  '12',
+  'Do the brackets first, then the scaling, then the dot product.',
+  'a − b = (2, 2), times 3 is (6, 6), and the dot product with (1, 1) is 6 + 6 = 12. operator* takes an int on the right, so (a − b) * 3 works but 3 * (a − b) would not.'),
+txt('c9-11', 'c9', P + C`
+class Card
+{
+private:
+    int rank;
+    char suit;
+public:
+    Card(int r, char s)
+    {
+        rank = r;
+        suit = s;
+    }
+    bool operator==(const Card & o) const
+    {
+        return rank == o.rank && suit == o.suit;
+    }
+    bool operator!=(const Card & o) const
+    {
+        return rank != o.rank || suit != o.suit;
+    }
+};
+
+int main()
+{
+    Card a(10, 'H'), b(10, 'S'), c(10, 'H');
+    cout << (a == c) << (a != b) << (b == c);
+    return 0;
+}`,
+  '110',
+  'Each comparison prints 1 or 0, with no spaces between them.',
+  'a and c match in rank and suit: 1. a and b differ in suit: a != b is 1. b and c differ: 0.'),
+mc('c9-12', 'c9', 'Why is the parameter in ' + K`Vec operator+(const Vec & other) const` + ' a const reference?',
+  ['It avoids a copy and promises not to change other', 'Operators must always take reference parameters', 'It makes the result of the addition const', 'It lets the operator change other in place'], 0,
+  'A reference avoids a copy, and const promises other is only read. The const at the end promises the left operand is not changed either.'),
+txt('c9-13', 'c9', P + C`
+class Song
+{
+private:
+    string title;
+    int secs;
+public:
+    Song()
+    {
+        title = "";
+        secs = 0;
+    }
+    Song(string t, int s)
+    {
+        title = t;
+        secs = s;
+    }
+    bool operator<(const Song & o) const
+    {
+        return secs < o.secs;
+    }
+    string getTitle() const
+    {
+        return title;
+    }
+};
+
+int main()
+{
+    Song list[4] = {Song("Glow", 200), Song("Rush", 145), Song("Echo", 310), Song("Spin", 145)};
+    int best = 0;
+    for (int i = 1; i < 4; i++)
+    {
+        if (list[i] < list[best])
+            best = i;
+    }
+    cout << list[best].getTitle();
+    return 0;
+}`,
+  'Rush',
+  'operator< compares lengths. Is Spin shorter than Rush?',
+  'Rush (145) is the first shortest song. Spin is also 145, but 145 &lt; 145 is false, so best stays at Rush. Overloading &lt; lets the min-search code read naturally.'),
+mc('c9-14', 'c9', 'Why write ' + K`#include "Song.h"` + ' with quotes instead of ' + K`#include <Song.h>` + '?',
+  ['Quotes search your project\'s folder first', 'Quotes make the header private to this file', 'Angle brackets are only allowed in .cpp files', 'There is no difference between the two at all'], 0,
+  'Angle brackets search the system\'s standard library folders (like &lt;iostream&gt;). Quotes search next to your source files first, which is where Song.h lives.'),
+order('c9-15', 'c9', 'Class Vec has a member ' + K`void output(ostream & out) const` + '. Write operator<< so that ' + K`cout << v;` + ' works. Some tiles are decoys.',
+  ['ostream & operator<<(ostream & out, const Vec & v)\n{',
+   '    v.output(out);',
+   '    return out;',
+   '}'],
+  ['void operator<<(ostream & out, const Vec & v)\n{', '    return v;'],
+  'operator<< is a free function because cout is on the left. It returns the stream by reference so calls can chain, like cout << a << b.',
+  { code: true, label: 'Your code, top to bottom', test: { top: true, pre: '#include <iostream>\nusing namespace std;\nclass Vec\n{\n    int x, y;\npublic:\n    Vec(int a, int b) { x = a; y = b; }\n    void output(ostream & out) const { out << "(" << x << "," << y << ")"; }\n};' } }),
+
+txt('w-1', 'tw', W + C`
+cout << 7 / 2 << " " << 7 % 2;`, '3 1', 'Integer division drops the remainder; % gives the remainder.', '7 / 2 = 3 with remainder 1.'),
+txt('w-2', 'tw', W + C`
+int x = 5;
+x += 3;
+cout << x;`, '8', 'x += 3 means x = x + 3.', '5 + 3 = 8.'),
+mc('w-3', 'tw', 'What is the index of the last element of ' + K`int a[10];` + '?', ['9', '10', '11', '1'], 0, 'Indexes start at 0, so a 10-element array runs from a[0] to a[9].'),
+txt('w-4', 'tw', W + C`
+for (int i = 0; i < 3; i++)
+    cout << i;`, '012', 'The loop stops before i reaches 3.', 'i takes the values 0, 1 and 2, printed with no spaces.'),
+mc('w-5', 'tw', 'What does this print?' + C`
+cout << (3 > 2 && 1 > 2);`, [K`0`, K`1`, K`true`, K`false`], 0, '1 &gt; 2 is false, and && needs both sides true. cout prints false as 0.', { test: { expect: true } }),
+txt('w-6', 'tw', W + C`
+double d = 7 / 2;
+cout << d;`, '3', 'Which division happens first: int or double?', '7 / 2 is integer division, giving 3, which is then stored as 3.0 and printed as 3. Write 7.0 / 2 to get 3.5.'),
+mc('w-7', 'tw', 'Which keyword makes a class member usable only inside the class\'s own functions?', ['private', 'public', 'const', 'virtual'], 0, 'private hides data so only member functions can touch it. public members are open to everyone.'),
+mc('w-8', 'tw', 'What does the & do in ' + K`void addOne(int & x)` + '?', ['x is the caller\'s variable, so changes stick', 'x is a separate copy of the caller\'s variable', 'x can never change inside the function', 'It prints the address of x'], 0, 'A reference parameter is another name for the caller\'s variable. Without &, the function works on a copy.'),
+txt('w-9', 'tw', W + C`
+string s = "Hi";
+s += "!";
+cout << s.length();`, '3', '+= adds characters to the end.', 's becomes "Hi!", which has 3 characters.'),
+mc('w-10', 'tw', 'What does ' + K`#include <fstream>` + ' give you?', ['ifstream and ofstream, for files', 'cout and cin, for the console', 'The string type and its functions', 'Math functions such as sqrt and pow'], 0, 'fstream provides file streams. cout and cin come from iostream, sqrt from cmath.'),
+txt('w-11', 'tw', W + C`
+bool b = 0;
+cout << !b;`, '1', '! flips true and false.', 'b is false, so !b is true, which cout prints as 1.'),
+mc('w-12', 'tw', 'What does const after a member function\'s brackets promise, as in ' + K`int getSeconds() const` + '?', ['The function does not change the object', 'The returned value can never be changed', 'The function can only run once per object', 'Nothing: it is optional decoration'], 0, 'A const member function only reads the object, and the compiler checks it. Getters should be const.')
 ];
 
 /* ---------- WRITE THE CODE: whole programs, marked by Claude (separate section) ---------- */
@@ -4090,7 +4730,8 @@ var T = [
   { id: 'h19', name: 'Equilibrium calculations', sec: 'Unit 5 · Q and ICE tables' },
   { id: 'h20', name: 'Le Chatelier and van \'t Hoff', sec: 'Unit 5 · shifts, K(T)' },
   { id: 'h21', name: 'Redox and galvanic cells', sec: 'Unit 6 · E°cell, agents' },
-  { id: 'h22', name: 'Nernst, K and electrolysis', sec: 'Unit 6 · E vs Q, Faraday' }
+  { id: 'h22', name: 'Nernst, K and electrolysis', sec: 'Unit 6 · E vs Q, Faraday' },
+  { id: 'tw', name: 'Pre-exam warm-up', sec: 'In your head', extra: 'Quick, easy questions on the basics to settle your nerves before the exam. Not counted in mastery or mock exams.' }
 ];
 
 /* --- diagrams --- */
@@ -4948,6 +5589,141 @@ mc('h22-10', 'h22', 'Aluminum is made by electrolysis of molten Al₂O₃. What 
   ['33.6 kg', '101 kg', '50.3 kg', '0.559 kg'], 0,
   'Q = 1.00 × 10⁵ × 3600 s = 3.60 × 10⁸ C, which is 3731 mol e⁻. Al³⁺ needs 3 e⁻, so 1244 mol Al × 26.98 = 33.6 kg. Forgetting the 3 gives 101 kg, and using 60 s instead of 3600 s gives 0.559 kg.', { k: 'n' }),
 
+/* ---------- more practice: Units 3 to 6 ---------- */
+num('h11-9', 'h11', 'For $N2$(g) + 3 $H2$(g) → 2 $NH3$(g), ammonia forms at d[$NH3$]/dt = 0.0480 M/s. At what rate is $H2$ used up, in M/s (as a positive number)? Give 3 significant figures.', '0.0720',
+  'Divide each rate by its coefficient: the rate of reaction is the same for every species.',
+  'Ṙ = ½ d[$NH3$]/dt = 0.0240 M/s, and −d[$H2$]/dt = 3Ṙ = 0.0720 M/s.', null, null, { sf: 3, unit: 'M/s' }),
+mc('h11-10', 'h11', 'Which change increases the fraction of collisions that have at least the activation energy?',
+  ['Raising the temperature', 'Raising the concentration of a reactant', 'Grinding a solid reactant into a powder', 'Using a bigger container'], 0,
+  'Higher temperature shifts the energy distribution so more molecules exceed Eₐ. More concentration or surface area gives more collisions per second, but the same fraction of them are energetic enough.', { k: 'c' }),
+num('h11-11', 'h11', 'For 2 $H2O2$(aq) → 2 $H2O$(l) + $O2$(g), [$O2$] rises from 0 to 0.0150 M in the first 30.0 s. What is the average rate of reaction Ṙ, in M/s? Give 3 significant figures, like 1.23E-4.', '5.00E-4',
+  'O₂ has a coefficient of 1, so Ṙ = Δ[$O2$]/Δt.',
+  '0.0150 M / 30.0 s = 5.00 × 10⁻⁴ M/s. (The peroxide is used up twice as fast: 1.00 × 10⁻³ M/s.)', null, null, { sf: 3, unit: 'M/s' }),
+
+num('h12-12', 'h12', 'A first-order reaction has k = 0.0231 min⁻¹. What is its half-life, in minutes? Give 3 significant figures.', '30.0',
+  'For first order, t<sub>½</sub> = ln 2 / k, whatever the starting concentration.',
+  '0.6931 / 0.0231 min⁻¹ = 30.0 min.', null, null, { sf: 3, unit: 'min' }),
+num('h12-13', 'h12', 'A first-order reaction has a half-life of 12.0 h. What percentage of the reactant is left after 36.0 h? Give 3 significant figures.', '12.5',
+  'How many half-lives is 36.0 h?',
+  '36.0 h is 3 half-lives, so (½)³ = 1/8 = 12.5% remains.', null, null, { sf: 3, unit: '%' }),
+mc('h12-14', 'h12', 'What are the units of k for a first-order reaction?',
+  ['s⁻¹', 'M/s', 'M⁻¹·s⁻¹', 'M⁻²·s⁻¹'], 0,
+  'Ṙ = k[A] has units M/s, so k has units (M/s)/M = s⁻¹. Zero order gives M/s and second order gives M⁻¹·s⁻¹.', { k: 'c' }),
+
+num('h13-8', 'h13', 'A reaction has Eₐ = 50.0 kJ/mol. By what factor does k increase when the temperature rises from 25.0 °C to 35.0 °C? Give 3 significant figures.', '1.92',
+  'ln(k₂/k₁) = (Eₐ/R)(1/T₁ − 1/T₂), with T in kelvin.',
+  'ln(k₂/k₁) = (50 000/8.314)(1/298.15 − 1/308.15) = 0.6546, so k₂/k₁ = 1.92: roughly the "doubles every 10 °C" rule of thumb.', null, null, { sf: 3 }),
+mc('h13-9', 'h13', 'A catalyst lowers the activation energy of a reversible reaction. What happens?',
+  ['Both the forward and reverse rate constants increase', 'Only the forward rate constant increases, not the reverse', 'The equilibrium constant K increases with it', 'ΔH of the reaction becomes more negative'], 0,
+  'A catalyst gives a new pathway with a lower barrier in both directions, so equilibrium is reached faster but K and ΔH do not change.', { k: 'c' }),
+num('h13-10', 'h13', 'A reaction has A = 1.0 × 10¹³ s⁻¹ and Eₐ = 100. kJ/mol. What is k at 500. K, in s⁻¹? Give 2 significant figures, like 1.2E3.', '3.6E2',
+  'k = A e<sup>−Eₐ/RT</sup>.',
+  'Eₐ/RT = 100 000/(8.314 × 500.) = 24.06, so k = 1.0 × 10¹³ × e<sup>−24.06</sup> = 3.6 × 10² s⁻¹.', null, null, { sf: 2, unit: 's⁻¹' }),
+
+num('h14-11', 'h14', 'Ethanol has a normal boiling point of 78.3 °C and ΔH<sub>vap</sub> = 38.6 kJ/mol. Estimate its vapour pressure at 50.0 °C, in mmHg. Give 3 significant figures.', '239',
+  'At the normal boiling point the vapour pressure is 760 mmHg. Use Clausius–Clapeyron.',
+  'ln(P/760) = −(38 600/8.314)(1/323.15 − 1/351.45) = −1.157, so P = 760 × 0.3145 = 239 mmHg.', null, null, { sf: 3, unit: 'mmHg' }),
+num('h14-12', 'h14', 'At 25.0 °C the vapour pressure of water is 23.8 mmHg. The partial pressure of water vapour in the air is 14.3 mmHg. What is the relative humidity, in %? Give 3 significant figures.', '60.1',
+  'Relative humidity = P<sub>water</sub> / P*<sub>water</sub> × 100%.',
+  '14.3 / 23.8 × 100% = 60.1%.', null, null, { sf: 3, unit: '%' }),
+mc('h14-13', 'h14', 'Air at 30 °C has a water vapour partial pressure of 17.5 mmHg. The vapour pressure of water is 17.5 mmHg at 20 °C and 31.8 mmHg at 30 °C. What is the dew point of this air?',
+  ['20 °C', '30 °C', '25 °C', '10 °C'], 0,
+  'The dew point is the temperature at which the water already in the air would saturate it: where P* equals the partial pressure, 17.5 mmHg, which is at 20 °C.', { k: 'n' }),
+
+mc('h15-10', 'h15', 'The solid–liquid line on water\'s phase diagram slopes to the left as pressure increases. What does that mean?',
+  ['Ice is less dense than water, so pressure can melt it', 'Ice is denser than liquid water, so it sinks in water', 'Water has no triple point on its phase diagram', 'Water can never become a supercritical fluid'], 0,
+  'Higher pressure favours the denser phase. For water that is the liquid, so the melting point drops slightly as pressure rises. Most substances lean the other way.', { k: 'c' }),
+mc('h15-11', 'h15', 'A gas sits at a temperature below its triple-point temperature. The pressure is slowly raised at constant temperature. What happens?',
+  ['It deposits straight into a solid', 'It condenses into a liquid', 'It becomes a supercritical fluid', 'Nothing: it stays a gas at any pressure'], 0,
+  'Below the triple-point temperature, a vertical line on the phase diagram crosses only the solid–gas curve, so there is no liquid region to pass through.', { k: 'c' }),
+mc('h15-12', 'h15', 'Where is the normal boiling point on a phase diagram?',
+  ['Where the liquid–gas curve crosses 1 atm', 'At the triple point', 'At the critical point', 'Where the solid–liquid line crosses 1 atm'], 0,
+  '"Normal" means at 1 atm. The solid–liquid line at 1 atm gives the normal melting point instead.', { k: 'c' }),
+
+num('h16-10', 'h16', 'The solubility of $N2$ in water is 6.8 × 10⁻⁴ mol/L when the $N2$ pressure above it is 1.00 atm. What is its solubility when the $N2$ pressure is 3.50 atm, in mol/L? Give 2 significant figures, like 1.2E-3.', '2.4E-3',
+  'Henry\'s law: gas solubility is proportional to its partial pressure.',
+  '6.8 × 10⁻⁴ × 3.50 = 2.4 × 10⁻³ mol/L. That is why divers breathing compressed air absorb more nitrogen.', null, null, { sf: 2, unit: 'mol/L' }),
+multi('h16-11', 'h16', 'Benzene and toluene form an ideal solution. At 25 °C the pure vapour pressures are 95.1 mmHg (benzene) and 28.4 mmHg (toluene). The liquid has a benzene mole fraction of 0.400.', [
+  { ask: 'What is the total vapour pressure, in mmHg? Give 3 significant figures.', ans: '55.1', sf: 3, unit: 'mmHg', hint: 'Raoult\'s law for each, then add.', why: '0.400 × 95.1 + 0.600 × 28.4 = 38.04 + 17.04 = 55.1 mmHg.' },
+  { ask: 'What is the mole fraction of benzene in the vapour? Give 3 significant figures.', ans: '0.691', sf: 3, hint: 'y = P<sub>benzene</sub> / P<sub>total</sub>.', why: '38.04 / 55.08 = 0.691. The vapour is richer in the more volatile benzene than the liquid (0.400).' }
+], 'C'),
+mc('h16-12', 'h16', 'Why can warm water hold less dissolved oxygen than cold water?',
+  ['Gas solubility in water decreases as temperature rises', 'Warm water has a higher Henry\'s law pressure of oxygen in the air', 'Oxygen reacts with warm water', 'Warm water is denser'], 0,
+  'Dissolving a gas releases heat, so heating shifts it back out of solution. In P = Hx, Henry\'s constant grows with temperature, so x falls at the same pressure.', { k: 'c' }),
+
+num('h17-11', 'h17', 'A 0.150 m solution of $K2SO4$ dissociates completely. By how much is the freezing point of water lowered, in °C? K<sub>f</sub> = 1.86 K·kg/mol. Give 3 significant figures.', '0.837',
+  '$K2SO4$ → 2 K⁺ + SO₄²⁻, so i = 3.',
+  'ΔT<sub>f</sub> = iK<sub>f</sub>m = 3 × 1.86 × 0.150 = 0.837 °C, so it freezes at −0.837 °C.', null, null, { sf: 3, unit: '°C' }),
+num('h17-12', 'h17', '18.0 g of glucose ($C6H12O6$, 180.16 g/mol) is dissolved in 150. g of water. By how much does the boiling point rise, in °C? K<sub>b</sub> = 0.512 K·kg/mol. Give 3 significant figures.', '0.341',
+  'Glucose does not dissociate (i = 1). Molality = mol solute / kg solvent.',
+  'mol = 18.0/180.16 = 0.09991, m = 0.09991/0.150 kg = 0.6661 mol/kg, ΔT<sub>b</sub> = 0.512 × 0.6661 = 0.341 °C.', null, null, { sf: 3, unit: '°C' }),
+mc('h17-13', 'h17', 'Which aqueous solution has the highest boiling point? Assume complete dissociation.',
+  ['0.10 m $Na3PO4$', '0.15 m NaCl', '0.20 m glucose', '0.12 m $MgCl2$'], 0,
+  'Compare i × m: $Na3PO4$ gives 4 × 0.10 = 0.40, $MgCl2$ 3 × 0.12 = 0.36, NaCl 2 × 0.15 = 0.30 and glucose 0.20.', { k: 'n' }),
+
+num('h18-11', 'h18', 'For $H2$(g) + $I2$(g) ⇌ 2 HI(g), K<sub>c</sub> = 50.0. What is K<sub>c</sub> for HI(g) ⇌ ½ $H2$(g) + ½ $I2$(g)? Give 3 significant figures.', '0.141',
+  'Reversing a reaction inverts K. Halving the coefficients takes the square root.',
+  'K = (1/50.0)<sup>1/2</sup> = 0.141.', null, null, { sf: 3 }),
+num('h18-12', 'h18', 'For 2 $SO2$(g) + $O2$(g) ⇌ 2 $SO3$(g), K<sub>c</sub> = 280. at 1000. K. What is K<sub>p</sub>, with pressures in bar? Give 3 significant figures.', '3.37',
+  'K<sub>p</sub> = K<sub>c</sub>(RT)<sup>Δn</sup>, with R = 0.08314 L·bar/(mol·K) and Δn = moles of gas products − reactants.',
+  'Δn = 2 − 3 = −1, so K<sub>p</sub> = 280./(0.08314 × 1000.) = 3.37.', null, null, { sf: 3 }),
+mc('h18-13', 'h18', 'What is K<sub>c</sub> for 2 NO(g) + $Cl2$(g) ⇌ 2 NOCl(g)?',
+  ['[NOCl]² / ([NO]²[$Cl2$])', '[NOCl] / ([NO][$Cl2$])', '2[NOCl] / (2[NO] + [$Cl2$])', '([NO]²[$Cl2$]) / [NOCl]²'], 0,
+  'Products over reactants, each raised to its coefficient. Coefficients become exponents, never multipliers.', { k: 'c' }),
+
+num('h19-9', 'h19', 'A(g) ⇌ B(g) has K<sub>c</sub> = 3.00. A vessel starts with [A] = 0.400 M and no B. What is [B] at equilibrium, in M? Give 3 significant figures.', '0.300',
+  'ICE table: [A] = 0.400 − x and [B] = x.',
+  'x/(0.400 − x) = 3.00 gives x = 1.20 − 3.00x, so x = 0.300 M. Check: 0.300/0.100 = 3.00.', null, null, { sf: 3, unit: 'M' }),
+num('h19-10', 'h19', 'For $N2O4$(g) ⇌ 2 $NO2$(g), K<sub>c</sub> = 4.60 × 10⁻³ at a certain temperature. A vessel starts with 0.0500 M $N2O4$ only. What is [$NO2$] at equilibrium, in M? Give 3 significant figures.', '0.0141',
+  'ICE: [$N2O4$] = 0.0500 − x and [$NO2$] = 2x. K is not tiny compared with 0.0500, so solve the quadratic.',
+  '(2x)²/(0.0500 − x) = 4.60 × 10⁻³ gives 4x² + 0.00460x − 2.30 × 10⁻⁴ = 0, so x = 0.00703 and [$NO2$] = 2x = 0.0141 M.', null, null, { sf: 3, unit: 'M' }),
+mc('h19-11', 'h19', 'For $H2$(g) + $I2$(g) ⇌ 2 HI(g), K<sub>c</sub> = 50.0. A mixture has [$H2$] = [$I2$] = 0.100 M and [HI] = 0.500 M. What happens?',
+  ['It shifts right, since Q = 25.0 &lt; K', 'It shifts left, because Q is greater than K', 'Nothing happens: it is already at equilibrium', 'It shifts right, because there is more HI than $H2$'], 0,
+  'Q = 0.500²/(0.100 × 0.100) = 25.0. Q &lt; K means too few products, so the forward reaction runs until Q = 50.0.', { k: 'n' }),
+
+mc('h20-11', 'h20', 'An exothermic reaction is at equilibrium. The temperature is raised. What happens?',
+  ['K decreases and the equilibrium shifts toward reactants', 'K increases and the equilibrium shifts toward products', 'K stays the same and the equilibrium shifts toward reactants', 'Nothing, because K only depends on concentrations'], 0,
+  'Treat heat as a product of an exothermic reaction: adding heat pushes it back. Temperature is the only change that alters K itself.', { k: 'c' }),
+num('h20-12', 'h20', 'A reaction has ΔH° = −50.0 kJ/mol and K = 100. at 300. K. What is K at 350. K? Give 3 significant figures.', '5.71',
+  'van \'t Hoff: ln(K₂/K₁) = −(ΔH°/R)(1/T₂ − 1/T₁).',
+  'ln(K₂/K₁) = −(−50 000/8.314)(1/350. − 1/300.) = −2.864, so K₂ = 100. × e<sup>−2.864</sup> = 5.71. Exothermic, so K falls when heated.', null, null, { sf: 3 }),
+mc('h20-13', 'h20', 'In the Haber process, $NH3$ is removed as it forms. What happens?',
+  ['It shifts right to make more $NH3$; K is unchanged', 'K increases because a product was taken away', 'The equilibrium shifts left to replace the reactants', 'The reaction stops, since its product is gone'], 0,
+  'Removing a product makes Q &lt; K, so the forward reaction keeps running. Only temperature changes K.', { k: 'c' }),
+
+mc('h21-13', 'h21', 'What is the oxidation state of Mn in $MnO4$⁻?',
+  ['+7', '+8', '+6', '−1'], 0,
+  'Four O at −2 give −8. The ion\'s charge is −1, so Mn = −1 − (−8) = +7.', { k: 'c' }),
+num('h21-11', 'h21', 'What is E°<sub>cell</sub> for Al(s)|Al³⁺(aq)||Ni²⁺(aq)|Ni(s), in V? (Al³⁺|Al: −1.676 V, Ni²⁺|Ni: −0.250 V) Give 4 significant figures.', '1.426',
+  'The right side of the cell notation is the cathode.',
+  'E°<sub>cell</sub> = −0.250 − (−1.676) = 1.426 V. The 2 : 3 electron balance (2 Al and 3 Ni²⁺) does not change E°.', null, null, { sf: 4, unit: 'V' }),
+mc('h21-12', 'h21', 'In the cell Zn(s)|Zn²⁺(aq)||Cu²⁺(aq)|Cu(s), which electrode gains mass as it runs?',
+  ['The copper cathode', 'The zinc anode', 'Both electrodes equally', 'Neither electrode'], 0,
+  'Cu²⁺ is reduced to copper metal, which plates onto the cathode. The zinc anode dissolves as Zn²⁺, so it loses mass.', { k: 'c' }),
+
+num('h22-11', 'h22', 'Find E<sub>cell</sub> at 25 °C for Zn(s)|Zn²⁺(1.0 M)||Cu²⁺(0.0010 M)|Cu(s). E°<sub>cell</sub> = 1.103 V. Give 3 significant figures.', '1.01',
+  'Nernst with n = 2 and Q = [Zn²⁺]/[Cu²⁺].',
+  'Q = 1.0/0.0010 = 1000. E = 1.103 − (8.314 × 298.15/(2 × 96485)) ln 1000 = 1.103 − 0.0888 = 1.01 V. Running low on Cu²⁺ lowers the voltage.', null, null, { sf: 3, unit: 'V' }),
+num('h22-12', 'h22', 'For Zn(s) + Cu²⁺(aq) → Zn²⁺(aq) + Cu(s), E°<sub>cell</sub> = 1.103 V. What is ln K at 25 °C? Give 3 significant figures.', '85.9',
+  'ln K = nFE°/RT with n = 2.',
+  'ln K = (2 × 96485 × 1.103)/(8.314 × 298.15) = 85.9, so K ≈ 2 × 10³⁷: the reaction goes to completion.', null, null, { sf: 3 }),
+num('h22-13', 'h22', 'Aluminum is made by electrolysis of molten $Al2O3$. How long does it take to make 2.00 g of Al with a current of 5.00 A, in minutes? (Al: 26.98 g/mol) Give 3 significant figures.', '71.5',
+  'Al³⁺ + 3 e⁻ → Al, so mol e⁻ = 3 × mol Al. Then t = (mol e⁻)F/I.',
+  'mol Al = 2.00/26.98 = 0.07413, mol e⁻ = 0.2224, t = 0.2224 × 96485/5.00 = 4291 s = 71.5 min.', null, null, { sf: 3, unit: 'min' }),
+
+num('w-1', 'tw', 'How many moles are in 18.0 g of water (18.0 g/mol)? Give 3 significant figures.', '1.00', 'n = m / M.', '18.0 / 18.0 = 1.00 mol.', null, null, { sf: 3, unit: 'mol' }),
+mc('w-2', 'tw', 'E°<sub>cell</sub> is positive. What does that tell you?', ['It is spontaneous as written', 'It is not spontaneous as written', 'The cell is at equilibrium', 'It says nothing about direction'], 0, 'A positive cell potential means the reaction runs on its own: a galvanic cell.', { k: 'c' }),
+num('w-3', 'tw', 'A 1.00 m glucose solution in water: by how much is the freezing point lowered, in °C? K<sub>f</sub> = 1.86 K·kg/mol. Give 3 significant figures.', '1.86', 'ΔT = iK<sub>f</sub>m with i = 1.', '1 × 1.86 × 1.00 = 1.86 °C.', null, null, { sf: 3, unit: '°C' }),
+mc('w-4', 'tw', 'What does a catalyst change?', ['How fast equilibrium is reached, not K', 'The value of K at that temperature', 'ΔH of the reaction, making it more negative', 'Which side the equilibrium favours'], 0, 'A catalyst lowers the barrier both ways, so rates go up but the equilibrium position stays put.', { k: 'c' }),
+mc('w-5', 'tw', 'Q &lt; K. Which way does the reaction go?', ['Forward, toward products', 'Backward, toward reactants', 'Neither: it is at equilibrium', 'It depends on the temperature only'], 0, 'Too few products compared with equilibrium, so the forward reaction runs until Q = K.', { k: 'c' }),
+num('w-6', 'tw', 'A first-order reaction runs for two half-lives. What percentage of the reactant is left? Give 2 significant figures.', '25', 'Half, then half again.', '½ × ½ = ¼ = 25%.', null, null, { sf: 2, unit: '%' }),
+mc('w-7', 'tw', 'What is oxidation?', ['Losing electrons', 'Gaining electrons', 'Gaining protons', 'Losing oxygen'], 0, 'OIL RIG: Oxidation Is Loss, Reduction Is Gain (of electrons).', { k: 'c' }),
+num('w-8', 'tw', 'For A ⇌ B at equilibrium, [A] = 0.50 M and [B] = 1.0 M. What is K<sub>c</sub>? Give 2 significant figures.', '2.0', 'K<sub>c</sub> = [B]/[A].', '1.0 / 0.50 = 2.0.', null, null, { sf: 2 }),
+mc('w-9', 'tw', 'An endothermic reaction is heated. What happens to K?', ['It increases', 'It decreases', 'It stays the same', 'It becomes 1'], 0, 'Heat acts like a reactant for an endothermic reaction, so heating pushes it forward and K grows.', { k: 'c' }),
+mc('w-10', 'tw', 'When does a liquid boil?', ['When vapour pressure = outside pressure', 'Always at 100 °C, whatever the pressure', 'When it reaches its critical temperature', 'When its vapour pressure drops to zero'], 0, 'At the normal boiling point the vapour pressure is 1 atm. Lower outside pressure means a lower boiling point.', { k: 'c' }),
+num('w-11', 'tw', 'A current of 3.0 A flows for 5.0 s. How much charge passes, in C? Give 2 significant figures.', '15', 'Q = It.', '3.0 × 5.0 = 15 C.', null, null, { sf: 2, unit: 'C' }),
+mc('w-12', 'tw', 'Which compound has a van \'t Hoff factor of 2 when it dissolves completely?', ['NaCl', 'Glucose', '$CaCl2$', '$AlCl3$'], 0, 'NaCl → Na⁺ + Cl⁻ makes 2 particles. Glucose stays as 1, $CaCl2$ makes 3 and $AlCl3$ makes 4.', { k: 'c' }),
+
 
 ];
 
@@ -5011,7 +5787,8 @@ var T = [
   { id: 'k17', name: 'Linear approximation', sec: 'L(x) and dy' },
   { id: 'k18', name: 'Riemann sums and integrals', sec: 'Σ f(xᵢ)Δx' },
   { id: 'k19', name: 'Fundamental Theorem', sec: 'FTC parts 1 and 2' },
-  { id: 'k20', name: 'Substitution', sec: 'u = g(x)' }
+  { id: 'k20', name: 'Substitution', sec: 'u = g(x)' },
+  { id: 'tw', name: 'Pre-exam warm-up', sec: 'In your head', extra: 'Quick, easy questions on the basics to settle your nerves before the exam. Not counted in mastery or mock exams.' }
 ];
 /* base graph used by the transformation questions: (-2,0) to (0,2) to (2,1) */
 function f0(x) { return x <= 0 ? x + 2 : 2 - x / 2; }
@@ -5705,7 +6482,185 @@ mc('k20-5', 'k20', 'Which substitution works best for ∫ x/(x² + 4) dx?',
   'du = 2x dx, and the x dx is right there in the numerator. The integral becomes (1/2)∫ du/u = (1/2) ln(x² + 4) + C.'),
 num('k20-6', 'k20', 'Evaluate ∫<sub>0</sub><sup>1</sup> 1/(1 + x)² dx.', '1/2',
   'u = 1 + x, du = dx.',
-  '∫<sub>1</sub><sup>2</sup> u<sup>−2</sup> du = [−1/u] from 1 to 2 = −1/2 + 1 = 1/2.')
+  '∫<sub>1</sub><sup>2</sup> u<sup>−2</sup> du = [−1/u] from 1 to 2 = −1/2 + 1 = 1/2.'),
+
+/* ---------- more practice: applications of derivatives and integrals ---------- */
+multi('k11-7', 'k11', 'Use Newton\'s method on f(x) = x³ − 2 with x<sub>0</sub> = 1.', [
+  { ask: 'What is x<sub>1</sub>?', ans: '4/3', hint: 'x<sub>n+1</sub> = x<sub>n</sub> − f(x<sub>n</sub>)/f′(x<sub>n</sub>), with f′(x) = 3x².', why: 'x<sub>1</sub> = 1 − (1 − 2)/3 = 1 + 1/3 = 4/3.' },
+  { ask: 'What is x<sub>2</sub>?', ans: '91/72', hint: 'Repeat with x<sub>1</sub> = 4/3.', why: 'f(4/3) = 64/27 − 2 = 10/27 and f′(4/3) = 16/3, so x<sub>2</sub> = 4/3 − (10/27)(3/16) = 4/3 − 5/72 = 91/72 ≈ 1.2639. The true root ∛2 ≈ 1.2599.' }
+]),
+num('k11-8', 'k11', 'Find the number c that the Mean Value Theorem gives for f(x) = x² on [1, 3].', '2',
+  'Set f′(c) equal to the average rate of change (f(3) − f(1))/(3 − 1).',
+  'The average rate is (9 − 1)/2 = 4, and f′(c) = 2c = 4 gives c = 2, inside (1, 3).'),
+num('k11-9', 'k11', 'Find the number c that the Mean Value Theorem gives for f(x) = √x on [0, 4].', '1',
+  'f′(x) = 1/(2√x).',
+  'The average rate is (2 − 0)/4 = 1/2, so 1/(2√c) = 1/2, √c = 1 and c = 1.'),
+mc('k11-10', 'k11', 'Why does the Mean Value Theorem not apply to f(x) = |x| on [−1, 1]?',
+  ['f is not differentiable at x = 0', 'f is not continuous on [−1, 1]', 'f(−1) and f(1) are different values', 'It does apply, with c = 0'], 0,
+  'The theorem needs f continuous on [a, b] and differentiable on (a, b). |x| has a corner at 0. Indeed no c works: f′ is only ever ±1, never the average rate 0.'),
+mc('k11-11', 'k11', 'When does Newton\'s method break down at a step?',
+  ['When f′(x<sub>n</sub>) = 0: the tangent is flat', 'When f(x<sub>n</sub>) = 0, the root itself', 'When x<sub>n</sub> becomes a negative number', 'Whenever f is a polynomial'], 0,
+  'The formula divides by f′(x<sub>n</sub>), and a horizontal tangent never meets the x-axis. f(x<sub>n</sub>) = 0 means you have already found the root.'),
+
+multi('k12-6', 'k12', 'Let f(x) = x³ − 12x.', [
+  { ask: 'At what x does f have a local maximum?', ans: '-2', hint: 'f′(x) = 3x² − 12 = 0 at x = ±2. Check the sign of f′ around each.', why: 'f′ goes from positive to negative at x = −2.' },
+  { ask: 'What is the local maximum value?', ans: '16', hint: 'Evaluate f there.', why: 'f(−2) = −8 + 24 = 16. (The local minimum is f(2) = −16.)' }
+]),
+mc('k12-7', 'k12', 'f′ changes from negative to positive at x = c. What is at x = c?',
+  ['A local minimum', 'A local maximum', 'An inflection point', 'Nothing in particular'], 0,
+  'f is decreasing before c and increasing after, so f(c) is lower than the values around it: the first derivative test.'),
+num('k12-8', 'k12', 'f(x) = xe<sup>−x</sup> is increasing for x &lt; a and decreasing for x &gt; a. Find a.', '1',
+  'Use the product rule, then factor out e<sup>−x</sup>.',
+  'f′(x) = e<sup>−x</sup> − xe<sup>−x</sup> = e<sup>−x</sup>(1 − x). e<sup>−x</sup> &gt; 0 always, so the sign is the sign of 1 − x.'),
+multi('k12-9', 'k12', 'Find the absolute extrema of f(x) = x³ − 3x² on [−1, 4].', [
+  { ask: 'What is the absolute maximum value?', ans: '16', hint: 'Compare f at the critical points (f′ = 3x² − 6x = 0) and at both endpoints.', why: 'f(−1) = −4, f(0) = 0, f(2) = −4 and f(4) = 16. The largest is 16, at the endpoint x = 4.' },
+  { ask: 'What is the absolute minimum value?', ans: '-4', hint: 'Same list of values.', why: 'The smallest is −4, reached twice: at x = −1 and at x = 2.' }
+]),
+mc('k12-10', 'k12', 'f′(c) = 0. What can you conclude?',
+  ['c is a critical point: max, min or neither', 'f must have a local maximum at x = c', 'f must have a local minimum or maximum at c', 'f must have an inflection point at x = c'], 0,
+  'f(x) = x³ has f′(0) = 0 but no extremum at 0, since it keeps increasing. You need the first or second derivative test to decide.'),
+
+num('k13-6', 'k13', 'At what x does f(x) = x³ − 3x² + 2 have an inflection point?', '1',
+  'Find where f″ changes sign.',
+  'f″(x) = 6x − 6 is negative for x &lt; 1 and positive for x &gt; 1, so concavity changes at x = 1.'),
+mc('k13-7', 'k13', 'f′(c) = 0 and f″(c) &lt; 0. What does the second derivative test say?',
+  ['f has a local maximum at c', 'f has a local minimum at c', 'c is an inflection point', 'The test gives no information'], 0,
+  'f″(c) &lt; 0 means f is concave down at c, so a horizontal tangent there sits on top of a hill.'),
+multi('k13-8', 'k13', 'Let f(x) = (3x² + 1)/(x² − 4).', [
+  { ask: 'The horizontal asymptote is y = k. Find k.', ans: '3', hint: 'Divide the top and bottom by x².', why: 'As x → ±∞, f(x) → 3/1 = 3, the ratio of the leading coefficients.' },
+  { ask: 'f has vertical asymptotes at x = ±a. Find a.', ans: '2', hint: 'Where is the denominator 0 but the numerator not?', why: 'x² − 4 = 0 at x = ±2, and the numerator is 13 there, not 0.' }
+]),
+mc('k13-9', 'k13', 'For f(x) = x⁴, f″(0) = 0. Is x = 0 an inflection point?',
+  ['No: f″(x) = 12x² does not change sign at 0', 'Yes: f″(0) = 0 always means an inflection point', 'Yes: the graph is flat at 0', 'No: f is not differentiable at 0'], 0,
+  'An inflection point needs the concavity to change. x⁴ is concave up on both sides of 0 (it has a minimum there).'),
+num('k13-10', 'k13', 'At what x does f(x) = xe<sup>x</sup> have an inflection point?', '-2',
+  'f′(x) = e<sup>x</sup>(x + 1). Differentiate again.',
+  'f″(x) = e<sup>x</sup>(x + 2), which changes sign at x = −2.'),
+
+num('k14-6', 'k14', 'A farmer has 60 m of fence to enclose a rectangle along a straight river, with no fence on the river side. What is the largest area possible, in m²?', '450',
+  'With sides x, 60 − 2x and x, the area is A(x) = x(60 − 2x).',
+  'A′(x) = 60 − 4x = 0 at x = 15, so the sides are 15, 30 and 15 m and A = 15 × 30 = 450 m². A″ = −4 &lt; 0 confirms a maximum.'),
+num('k14-7', 'k14', 'What is the shortest distance from the point (0, 2) to the parabola y = x²?', 'sqrt(7)/2',
+  'Minimize the squared distance D(x) = x² + (x² − 2)², which is easier than the distance itself.',
+  'D′(x) = 2x + 4x(x² − 2) = 2x(2x² − 3) = 0 at x = 0 or x² = 3/2. D(0) = 4 and D = 3/2 + 1/4 = 7/4 at x² = 3/2, so the shortest distance is √(7/4) = √7/2 ≈ 1.32.'),
+num('k14-8', 'k14', 'A closed cylindrical can holds 250π cm³. What radius, in cm, uses the least metal?', '5',
+  'h = 250/r² from the volume, so the surface area is A(r) = 2πr² + 500π/r.',
+  'A′(r) = 4πr − 500π/r² = 0 gives r³ = 125, so r = 5 cm (and h = 10 cm, equal to the diameter).'),
+num('k14-9', 'k14', 'Two positive numbers add to 20. What is the largest their product can be?', '100',
+  'P(x) = x(20 − x).',
+  'P′(x) = 20 − 2x = 0 at x = 10, so both numbers are 10 and the product is 100.'),
+mc('k14-10', 'k14', 'f is continuous on [a, b]. To find its absolute maximum, which values do you compare?',
+  ['f at interior critical points and both endpoints', 'f at the critical points inside (a, b) only', 'f at the two endpoints a and b only', 'f″ at each critical point, the second derivative test'], 0,
+  'The Closed Interval Method: the largest value can be at an interior critical point or at an endpoint, as in f(x) = x³ − 3x² on [−1, 4].'),
+
+num('k15-6', 'k15', 'A 10 m ladder leans against a wall. Its foot slides away from the wall at 1 m/s. How fast is the top sliding down when the foot is 6 m from the wall, in m/s?', '3/4',
+  'x² + y² = 100. Differentiate with respect to t.',
+  'When x = 6, y = 8. 2x x′ + 2y y′ = 0 gives y′ = −(6)(1)/8 = −3/4, so the top slides down at 3/4 m/s.'),
+num('k15-7', 'k15', 'A circle\'s radius grows at 2 cm/s. How fast is its area growing when r = 3 cm, in cm²/s?', '12pi',
+  'A = πr², so dA/dt = 2πr dr/dt.',
+  'dA/dt = 2π(3)(2) = 12π ≈ 37.7 cm²/s.'),
+num('k15-8', 'k15', 'A cube\'s edges grow at 0.5 cm/s. How fast is its volume growing when the edges are 4 cm, in cm³/s?', '24',
+  'V = s³, so dV/dt = 3s² ds/dt.',
+  '3(16)(0.5) = 24 cm³/s.'),
+num('k15-9', 'k15', 'Water pours at 2 m³/min into a cone-shaped tank, point down, 4 m tall with a 2 m top radius. How fast is the water level rising when the water is 2 m deep, in m/min?', '2/pi',
+  'Similar triangles give r = h/2, so V = (1/3)π(h/2)²h = πh³/12.',
+  'dV/dt = (πh²/4) dh/dt. At h = 2: 2 = π dh/dt, so dh/dt = 2/π ≈ 0.64 m/min.'),
+num('k15-10', 'k15', 'Two cars leave the same point: one north at 60 km/h, the other east at 80 km/h. How fast is the distance between them growing after 1 hour, in km/h?', '100',
+  'D² = x² + y², so D D′ = x x′ + y y′.',
+  'After 1 h, x = 80, y = 60 and D = 100. D′ = (80 × 80 + 60 × 60)/100 = 100 km/h.'),
+
+num('k16-7', 'k16', 'Evaluate lim<sub>x→0</sub> sin(3x)/x.', '3',
+  'It is 0/0, so differentiate the top and bottom.',
+  'L\'Hôpital: lim 3cos(3x)/1 = 3.'),
+num('k16-8', 'k16', 'Evaluate lim<sub>x→0</sub> (e<sup>x</sup> − 1 − x)/x².', '1/2',
+  'You may need L\'Hôpital twice: check for 0/0 each time.',
+  'First: (e<sup>x</sup> − 1)/(2x), still 0/0. Second: e<sup>x</sup>/2 → 1/2.'),
+num('k16-9', 'k16', 'Evaluate lim<sub>x→∞</sub> (ln x)/√x.', '0',
+  '∞/∞: differentiate the top and bottom.',
+  '(1/x)/(1/(2√x)) = 2/√x → 0. Logarithms grow slower than any power of x.'),
+num('k16-10', 'k16', 'Evaluate lim<sub>x→0⁺</sub> x<sup>x</sup>.', '1',
+  'Let y = x<sup>x</sup>, so ln y = x ln x, a 0 · ∞ form.',
+  'x ln x = (ln x)/(1/x) → (1/x)/(−1/x²) = −x → 0, so ln y → 0 and y → e⁰ = 1.'),
+mc('k16-11', 'k16', 'Can L\'Hôpital\'s rule be used on lim<sub>x→0</sub> (x + 1)/x?',
+  ['No: the form is 1/0, not 0/0 or ∞/∞', 'Yes, giving 1/1 = 1', 'Yes, giving 0', 'No: the function is not differentiable'], 0,
+  'L\'Hôpital only applies to 0/0 and ∞/∞. Here the top tends to 1 and the bottom to 0, so the limit does not exist (it goes to ±∞ from the two sides).'),
+
+num('k17-6', 'k17', 'Use the linearization of f(x) = ∛x at x = 8 to estimate ∛8.12.', '2.01',
+  'f′(x) = (1/3)x<sup>−2/3</sup>, so f′(8) = 1/12.',
+  'L(x) = 2 + (1/12)(x − 8), so L(8.12) = 2 + 0.12/12 = 2.01.'),
+num('k17-7', 'k17', 'Use the linearization of ln x at x = 1 to estimate ln(1.05).', '0.05',
+  'ln 1 = 0 and the slope there is 1.',
+  'L(x) = x − 1, so ln(1.05) ≈ 0.05. (The true value is 0.04879.)'),
+num('k17-8', 'k17', 'y = x³. Find the differential dy when x = 2 and dx = 0.1.', '1.2',
+  'dy = f′(x) dx.',
+  'dy = 3(2)²(0.1) = 1.2. (The actual change 2.1³ − 8 = 1.261 is close.)'),
+mc('k17-9', 'k17', 'f is concave up near a. How does the linear approximation L(x) compare with f(x)?',
+  ['It underestimates: the tangent lies below the curve', 'It overestimates: the tangent line lies above the curve', 'It is exact', 'It depends only on the sign of f′(a)'], 0,
+  'A concave-up curve bends away above its tangent lines, so L(x) ≤ f(x) nearby. Concave down gives overestimates.'),
+num('k17-10', 'k17', 'Use the linearization of f(x) = 1/x at x = 2 to estimate 1/2.1.', '0.475',
+  'f′(x) = −1/x², so f′(2) = −1/4.',
+  'L(2.1) = 1/2 − (1/4)(0.1) = 0.475. (The true value is 0.47619.)'),
+
+num('k18-7', 'k18', 'Compute the right Riemann sum R<sub>4</sub> for f(x) = 2x + 1 on [0, 4].', '24',
+  'Δx = 1, with right endpoints 1, 2, 3 and 4.',
+  'R<sub>4</sub> = 1 × (3 + 5 + 7 + 9) = 24. (The exact integral is 20, so a right sum overestimates an increasing function.)'),
+num('k18-8', 'k18', 'Compute the midpoint sum M<sub>2</sub> for f(x) = x² on [0, 2].', '5/2',
+  'Δx = 1, with midpoints 1/2 and 3/2.',
+  'M<sub>2</sub> = 1 × (1/4 + 9/4) = 5/2. (The exact value is 8/3.)'),
+num('k18-9', 'k18', '∫<sub>0</sub><sup>2</sup> f(x) dx = 5 and ∫<sub>0</sub><sup>5</sup> f(x) dx = 12. Find ∫<sub>2</sub><sup>5</sup> f(x) dx.', '7',
+  'Integrals over touching intervals add.',
+  '∫<sub>0</sub><sup>5</sup> = ∫<sub>0</sub><sup>2</sup> + ∫<sub>2</sub><sup>5</sup>, so 12 = 5 + ∫<sub>2</sub><sup>5</sup> and the answer is 7.'),
+num('k18-10', 'k18', 'Evaluate ∫<sub>−2</sub><sup>2</sup> √(4 − x²) dx by interpreting it as an area.', '2pi',
+  'y = √(4 − x²) is the top half of a circle of radius 2.',
+  'Half the area of a radius-2 circle: (1/2)π(2)² = 2π.'),
+num('k18-11', 'k18', 'Evaluate ∫<sub>0</sub><sup>3</sup> (2x − 1) dx.', '6',
+  'Find an antiderivative, or split the region into triangles.',
+  '[x² − x] from 0 to 3 = 9 − 3 = 6.'),
+
+num('k19-7', 'k19', 'g(x) = ∫<sub>0</sub><sup>x</sup> (t² + 1)³ dt. Find g′(1).', '8',
+  'FTC part 1: g′(x) is the integrand evaluated at x.',
+  'g′(x) = (x² + 1)³, so g′(1) = 2³ = 8.'),
+num('k19-8', 'k19', 'Evaluate ∫<sub>0</sub><sup>π</sup> sin x dx.', '2',
+  'An antiderivative of sin x is −cos x.',
+  '[−cos x] from 0 to π = −(−1) − (−1) = 2.'),
+num('k19-9', 'k19', 'Evaluate ∫<sub>1</sub><sup>e</sup> (1/x) dx.', '1',
+  'An antiderivative of 1/x is ln|x|.',
+  'ln e − ln 1 = 1 − 0 = 1.'),
+num('k19-10', 'k19', 'h(x) = ∫<sub>x</sub><sup>3</sup> cos(t²) dt. Find h′(0).', '-1',
+  'Flip the limits first: ∫<sub>x</sub><sup>3</sup> = −∫<sub>3</sub><sup>x</sup>.',
+  'h′(x) = −cos(x²), so h′(0) = −cos 0 = −1.'),
+num('k19-11', 'k19', 'What is the average value of f(x) = x² on [0, 3]?', '3',
+  'Average = (1/(b − a)) ∫<sub>a</sub><sup>b</sup> f(x) dx.',
+  '(1/3) × [x³/3] from 0 to 3 = (1/3)(9) = 3.'),
+
+num('k20-7', 'k20', 'Evaluate ∫<sub>0</sub><sup>π/2</sup> cos x e<sup>sin x</sup> dx.', 'e-1',
+  'u = sin x, so du = cos x dx.',
+  'x = 0 → u = 0 and x = π/2 → u = 1. ∫<sub>0</sub><sup>1</sup> e<sup>u</sup> du = e − 1.'),
+num('k20-8', 'k20', 'Evaluate ∫<sub>0</sub><sup>1</sup> x/(x² + 1) dx.', 'ln(2)/2',
+  'u = x² + 1, so x dx = du/2.',
+  '(1/2)∫<sub>1</sub><sup>2</sup> du/u = (1/2)(ln 2 − ln 1) = (ln 2)/2 ≈ 0.347.'),
+num('k20-9', 'k20', 'Evaluate ∫<sub>1</sub><sup>2</sup> (2x + 1)/(x² + x) dx.', 'ln(3)',
+  'The top is the derivative of the bottom.',
+  'u = x² + x gives ∫<sub>2</sub><sup>6</sup> du/u = ln 6 − ln 2 = ln 3.'),
+num('k20-10', 'k20', 'Evaluate ∫<sub>0</sub><sup>√3</sup> x√(x² + 1) dx.', '7/3',
+  'u = x² + 1, so x dx = du/2, and the limits become 1 and 4.',
+  '(1/2)∫<sub>1</sub><sup>4</sup> u<sup>1/2</sup> du = (1/2)(2/3)[u<sup>3/2</sup>] = (1/3)(8 − 1) = 7/3.'),
+mc('k20-11', 'k20', 'Which substitution turns ∫ x² cos(x³) dx into a basic integral?',
+  ['u = x³', 'u = x²', 'u = cos(x³)', 'u = cos x'], 0,
+  'With u = x³, du = 3x² dx, so the integral becomes (1/3)∫ cos u du = (1/3)sin(x³) + C.'),
+
+num('w-1', 'tw', 'f(x) = x³. What is f′(2)?', '12', 'Power rule: f′(x) = 3x².', '3(2)² = 12.'),
+num('w-2', 'tw', 'What is the derivative of sin x at x = 0?', '1', 'd/dx sin x = cos x.', 'cos 0 = 1.'),
+num('w-3', 'tw', 'Evaluate lim<sub>x→3</sub> (x² − 9)/(x − 3).', '6', 'Factor the top.', '(x − 3)(x + 3)/(x − 3) = x + 3 → 6.'),
+num('w-4', 'tw', 'Evaluate ∫<sub>0</sub><sup>1</sup> 2x dx.', '1', 'An antiderivative of 2x is x².', '1² − 0² = 1.'),
+num('w-5', 'tw', 'What is the derivative of e<sup>2x</sup> at x = 0?', '2', 'Chain rule: 2e<sup>2x</sup>.', '2e⁰ = 2.'),
+mc('w-6', 'tw', 'What is the derivative of ln x?', ['1/x', 'ln x', 'e<sup>x</sup>', 'x ln x − x'], 0, 'd/dx ln x = 1/x for x &gt; 0. (x ln x − x is its antiderivative.)'),
+num('w-7', 'tw', 'Evaluate ∫<sub>1</sub><sup>2</sup> 3x² dx.', '7', 'An antiderivative of 3x² is x³.', '8 − 1 = 7.'),
+mc('w-8', 'tw', 'f′(x) &gt; 0 on an interval. What is f doing there?', ['Increasing', 'Decreasing', 'Concave up', 'Constant'], 0, 'A positive slope means the graph goes up from left to right. Concavity is about f″.'),
+num('w-9', 'tw', 'What is the slope of the tangent line to y = x² at x = 3?', '6', 'The slope is the derivative.', 'y′ = 2x, so the slope is 6.'),
+mc('w-10', 'tw', 'What is d/dx f(g(x))?', ['f′(g(x)) g′(x)', 'f′(x) g′(x)', 'f′(g′(x))', 'f(g′(x)) + g(x)'], 0, 'The chain rule: derivative of the outside, evaluated at the inside, times the derivative of the inside.'),
+num('w-11', 'tw', 'Evaluate lim<sub>x→∞</sub> 1/x.', '0', 'What happens to 1 divided by a huge number?', '1/x shrinks toward 0 as x grows.'),
+num('w-12', 'tw', 'f(x) = x² + 3x. What is f′(1)?', '5', 'f′(x) = 2x + 3.', '2 + 3 = 5.')
 ];
 
 COURSES.push({
@@ -5755,7 +6710,8 @@ var T = [
   { id: 'd14', name: 'Gears and couplings', sec: 'DCAP · power transmission' },
   { id: 'd15', name: 'Actuators and motor control', sec: 'DCAP · motors, H-bridge, PWM' },
   { id: 'd16', name: 'Sensors', sec: 'DCAP · strain, temperature, position' },
-  { id: 'd17', name: 'Project management', sec: 'DCAP · Gantt, critical path' }
+  { id: 'd17', name: 'Project management', sec: 'DCAP · Gantt, critical path' },
+  { id: 'tw', name: 'Pre-exam warm-up', sec: 'In your head', extra: 'Quick, easy questions on the basics to settle your nerves before the exam. Not counted in mastery or mock exams.' }
 ];
 
 /* ---------- drawing helpers ---------- */
@@ -6346,6 +7302,133 @@ mc('d17-3', 'd17', 'In that project, what happens if task C slips by 1 day?',
 mc('d3-x1', 'd3', 'Who holds the duty to consult Indigenous peoples when a project may affect their Aboriginal or treaty rights?',
   ['The Crown (the federal or provincial government)', 'Only the engineer of record', 'The company building the project, and nobody else', 'Professional Engineers Ontario'], 0,
   'The duty comes from section 35 of the Constitution Act, 1982 and belongs to the Crown. Some procedural parts can be delegated to the project proponent, so engineers on such projects need to understand it and plan consultation into the schedule.'),
+
+num('w-1', 'tw', 'A part is dimensioned 10.0 ± 0.1 mm. What is its tolerance, in mm?', '0.2', 'Tolerance = upper limit − lower limit.', '10.1 − 9.9 = 0.2 mm.', null, null, { tol: 0.001 }),
+mc('w-2', 'tw', 'In third-angle projection, where is the top view placed?', ['Above the front view', 'Below the front view', 'To the left of the front view', 'Behind the front view'], 0, 'Third-angle projection, the North American standard, puts each view on the side it is seen from: the top view above, the right side view to the right.'),
+num('w-3', 'tw', 'A 10-tooth gear turning at 900 rpm drives a 30-tooth gear. What is the output speed, in rpm?', '300', 'Ratio = driven teeth ÷ driver teeth.', '30/10 = 3, so 900 ÷ 3 = 300 rpm (with 3 times the torque).'),
+mc('w-4', 'tw', 'How many degrees of freedom does the primary datum remove?', ['3', '2', '1', '6'], 0, 'Primary 3, secondary 2, tertiary 1: six in total.'),
+num('w-5', 'tw', 'A 12 V motor is driven with a 50% PWM duty cycle. What is the average voltage, in V?', '6', 'Average = duty × supply.', '0.50 × 12 = 6 V.'),
+mc('w-6', 'tw', 'Under the PEO Code of Ethics, what must an engineer treat as paramount?', ['The welfare of the public', 'The client\'s budget and timeline', 'The employer\'s schedule', 'Their own reputation'], 0, 'Duty to public welfare comes first, above clients, employers and colleagues.'),
+mc('w-7', 'tw', 'What is the maximum material condition (MMC) of a hole?', ['Its smallest allowed size', 'Its largest allowed size', 'Its nominal (basic) size', 'The average of its two limits'], 0, 'A small hole leaves the most material in the part. For a shaft, MMC is the largest size.'),
+num('w-8', 'tw', 'A sensor\'s output rises by 2 V over a 100 °C range. What is its sensitivity, in mV/°C?', '20', 'Change in output ÷ change in input.', '2000 mV / 100 °C = 20 mV/°C.'),
+mc('w-9', 'tw', 'Which bearing is designed for a purely axial load?', ['Thrust bearing', 'Deep-groove ball bearing', 'Linear bearing', 'Sleeve bearing'], 0, 'Thrust bearings carry load along the shaft. Ball and sleeve bearings mainly carry radial load.'),
+mc('w-10', 'tw', 'What usually comes first in an engineering design process?', ['Defining the problem and requirements', 'Building and testing a first prototype', 'Testing the final design with users', 'Choosing the materials and the suppliers'], 0, 'You cannot judge solutions until you know what the design has to do and under which constraints.'),
+num('w-11', 'tw', 'A motor gives 2 N·m at 10 rad/s. What mechanical power is that, in W?', '20', 'P = Tω.', '2 × 10 = 20 W.'),
+mc('w-12', 'tw', 'How are hidden edges drawn on an engineering drawing?', ['As dashed lines', 'As solid thick lines', 'As thin chain lines (long and short dashes)', 'They are left out'], 0, 'Hidden lines are short dashes. Chain lines are for centre lines, and thick solid lines are visible edges.'),
+
+/* ---------- more practice: tolerancing, GD&T and the later DCAP decks ---------- */
+num('d11-9', 'd11', 'A hole is dimensioned 30.00 <sup>+0.04</sup><sub>−0.01</sub> mm. What is its upper limit, in mm?', '30.04',
+  'Add the upper deviation to the basic size.',
+  '30.00 + 0.04 = 30.04 mm. The lower limit is 29.99 mm, so the tolerance is 0.05 mm.', null, null, { tol: 1e-6 }),
+multi('d11-10', 'd11', 'A hole is 20.000 to 20.021 mm. The shaft pressed into it is 20.035 to 20.048 mm.', [
+  { ask: 'What is the maximum interference, in mm?', ans: '0.048', tol: 1e-6, hint: 'Largest shaft in the smallest hole.', why: '20.048 − 20.000 = 0.048 mm.' },
+  { ask: 'What is the minimum interference, in mm?', ans: '0.014', tol: 1e-6, hint: 'Smallest shaft in the largest hole.', why: '20.035 − 20.021 = 0.014 mm. It is still positive, so every pair is a press fit.' }
+], 'num'),
+mc('d11-11', 'd11', 'A hole is 10.00 to 10.03 mm and its shaft is 10.01 to 10.04 mm. What kind of fit is it?',
+  ['Transition fit', 'Clearance fit', 'Interference fit', 'Line fit'], 0,
+  'The clearance ranges from 10.03 − 10.01 = +0.02 mm (loose) down to 10.00 − 10.04 = −0.04 mm (tight), so some pairs slide and some must be pressed.'),
+num('d11-12', 'd11', 'Two blocks, each 20.0 ± 0.1 mm long, sit side by side in a slot that is 50.0 ± 0.2 mm long. What is the smallest possible gap left over, in mm (worst case)?', '9.6',
+  'Smallest slot, largest blocks.',
+  '49.8 − 2(20.1) = 9.6 mm. The nominal gap is 10.0 mm, and the three tolerances add up to ±0.4 mm.', null, null, { tol: 1e-6 }),
+mc('d11-13', 'd11', 'Why not give every dimension the tightest tolerance possible?',
+  ['Tighter tolerances cost more to make and inspect', 'Tight tolerances make parts weaker', 'Drawings cannot show tolerances smaller than 0.1 mm', 'Loose tolerances always fit better'], 0,
+  'Each extra decimal place needs better machines, slower machining and more inspection. Tolerances should be as loose as the function allows.'),
+
+mc('d12-10', 'd12', 'What is a basic dimension, the one drawn in a box?',
+  ['A theoretically exact value with no ± of its own', 'A reference dimension that is never inspected', 'A dimension that takes the general tolerance block', 'The single most important dimension on a drawing'], 0,
+  'Basic dimensions locate the true position or profile exactly. The feature control frame then says how far the real feature may deviate from it.'),
+num('d12-11', 'd12', 'A hole is toleranced Ø12.0 to Ø12.3 mm, with a position tolerance of Ø0.2 at MMC. It is made at its largest size, Ø12.3. How big is the position tolerance zone now, in mm?', '0.5',
+  'Bonus = departure from MMC, which for a hole is its smallest size.',
+  'The hole is 0.3 mm above MMC (Ø12.0), so the zone is 0.2 + 0.3 = Ø0.5. At LMC the hole gets the most bonus.', null, null, { tol: 1e-6 }),
+mc('d12-12', 'd12', 'Which of these is an orientation control?',
+  ['Parallelism', 'Flatness', 'Circularity', 'Straightness'], 0,
+  'Orientation controls (perpendicularity, parallelism, angularity) relate a feature to a datum. The other three are form controls with no datum.'),
+mc('d12-13', 'd12', 'A surface has a flatness tolerance of 0.05 mm. What does that require?',
+  ['All of it lies between two parallel planes 0.05 mm apart', 'The surface is within 0.05 mm of its nominal height', 'The surface is perpendicular to the datum within 0.05 mm', 'The surface roughness can be at most 0.05 mm'], 0,
+  'Flatness only limits the form of the surface itself. The planes can float and tilt; they are not tied to a datum or a height.'),
+num('d12-14', 'd12', 'A pin is toleranced Ø7.90 to Ø8.00 mm, with axis straightness of Ø0.05 at MMC. What is its virtual condition, the worst-case envelope a mating hole must clear, in mm?', '8.05',
+  'For an external feature, virtual condition = MMC + the geometric tolerance at MMC.',
+  '8.00 + 0.05 = Ø8.05. A hole at least this big always accepts the pin, however it is bent within tolerance.', null, null, { tol: 1e-6 }),
+
+mc('d13-8', 'd13', 'What does the thread callout M10 × 1.5 mean?',
+  ['Metric thread, 10 mm major diameter, 1.5 mm pitch', 'Metric thread, 10 threads per mm, 1.5 mm long thread', '10 mm long bolt with a 1.5 mm head', 'Metric thread, 10 mm pitch, 1.5 mm diameter'], 0,
+  'M is metric, the first number is the nominal major diameter and the second is the pitch: the distance between neighbouring threads.'),
+num('d13-9', 'd13', 'A nut sits on a single-start thread with a 1.5 mm pitch. How many full turns move it 12 mm along the bolt?', '8',
+  'A single-start thread advances one pitch per turn.',
+  '12 ÷ 1.5 = 8 turns.'),
+mc('d13-10', 'd13', 'What is a set screw used for?',
+  ['Pressing on a shaft to hold a collar or hub', 'Joining two plates together using a nut and washer', 'Adjusting a bearing\'s preload only', 'Locating parts with a precise pin fit'], 0,
+  'A set screw threads through the hub and its tip bites the shaft, often on a flat. A key carries more torque; a dowel pin locates precisely.'),
+mc('d13-11', 'd13', 'Why is a shoulder (a step in diameter) machined on a shaft?',
+  ['To locate a bearing or gear along the shaft', 'To make the shaft lighter and cheaper to machine', 'To transmit torque without needing a key', 'To reduce stress concentration at that point'], 0,
+  'The part is pushed up against the shoulder, which sets its axial position. Steps actually raise stress, so they get a fillet radius.'),
+mc('d13-12', 'd13', 'A bolted joint on a vibrating machine keeps working loose. Which is a fix?',
+  ['A lock nut or thread-locking compound', 'A longer bolt of the same diameter and nut', 'An extra flat washer under the nut and head', 'Loosening the bolt slightly to relieve stress'], 0,
+  'Lock nuts, lock washers and threadlocker resist vibration. A flat washer only spreads load.'),
+
+num('d14-9', 'd14', 'A 15-tooth gear at 1200 rpm drives a 30-tooth idler, which drives a 45-tooth gear. What is the output speed, in rpm?', '400',
+  'The idler cancels out: only the first and last gears set the ratio.',
+  'Ratio = 45/15 = 3, so 1200 ÷ 3 = 400 rpm. The idler only makes the output turn the same way as the input.'),
+num('d14-10', 'd14', 'A motor runs at 3000 rpm and the wheel needs 250 rpm. What overall gear ratio (reduction) is needed?', '12',
+  'Ratio = input speed ÷ output speed.',
+  '3000 ÷ 250 = 12, for example 3 : 1 then 4 : 1 in two stages. The torque also goes up about 12 times.'),
+mc('d14-11', 'd14', 'Two external spur gears mesh. How do they turn?',
+  ['In opposite directions', 'In the same direction', 'At the same speed, always', 'One of them cannot turn'], 0,
+  'Meshing external teeth push each other the opposite way. An internal (ring) gear would turn the same way.'),
+num('d14-12', 'd14', 'A single-start worm at 1200 rpm drives a 40-tooth worm wheel. What is the wheel\'s speed, in rpm?', '30',
+  'One turn of a single-start worm advances the wheel one tooth.',
+  'Ratio = 40 : 1, so 1200 ÷ 40 = 30 rpm.'),
+mc('d14-13', 'd14', 'What is a universal joint for?',
+  ['Linking shafts that meet at an angle', 'Locking two shafts rigidly in line', 'Reducing speed by a large ratio', 'Turning rotation into straight-line motion'], 0,
+  'A U-joint (as in a car\'s drive shaft) bends the line of rotation. It works well up to moderate angles.'),
+
+num('d15-10', 'd15', 'A motor gives 0.50 N·m at 2000 rpm. What mechanical power is that, in W? Give 3 significant figures.', '105',
+  'Convert rpm to rad/s first: ω = rpm × 2π/60.',
+  'ω = 2000 × 2π/60 = 209.4 rad/s, so P = 0.50 × 209.4 = 105 W.', null, null, { sf: 3, unit: 'W' }),
+num('d15-11', 'd15', 'A stepper motor moves 1.8° per step. How many steps make 2 full revolutions?', '400',
+  'Steps per revolution = 360° ÷ step angle.',
+  '360 ÷ 1.8 = 200 steps per revolution, so 400 for two.'),
+mc('d15-12', 'd15', 'What is a DC motor\'s stall torque?',
+  ['The torque at zero speed, with the most current', 'The torque when it spins at no-load speed', 'The torque at maximum power output', 'The smallest torque that starts it turning'], 0,
+  'At stall nothing turns, so there is no back-EMF and the current is limited only by the winding resistance. Holding a motor stalled overheats it.'),
+num('d15-13', 'd15', 'What PWM duty cycle, in %, gives a 9 V average from a 12 V supply?', '75',
+  'Duty = average ÷ supply.',
+  '9 ÷ 12 = 0.75 = 75%.'),
+
+mc('d16-9', 'd16', 'What is a sensor\'s resolution?',
+  ['The smallest change in the input it can detect', 'How close it reads to the true value', 'The span from its lowest to its highest reading', 'How quickly it responds to a change'], 0,
+  'Resolution is the smallest step. Closeness to the truth is accuracy, the span is range, and speed is response time.'),
+num('d16-10', 'd16', 'A thermometer reads 102 °C when the true temperature is 100 °C. What is its error as a percentage of the true value?', '2',
+  'Error = (reading − true) ÷ true × 100%.',
+  '(102 − 100) ÷ 100 × 100% = 2%.'),
+mc('d16-11', 'd16', 'Which sensor would you use to measure the force on a robot gripper?',
+  ['A strain-gauge load cell', 'A thermocouple on the jaw', 'An LVDT on the gripper', 'A capacitive proximity sensor'], 0,
+  'A load cell is a metal element with strain gauges: force bends it slightly and the bridge turns that strain into a voltage.'),
+mc('d16-12', 'd16', 'Which of these measures position without any rubbing contact?',
+  ['An LVDT', 'A potentiometer', 'A limit switch', 'A wiper on a resistive track'], 0,
+  'The LVDT\'s core never touches its coils, so it does not wear. A potentiometer\'s wiper slides along a track and wears over time.'),
+num('d16-13', 'd16', 'A thermocouple produces 41 µV per °C of temperature difference. What voltage does a 250 °C difference produce, in mV?', '10.25',
+  'Multiply, then convert µV to mV.',
+  '41 × 250 = 10 250 µV = 10.25 mV. Signals this small need an amplifier and protection from noise.', null, null, { tol: 1e-6 }),
+
+mc('d17-4', 'd17', 'What is a milestone on a Gantt chart?',
+  ['A zero-length marker for a key event', 'The longest task in the whole project', 'A task that has no dependencies at all', 'The total slack in the schedule'], 0,
+  'Milestones take no time; they mark checkpoints like "prototype done", usually drawn as diamonds.'),
+num('d17-5', 'd17', 'Task A takes 2 days. B (5 days) and C (4 days) both need A. D (2 days) needs C. E (1 day) needs both B and D. What is the shortest time to finish, in days?', '9',
+  'Add up each chain from start to finish and take the longest.',
+  'A → B → E = 2 + 5 + 1 = 8 days. A → C → D → E = 2 + 4 + 2 + 1 = 9 days. The longest chain, 9 days, is the critical path.'),
+num('d17-6', 'd17', 'In that same project, how many days of slack does task B have?', '1',
+  'Compare B\'s chain with the critical path.',
+  'B\'s chain takes 8 days against the critical path\'s 9, so B can slip 1 day without delaying E.'),
+mc('d17-7', 'd17', 'A task on the critical path finishes 2 days late. What happens to the project?',
+  ['It ends 2 days late unless later work speeds up', 'Nothing, because slack absorbs the delay', 'It finishes 1 day late on average', 'Only the next task in line is affected'], 0,
+  'Critical tasks have zero slack, so any delay pushes back the end date directly.'),
+mc('d17-8', 'd17', 'What is a work breakdown structure (WBS)?',
+  ['The project split into smaller tasks', 'A chart showing who reports to whom', 'The budget for each part of the work', 'A list of the risks in the project'], 0,
+  'Breaking work down until each piece can be estimated and assigned is what makes a Gantt chart possible.'),
+mc('d17-9', 'd17', 'What does a finish-to-start dependency from task A to task B mean?',
+  ['B cannot start until A has finished', 'A and B must finish at the same time', 'B must finish before A starts', 'A and B can run in any order'], 0,
+  'It is the usual arrow on a Gantt chart: for example, the prototype must be built before testing can begin.'),
 ];
 
 COURSES.push({
@@ -8187,6 +9270,10 @@ if (!G) {
   G = { streak: old.streak || 0, last: old.last || '', today: old.today || { d: '', n: 0, hit: false }, snd: old.snd !== false, hap: old.hap !== false };
   store(GKEY, G);
 }
+/* fill anything a partial save or an old backup left out */
+if (!G.today || typeof G.today !== 'object') G.today = { d: '', n: 0, hit: false };
+if (typeof G.streak !== 'number') G.streak = 0;
+if (typeof G.last !== 'string') G.last = '';
 COURSES.forEach(function (c) {
   var o = load(c.key) || {};
   c.S = { xp: o.xp || 0, q: o.q || {}, code: o.code || {} };
@@ -9046,6 +10133,7 @@ function showHome(c) {
     '<section class="cta"><button class="btn big" type="button" data-act="smart">Start smart run <small>10 questions</small></button>' +
       '<p class="due-note">' + (dueN ? '<b>' + dueN + ' due for review</b> go first, then new questions from your weakest topics.' : (newN ? 'Nothing due. You get new questions from your weakest topics.' : 'Everything is on a review schedule. Mixed practice from all topics.')) + '</p>' +
       '<button class="btn big inf" type="button" data-act="inf"><span class="bl">' + infIcon() + 'Infinite mode</span><small>' + (rec.st || rec.lv ? 'best streak ' + rec.st + (rec.lv ? ' · 3-lives best ' + rec.lv : '') : 'endless or 3 lives') + '</small></button>' +
+      (CUR.TBY.tw ? '<button class="btn ghost big warm" type="button" data-act="warm"><span>Pre-exam warm-up</span><small class="muted">Easy basics, in your head</small></button>' : '') +
       (missed.length ? '<button class="btn ghost big fix" type="button" data-act="fix"><span>Fix my mistakes</span><small class="muted">' + missed.length + ' missed last time</small></button>' : '') +
       '<div class="cta2' + (CUR.formula ? '' : ' one') + '"><button class="btn ghost" type="button" data-act="mock">Mock exam<small class="muted">' + mockSub + '</small></button>' +
       (CUR.formula ? '<button class="btn ghost" type="button" data-act="formula">Formula sheet<small class="muted">' + (CUR.formula.sub || (CUR.formula.kind === 'img' ? 'The real sheet, ' + CUR.formula.pages.length + ' page' + (CUR.formula.pages.length > 1 ? 's' : '') : 'What you get on the exam')) + '</small></button>' : '') +
@@ -9063,6 +10151,8 @@ function showHome(c) {
   app.querySelectorAll('[data-topic]').forEach(function (b) { b.addEventListener('click', function () { Snd.tap(); startRun(pickSmart(10, b.getAttribute('data-topic')), 'drill'); }); });
   app.querySelector('[data-act="smart"]').addEventListener('click', function () { Snd.tap(); startRun(pickSmart(10), 'smart'); });
   app.querySelector('[data-act="mock"]').addEventListener('click', function () { Snd.tap(); showMockIntro(); });
+  var wb = app.querySelector('[data-act="warm"]');
+  if (wb) wb.addEventListener('click', function () { Snd.tap(); startRun(pickSmart(10, 'tw'), 'drill'); });
   app.querySelector('[data-act="inf"]').addEventListener('click', function () { Snd.tap(); showInfIntro(false); });
   var fx = app.querySelector('[data-act="fix"]');
   if (fx) fx.addEventListener('click', function () { Snd.tap(); startRun(spread(shuffle(missed)).slice(0, 10).map(function (q) { return q.id; }), 'fix'); });

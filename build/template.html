@@ -1020,6 +1020,9 @@ h2 { font-weight: 700; letter-spacing: -.01em; }
 .oops .bd .bd-dizzy { animation: bd-dzon 1.75s linear, bd-dzspin .6s linear infinite; }
 .scuffed .bd .bd-scuff { animation: bd-scuff 4.2s ease-out; }
 @media (prefers-reduced-motion: reduce) { .oops .bd .bd-dizzy, .oops .bd .bd-puff { animation: none; } }
+.btn.warm { display: flex; justify-content: space-between; align-items: center; gap: .6rem; color: var(--good); }
+.btn.warm span { white-space: nowrap; text-align: left; flex: none; }
+.btn.warm small { text-align: right; min-width: 0; }
 </style>
 
 <div class="app" id="app"></div>

@@ -185,6 +185,10 @@ if (!G) {
   G = { streak: old.streak || 0, last: old.last || '', today: old.today || { d: '', n: 0, hit: false }, snd: old.snd !== false, hap: old.hap !== false };
   store(GKEY, G);
 }
+/* fill anything a partial save or an old backup left out */
+if (!G.today || typeof G.today !== 'object') G.today = { d: '', n: 0, hit: false };
+if (typeof G.streak !== 'number') G.streak = 0;
+if (typeof G.last !== 'string') G.last = '';
 COURSES.forEach(function (c) {
   var o = load(c.key) || {};
   c.S = { xp: o.xp || 0, q: o.q || {}, code: o.code || {} };
@@ -1044,6 +1048,7 @@ function showHome(c) {
     '<section class="cta"><button class="btn big" type="button" data-act="smart">Start smart run <small>10 questions</small></button>' +
       '<p class="due-note">' + (dueN ? '<b>' + dueN + ' due for review</b> go first, then new questions from your weakest topics.' : (newN ? 'Nothing due. You get new questions from your weakest topics.' : 'Everything is on a review schedule. Mixed practice from all topics.')) + '</p>' +
       '<button class="btn big inf" type="button" data-act="inf"><span class="bl">' + infIcon() + 'Infinite mode</span><small>' + (rec.st || rec.lv ? 'best streak ' + rec.st + (rec.lv ? ' · 3-lives best ' + rec.lv : '') : 'endless or 3 lives') + '</small></button>' +
+      (CUR.TBY.tw ? '<button class="btn ghost big warm" type="button" data-act="warm"><span>Pre-exam warm-up</span><small class="muted">Easy basics, in your head</small></button>' : '') +
       (missed.length ? '<button class="btn ghost big fix" type="button" data-act="fix"><span>Fix my mistakes</span><small class="muted">' + missed.length + ' missed last time</small></button>' : '') +
       '<div class="cta2' + (CUR.formula ? '' : ' one') + '"><button class="btn ghost" type="button" data-act="mock">Mock exam<small class="muted">' + mockSub + '</small></button>' +
       (CUR.formula ? '<button class="btn ghost" type="button" data-act="formula">Formula sheet<small class="muted">' + (CUR.formula.sub || (CUR.formula.kind === 'img' ? 'The real sheet, ' + CUR.formula.pages.length + ' page' + (CUR.formula.pages.length > 1 ? 's' : '') : 'What you get on the exam')) + '</small></button>' : '') +
@@ -1061,6 +1066,8 @@ function showHome(c) {
   app.querySelectorAll('[data-topic]').forEach(function (b) { b.addEventListener('click', function () { Snd.tap(); startRun(pickSmart(10, b.getAttribute('data-topic')), 'drill'); }); });
   app.querySelector('[data-act="smart"]').addEventListener('click', function () { Snd.tap(); startRun(pickSmart(10), 'smart'); });
   app.querySelector('[data-act="mock"]').addEventListener('click', function () { Snd.tap(); showMockIntro(); });
+  var wb = app.querySelector('[data-act="warm"]');
+  if (wb) wb.addEventListener('click', function () { Snd.tap(); startRun(pickSmart(10, 'tw'), 'drill'); });
   app.querySelector('[data-act="inf"]').addEventListener('click', function () { Snd.tap(); showInfIntro(false); });
   var fx = app.querySelector('[data-act="fix"]');
   if (fx) fx.addEventListener('click', function () { Snd.tap(); startRun(spread(shuffle(missed)).slice(0, 10).map(function (q) { return q.id; }), 'fix'); });
