@@ -922,6 +922,53 @@ h2 { font-weight: 700; letter-spacing: -.01em; }
 .lt-open { display: inline-block; margin-top: .35rem; font-size: .85rem; font-weight: 600; color: var(--brand); }
 .lt-note { font-size: .8rem; color: var(--muted); }
 .foot .lt-foot { background: none; border: 0; padding: 0; font: inherit; color: var(--brand); font-weight: 600; cursor: pointer; }
+/* ---------- Apple Health palette: iOS system colours on every screen ----------
+   Light text uses Apple's higher-contrast variants of the system colours; fills and dark mode use the standard ones.
+   Code is coloured like Xcode's default theme. */
+:root {
+  --brand: #007aff; --brand-deep: #0062cc; --brand-soft: #e5f0ff;
+  --good: #248a3d; --good-deep: #1c6e31; --good-soft: #e3f7e8;
+  --bad: #d70015; --bad-soft: #ffe5e7;
+  --gold: #c93400; --gold-soft: #fff1e0; --flame: #ff9500;
+  --c1: #d30f45; --c2: #248a3d; --c3: #c93400; --c4: #8944ab; --c5: #0071a4;
+  --ios-indigo: #5856d6; --ios-purple: #af52de; --ios-orange: #ff9500; --ios-yellow: #ffcc00; --ios-red: #ff3b30; --ios-move: #fa114f;
+  --tk-k: #9b2393; --tk-s: #c41a16; --tk-n: #1c00cf; --tk-p: #643820; --tk-c: #5d6c79;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --brand: #0a84ff; --brand-soft: #0f2a4d; --good: #30d158; --good-soft: #0f3a1c; --bad: #ff453a; --bad-soft: #45161a;
+    --gold: #ff9f0a; --gold-soft: #3a2a08; --flame: #ff9f0a;
+    --c1: #ff375f; --c2: #92e82a; --c3: #ff9f0a; --c4: #bf5af2; --c5: #1eeaef;
+    --ios-indigo: #5e5ce6; --ios-purple: #bf5af2; --ios-orange: #ff9f0a; --ios-yellow: #ffd60a; --ios-red: #ff453a;
+    --tk-k: #fc5fa3; --tk-s: #fc6a5d; --tk-n: #d0bf69; --tk-p: #fd8f3f; --tk-c: #7f8c98;
+  }
+}
+:root[data-theme="dark"] {
+  --brand: #0a84ff; --brand-soft: #0f2a4d; --good: #30d158; --good-soft: #0f3a1c; --bad: #ff453a; --bad-soft: #45161a;
+  --gold: #ff9f0a; --gold-soft: #3a2a08; --flame: #ff9f0a;
+  --c1: #ff375f; --c2: #92e82a; --c3: #ff9f0a; --c4: #bf5af2; --c5: #1eeaef;
+  --ios-indigo: #5e5ce6; --ios-purple: #bf5af2; --ios-orange: #ff9f0a; --ios-yellow: #ffd60a; --ios-red: #ff453a;
+  --tk-k: #fc5fa3; --tk-s: #fc6a5d; --tk-n: #d0bf69; --tk-p: #fd8f3f; --tk-c: #7f8c98;
+}
+.btn.inf { background: var(--ios-indigo); color: #fff; }
+.prog.streak i { background: var(--ios-orange); }
+.hl-act .hl-tag { color: var(--ios-move); }
+.lg-cd.soon { color: #ff453a; }
+.hl-tag.bdt { color: var(--ios-orange); }
+.hb-bar i { background: linear-gradient(90deg, var(--ios-yellow), var(--ios-orange)); }
+.tk-c { font-style: normal; }
+/* Latent invite, laid out like a Health card with a grouped list */
+.lt-k { color: var(--ios-purple); background: color-mix(in srgb, var(--ios-purple) 14%, transparent); }
+.lt-list { background: var(--surface-2); border-radius: .9rem; margin: .2rem 0 .8rem; }
+.lt-li { padding: .7rem .85rem; display: grid; gap: .35rem; }
+.lt-li + .lt-li { border-top: 1px solid var(--rule); }
+.lt-lab { font-size: .85rem; font-weight: 600; color: var(--muted); }
+.lt-val { display: flex; align-items: center; gap: .6rem; min-width: 0; }
+.lt-val code { flex: 1; min-width: 0; font-family: var(--font-mono); font-size: .86rem; overflow-wrap: anywhere; user-select: all; -webkit-user-select: all; }
+.lt-val code.big { font-size: 1.2rem; font-weight: 600; letter-spacing: .12em; }
+.lt-copy { flex: none; min-height: 44px; min-width: 4.5rem; border: 0; border-radius: .7rem; background: var(--surface); color: var(--brand); font: inherit; font-weight: 600; cursor: pointer; }
+.lt-copy:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+.lt-note a { color: var(--brand); font-weight: 600; }
 </style>
 
 <div class="app" id="app"></div>
@@ -7757,14 +7804,12 @@ function showLatent() {
     '<div class="lt">' +
     '<p class="lt-k">Invite only</p>' +
     '<h3>Study with me on Latent</h3>' +
-    '<p>Latent is an iPhone app that turns your phone into a study camera. You prop it up, start a session, and it records a timelapse of you working. It pauses if you leave the app, logs your hours, keeps a streak, and shares your sessions with friends and groups. Think Strava, but for studying.</p>' +
-    '<p>Why I use it: the Tron group can see when I\'m studying and when I\'m not, which is what gets me to sit down and start. And with my phone filming, it\'s not in my hand. Finals Gym is what I study with; Latent is what keeps me showing up.</p>' +
-    '<ol class="lt-steps">' +
-      '<li><b>Get Latent</b> on your iPhone. It\'s invite only, so you need the link below.</li>' +
-      '<li><b>Copy this link into the app to get in:</b><div class="lt-row"><code class="lt-code">' + LATENT.link + '</code><button class="btn ghost lt-btn" type="button" id="lt-cl">Copy link</button></div><a class="lt-open" href="' + LATENT.link + '" target="_blank" rel="noopener">Open the invite page</a></li>' +
-      '<li><b>Join the Tron group</b> with this code:<div class="lt-row"><code class="lt-code big">' + LATENT.group + '</code><button class="btn ghost lt-btn" type="button" id="lt-cg">Copy code</button></div></li>' +
-    '</ol>' +
-    '<p class="lt-note">Latent is a separate app, not part of Finals Gym.</p>' +
+    '<p>Latent is an iPhone app that films a timelapse while you study, logs your hours and streak, and shares your sessions with friends. Knowing the Tron group can see when I\'m studying is what gets me to start.</p>' +
+    '<div class="lt-list">' +
+      '<div class="lt-li"><span class="lt-lab">1. Copy this link into the app to get in</span><div class="lt-val"><code>' + LATENT.link + '</code><button class="lt-copy" type="button" id="lt-cl">Copy</button></div></div>' +
+      '<div class="lt-li"><span class="lt-lab">2. Join the Tron group with this code</span><div class="lt-val"><code class="big">' + LATENT.group + '</code><button class="lt-copy" type="button" id="lt-cg">Copy</button></div></div>' +
+    '</div>' +
+    '<p class="lt-note">Finals Gym updates as new course material is posted, so check back before each exam. <a href="' + LATENT.link + '" target="_blank" rel="noopener">Open the invite page</a></p>' +
     '<div class="aid-acts"><button class="btn" type="button" id="lt-x">Maybe later</button></div>' +
     '</div>', 'lt-modal');
   m.m.setAttribute('aria-label', 'Study with me on Latent');
@@ -8658,7 +8703,8 @@ function ringStreak(test) {   /* consecutive days ending today (or yesterday, so
 }
 function courseStreak(c) { return ringStreak(function (k) { return closedOn(k, c.id); }); }
 function perfectStreak() { var cs = ringCourses(); return ringStreak(function (k) { return cs.every(function (c) { return closedOn(k, c.id); }); }); }
-var RINGC = { c1: ['#e0005a', '#ff3d7f'], c2: ['#5fd400', '#b8ff2b'], c3: ['#ff6a00', '#ffb340'], c4: ['#7a3cff', '#c792ff'], c5: ['#00c8e0', '#6bfff7'] };
+/* Apple's activity ring colours (Move, Exercise, Stand) plus the system orange and purple */
+var RINGC = { c1: ['#e8003f', '#ff4f8b'], c2: ['#7ddc12', '#c2ff4d'], c3: ['#ff8a00', '#ffbf47'], c4: ['#a24cf0', '#d79bff'], c5: ['#00d4e8', '#76f7ff'] };
 var ringUid = 0;
 function ringsSVG(rows, size, stroke, gap, cls) {
   var id = 'rg' + (++ringUid), c0 = size / 2, defs = '', body = '';
@@ -8784,7 +8830,7 @@ function showGym() {
       '<div class="hl-li"><span>Study with me on Latent<small>An invite to my study group on the Latent app.</small></span><button class="hl-link" type="button" id="lt-open">Invite</button></div>' +
     '</div>' +
     '<details class="how"><summary>How this works</summary><ul><li>You answer before you see anything. Pulling the answer out of your head is what builds memory.</li><li>Missed questions come back in the same run, then again after 8 hours, 1 day, 2 days and 4 days.</li><li>Each ring is one course. It fills with the XP you earn in that course today, and closes at your daily XP goal (change it in Settings). A ring streak counts the days in a row you closed it.</li><li>Smart runs mix topics, like the exam does. Tap a topic on a course page to drill just that topic.</li><li>Infinite mode never runs out. Generators write new versions of the calculation questions with fresh numbers each time.</li><li>The formula sheet button sits at the top of every question for courses that have one.</li><li>On a keyboard: 1 to 5 picks an option, Enter checks or moves on, H opens a hint, F opens the formula sheet.</li></ul></details>' +
-    '<div class="foot"><span>1A-Tron Finals Gym · Progress saves in this browser. Use Export in Settings to move it to another device. <button class="lt-foot" type="button" id="lt-foot">Study with me on Latent</button></span></div>';
+    '<div class="foot"><span>1A-Tron Finals Gym · Updated as new course material is posted. Progress saves in this browser; use Export in Settings to move it to another device. <button class="lt-foot" type="button" id="lt-foot">Study with me on Latent</button></span></div>';
   animateRings(app);
   bindToggles();
   birdCardBind(); birdDraw();

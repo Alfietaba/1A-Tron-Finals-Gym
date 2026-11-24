@@ -913,6 +913,53 @@ h2 { font-weight: 700; letter-spacing: -.01em; }
 .lt-open { display: inline-block; margin-top: .35rem; font-size: .85rem; font-weight: 600; color: var(--brand); }
 .lt-note { font-size: .8rem; color: var(--muted); }
 .foot .lt-foot { background: none; border: 0; padding: 0; font: inherit; color: var(--brand); font-weight: 600; cursor: pointer; }
+/* ---------- Apple Health palette: iOS system colours on every screen ----------
+   Light text uses Apple's higher-contrast variants of the system colours; fills and dark mode use the standard ones.
+   Code is coloured like Xcode's default theme. */
+:root {
+  --brand: #007aff; --brand-deep: #0062cc; --brand-soft: #e5f0ff;
+  --good: #248a3d; --good-deep: #1c6e31; --good-soft: #e3f7e8;
+  --bad: #d70015; --bad-soft: #ffe5e7;
+  --gold: #c93400; --gold-soft: #fff1e0; --flame: #ff9500;
+  --c1: #d30f45; --c2: #248a3d; --c3: #c93400; --c4: #8944ab; --c5: #0071a4;
+  --ios-indigo: #5856d6; --ios-purple: #af52de; --ios-orange: #ff9500; --ios-yellow: #ffcc00; --ios-red: #ff3b30; --ios-move: #fa114f;
+  --tk-k: #9b2393; --tk-s: #c41a16; --tk-n: #1c00cf; --tk-p: #643820; --tk-c: #5d6c79;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --brand: #0a84ff; --brand-soft: #0f2a4d; --good: #30d158; --good-soft: #0f3a1c; --bad: #ff453a; --bad-soft: #45161a;
+    --gold: #ff9f0a; --gold-soft: #3a2a08; --flame: #ff9f0a;
+    --c1: #ff375f; --c2: #92e82a; --c3: #ff9f0a; --c4: #bf5af2; --c5: #1eeaef;
+    --ios-indigo: #5e5ce6; --ios-purple: #bf5af2; --ios-orange: #ff9f0a; --ios-yellow: #ffd60a; --ios-red: #ff453a;
+    --tk-k: #fc5fa3; --tk-s: #fc6a5d; --tk-n: #d0bf69; --tk-p: #fd8f3f; --tk-c: #7f8c98;
+  }
+}
+:root[data-theme="dark"] {
+  --brand: #0a84ff; --brand-soft: #0f2a4d; --good: #30d158; --good-soft: #0f3a1c; --bad: #ff453a; --bad-soft: #45161a;
+  --gold: #ff9f0a; --gold-soft: #3a2a08; --flame: #ff9f0a;
+  --c1: #ff375f; --c2: #92e82a; --c3: #ff9f0a; --c4: #bf5af2; --c5: #1eeaef;
+  --ios-indigo: #5e5ce6; --ios-purple: #bf5af2; --ios-orange: #ff9f0a; --ios-yellow: #ffd60a; --ios-red: #ff453a;
+  --tk-k: #fc5fa3; --tk-s: #fc6a5d; --tk-n: #d0bf69; --tk-p: #fd8f3f; --tk-c: #7f8c98;
+}
+.btn.inf { background: var(--ios-indigo); color: #fff; }
+.prog.streak i { background: var(--ios-orange); }
+.hl-act .hl-tag { color: var(--ios-move); }
+.lg-cd.soon { color: #ff453a; }
+.hl-tag.bdt { color: var(--ios-orange); }
+.hb-bar i { background: linear-gradient(90deg, var(--ios-yellow), var(--ios-orange)); }
+.tk-c { font-style: normal; }
+/* Latent invite, laid out like a Health card with a grouped list */
+.lt-k { color: var(--ios-purple); background: color-mix(in srgb, var(--ios-purple) 14%, transparent); }
+.lt-list { background: var(--surface-2); border-radius: .9rem; margin: .2rem 0 .8rem; }
+.lt-li { padding: .7rem .85rem; display: grid; gap: .35rem; }
+.lt-li + .lt-li { border-top: 1px solid var(--rule); }
+.lt-lab { font-size: .85rem; font-weight: 600; color: var(--muted); }
+.lt-val { display: flex; align-items: center; gap: .6rem; min-width: 0; }
+.lt-val code { flex: 1; min-width: 0; font-family: var(--font-mono); font-size: .86rem; overflow-wrap: anywhere; user-select: all; -webkit-user-select: all; }
+.lt-val code.big { font-size: 1.2rem; font-weight: 600; letter-spacing: .12em; }
+.lt-copy { flex: none; min-height: 44px; min-width: 4.5rem; border: 0; border-radius: .7rem; background: var(--surface); color: var(--brand); font: inherit; font-weight: 600; cursor: pointer; }
+.lt-copy:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+.lt-note a { color: var(--brand); font-weight: 600; }
 </style>
 
 <div class="app" id="app"></div>

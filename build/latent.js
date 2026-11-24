@@ -26,14 +26,12 @@ function showLatent() {
     '<div class="lt">' +
     '<p class="lt-k">Invite only</p>' +
     '<h3>Study with me on Latent</h3>' +
-    '<p>Latent is an iPhone app that turns your phone into a study camera. You prop it up, start a session, and it records a timelapse of you working. It pauses if you leave the app, logs your hours, keeps a streak, and shares your sessions with friends and groups. Think Strava, but for studying.</p>' +
-    '<p>Why I use it: the Tron group can see when I\'m studying and when I\'m not, which is what gets me to sit down and start. And with my phone filming, it\'s not in my hand. Finals Gym is what I study with; Latent is what keeps me showing up.</p>' +
-    '<ol class="lt-steps">' +
-      '<li><b>Get Latent</b> on your iPhone. It\'s invite only, so you need the link below.</li>' +
-      '<li><b>Copy this link into the app to get in:</b><div class="lt-row"><code class="lt-code">' + LATENT.link + '</code><button class="btn ghost lt-btn" type="button" id="lt-cl">Copy link</button></div><a class="lt-open" href="' + LATENT.link + '" target="_blank" rel="noopener">Open the invite page</a></li>' +
-      '<li><b>Join the Tron group</b> with this code:<div class="lt-row"><code class="lt-code big">' + LATENT.group + '</code><button class="btn ghost lt-btn" type="button" id="lt-cg">Copy code</button></div></li>' +
-    '</ol>' +
-    '<p class="lt-note">Latent is a separate app, not part of Finals Gym.</p>' +
+    '<p>Latent is an iPhone app that films a timelapse while you study, logs your hours and streak, and shares your sessions with friends. Knowing the Tron group can see when I\'m studying is what gets me to start.</p>' +
+    '<div class="lt-list">' +
+      '<div class="lt-li"><span class="lt-lab">1. Copy this link into the app to get in</span><div class="lt-val"><code>' + LATENT.link + '</code><button class="lt-copy" type="button" id="lt-cl">Copy</button></div></div>' +
+      '<div class="lt-li"><span class="lt-lab">2. Join the Tron group with this code</span><div class="lt-val"><code class="big">' + LATENT.group + '</code><button class="lt-copy" type="button" id="lt-cg">Copy</button></div></div>' +
+    '</div>' +
+    '<p class="lt-note">Finals Gym updates as new course material is posted, so check back before each exam. <a href="' + LATENT.link + '" target="_blank" rel="noopener">Open the invite page</a></p>' +
     '<div class="aid-acts"><button class="btn" type="button" id="lt-x">Maybe later</button></div>' +
     '</div>', 'lt-modal');
   m.m.setAttribute('aria-label', 'Study with me on Latent');

@@ -871,7 +871,8 @@ function ringStreak(test) {   /* consecutive days ending today (or yesterday, so
 }
 function courseStreak(c) { return ringStreak(function (k) { return closedOn(k, c.id); }); }
 function perfectStreak() { var cs = ringCourses(); return ringStreak(function (k) { return cs.every(function (c) { return closedOn(k, c.id); }); }); }
-var RINGC = { c1: ['#e0005a', '#ff3d7f'], c2: ['#5fd400', '#b8ff2b'], c3: ['#ff6a00', '#ffb340'], c4: ['#7a3cff', '#c792ff'], c5: ['#00c8e0', '#6bfff7'] };
+/* Apple's activity ring colours (Move, Exercise, Stand) plus the system orange and purple */
+var RINGC = { c1: ['#e8003f', '#ff4f8b'], c2: ['#7ddc12', '#c2ff4d'], c3: ['#ff8a00', '#ffbf47'], c4: ['#a24cf0', '#d79bff'], c5: ['#00d4e8', '#76f7ff'] };
 var ringUid = 0;
 function ringsSVG(rows, size, stroke, gap, cls) {
   var id = 'rg' + (++ringUid), c0 = size / 2, defs = '', body = '';
@@ -997,7 +998,7 @@ function showGym() {
       '<div class="hl-li"><span>Study with me on Latent<small>An invite to my study group on the Latent app.</small></span><button class="hl-link" type="button" id="lt-open">Invite</button></div>' +
     '</div>' +
     '<details class="how"><summary>How this works</summary><ul><li>You answer before you see anything. Pulling the answer out of your head is what builds memory.</li><li>Missed questions come back in the same run, then again after 8 hours, 1 day, 2 days and 4 days.</li><li>Each ring is one course. It fills with the XP you earn in that course today, and closes at your daily XP goal (change it in Settings). A ring streak counts the days in a row you closed it.</li><li>Smart runs mix topics, like the exam does. Tap a topic on a course page to drill just that topic.</li><li>Infinite mode never runs out. Generators write new versions of the calculation questions with fresh numbers each time.</li><li>The formula sheet button sits at the top of every question for courses that have one.</li><li>On a keyboard: 1 to 5 picks an option, Enter checks or moves on, H opens a hint, F opens the formula sheet.</li></ul></details>' +
-    '<div class="foot"><span>1A-Tron Finals Gym · Progress saves in this browser. Use Export in Settings to move it to another device. <button class="lt-foot" type="button" id="lt-foot">Study with me on Latent</button></span></div>';
+    '<div class="foot"><span>1A-Tron Finals Gym · Updated as new course material is posted. Progress saves in this browser; use Export in Settings to move it to another device. <button class="lt-foot" type="button" id="lt-foot">Study with me on Latent</button></span></div>';
   animateRings(app);
   bindToggles();
   birdCardBind(); birdDraw();
