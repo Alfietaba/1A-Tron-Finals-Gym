@@ -1071,6 +1071,19 @@ course('math116').gens = [
       'Δx = ' + frac(w, 2) + '. The sample points are ' + pts.map(minus).join(', ') + '. Sum of f at those points, times Δx, is ' + minus(S) + '.', null, null,
       { chk: { val: (function () { var dx = (b - a) / n, s = 0; for (var j = 0; j < n; j++) { var x = a + j * dx + (side === 'left' ? 0 : side === 'right' ? dx : dx / 2); s += c * x * x + d; } return s * dx; })() } });
   } },
+  { t: 'k18', make: function (R) {   /* standard sums: Σ (a i² + b i + c) */
+    var N = R.i(5, 25), a = R.i(0, 2), b = R.i(-3, 4), c = R.i(-5, 6);
+    if (!a && !b) b = R.nz(1, 4);
+    var s1 = N * (N + 1) / 2, s2 = N * (N + 1) * (2 * N + 1) / 6, val = a * s2 + b * s1 + c * N;
+    var terms = [], show = [];
+    if (a) { terms.push((a === 1 ? '' : a) + 'i²'); show.push(a + ' × ' + s2); }
+    if (b) { terms.push((terms.length ? (b < 0 ? ' − ' : ' + ') : (b < 0 ? '−' : '')) + (Math.abs(b) === 1 ? '' : Math.abs(b)) + 'i'); show.push(minus(String(b)) + ' × ' + s1); }
+    if (c) { terms.push((c < 0 ? ' − ' : ' + ') + Math.abs(c)); show.push(minus(String(c)) + ' × ' + N); }
+    return num(nid('ss'), 'k18', 'Evaluate Σ<sub>i=1</sub><sup>' + N + '</sup> (' + terms.join('') + ').', String(val),
+      'Split the sum, then use Σ<sub>i=1</sub><sup>n</sup> 1 = n, Σ<sub>i=1</sub><sup>n</sup> i = n(n + 1)/2 and Σ<sub>i=1</sub><sup>n</sup> i² = n(n + 1)(2n + 1)/6.',
+      'With n = ' + N + ': Σi = ' + s1 + ' and Σi² = ' + s2 + '. So the sum is ' + show.join(' + ').replace(/\+ −/g, '− ') + ' = ' + minus(String(val)) + '.', null, null,
+      { chk: { val: (function () { var t = 0; for (var i = 1; i <= N; i++) t += a * i * i + b * i + c; return t; })() } });
+  } },
   { t: 'k19', make: function (R) {
     var p = [R.i(-3, 3), R.i(-4, 4), R.nz(-3, 3)], a = R.i(-2, 1), b = a + R.i(1, 3);   /* f(x) = p0 + p1 x + p2 x² (times 3 so the result is tidy) */
     var F = function (x) { return 6 * p[0] * x + 3 * p[1] * x * x + 2 * p[2] * x * x * x; };   /* 6 × antiderivative */

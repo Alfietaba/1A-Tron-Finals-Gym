@@ -893,16 +893,47 @@ mc('w-8', 'tw', 'f′(x) &gt; 0 on an interval. What is f doing there?', ['Incre
 num('w-9', 'tw', 'What is the slope of the tangent line to y = x² at x = 3?', '6', 'The slope is the derivative.', 'y′ = 2x, so the slope is 6.'),
 mc('w-10', 'tw', 'What is d/dx f(g(x))?', ['f′(g(x)) g′(x)', 'f′(x) g′(x)', 'f′(g′(x))', 'f(g′(x)) + g(x)'], 0, 'The chain rule: derivative of the outside, evaluated at the inside, times the derivative of the inside.'),
 num('w-11', 'tw', 'Evaluate lim<sub>x→∞</sub> 1/x.', '0', 'What happens to 1 divided by a huge number?', '1/x shrinks toward 0 as x grows.'),
-num('w-12', 'tw', 'f(x) = x² + 3x. What is f′(1)?', '5', 'f′(x) = 2x + 3.', '2 + 3 = 5.')
+num('w-12', 'tw', 'f(x) = x² + 3x. What is f′(1)?', '5', 'f′(x) = 2x + 3.', '2 + 3 = 5.'),
+
+/* ---------- standard Riemann sums and summation formulas ---------- */
+num('k18-12', 'k18', 'Evaluate Σ<sub>i=1</sub><sup>10</sup> i.', '55',
+  'Standard sum: Σ<sub>i=1</sub><sup>n</sup> i = n(n + 1)/2.',
+  '10 × 11 / 2 = 55.'),
+num('k18-13', 'k18', 'Evaluate Σ<sub>i=1</sub><sup>10</sup> i².', '385',
+  'Standard sum: Σ<sub>i=1</sub><sup>n</sup> i² = n(n + 1)(2n + 1)/6.',
+  '10 × 11 × 21 / 6 = 385.'),
+num('k18-14', 'k18', 'Evaluate Σ<sub>i=1</sub><sup>20</sup> (2i + 3).', '480',
+  'Split it: 2Σi + Σ3, then use Σ<sub>i=1</sub><sup>n</sup> i = n(n + 1)/2 and Σ<sub>i=1</sub><sup>n</sup> 1 = n.',
+  '2 × (20 × 21 / 2) + 3 × 20 = 420 + 60 = 480.'),
+multi('k18-15', 'k18', 'Use right endpoints with n equal subintervals for f(x) = x² on [0, 3].', [
+  { ask: 'Simplified, R<sub>n</sub> = (9/2)(n + 1)(2n + 1)/n². What is R<sub>6</sub>?', ans: '91/8', hint: 'Substitute n = 6.', why: '(9/2)(7)(13)/36 = 819/72 = 91/8 = 11.375.' },
+  { ask: 'What is #lim{n → ∞} R<sub>n</sub>?', ans: '9', hint: '(n + 1)(2n + 1)/n² → 2.', why: '(9/2) × 2 = 9, which is ∫<sub>0</sub><sup>3</sup> x² dx = 27/3. Where R<sub>n</sub> comes from: Δx = 3/n and x<sub>i</sub> = 3i/n, so R<sub>n</sub> = Σ (3i/n)²(3/n) = (27/n³) Σ i² = (27/n³) × n(n + 1)(2n + 1)/6.' }
+]),
+mc('k18-16', 'k18', 'Which limit equals ∫<sub>1</sub><sup>3</sup> x² dx, using right endpoints?',
+  ['#lim{n → ∞} Σ<sub>i=1</sub><sup>n</sup> (2/n)(1 + 2i/n)²', '#lim{n → ∞} Σ<sub>i=1</sub><sup>n</sup> (1/n)(1 + 2i/n)²', '#lim{n → ∞} Σ<sub>i=1</sub><sup>n</sup> (2/n)(2i/n)²', '#lim{n → ∞} Σ<sub>i=1</sub><sup>n</sup> (2/n)(1 + i/n)²'], 0,
+  'Δx = (3 − 1)/n = 2/n and x<sub>i</sub> = a + iΔx = 1 + 2i/n. The others use the wrong width, forget to start at a = 1, or step by 1/n.'),
+num('k18-17', 'k18', 'Use the limit of right Riemann sums to evaluate ∫<sub>0</sub><sup>2</sup> (3x + 1) dx.', '8',
+  'Δx = 2/n and x<sub>i</sub> = 2i/n. Then use Σ<sub>i=1</sub><sup>n</sup> i = n(n + 1)/2 and Σ<sub>i=1</sub><sup>n</sup> 1 = n.',
+  'R<sub>n</sub> = Σ (6i/n + 1)(2/n) = (12/n²) × n(n + 1)/2 + 2 = 6(n + 1)/n + 2 → 6 + 2 = 8. Check with the antiderivative: [3x²/2 + x] from 0 to 2 = 6 + 2 = 8.'),
+mc('k18-18', 'k18', 'f is decreasing on [a, b]. How does the left Riemann sum L<sub>n</sub> compare with ∫<sub>a</sub><sup>b</sup> f(x) dx?',
+  ['It overestimates', 'It underestimates', 'It is exact', 'It depends on n only'], 0,
+  'On each subinterval the left endpoint is the highest point of a decreasing function, so every rectangle sticks out above the curve. R<sub>n</sub> underestimates instead.'),
+num('k18-19', 'k18', 'f(0) = 1, f(1) = 3, f(2) = 4, f(3) = 6 and f(4) = 9. Estimate ∫<sub>0</sub><sup>4</sup> f(x) dx with the right Riemann sum R<sub>4</sub>.', '22',
+  'Δx = 1, and the right endpoints are 1, 2, 3 and 4.',
+  'R<sub>4</sub> = 1 × (3 + 4 + 6 + 9) = 22. (L<sub>4</sub> = 1 + 3 + 4 + 6 = 14, so the true value of an increasing f is between 14 and 22.)')
 ];
 
+var RSUM = [
+  ['Riemann sums', 'Δx = (b − a)/n and x<sub>i</sub> = a + iΔx. Right sum R<sub>n</sub> = Σ<sub>i=1</sub><sup>n</sup> f(x<sub>i</sub>)Δx. The left sum L<sub>n</sub> uses x<sub>i−1</sub>, and the midpoint sum M<sub>n</sub> uses (x<sub>i−1</sub> + x<sub>i</sub>)/2.<br>∫<sub>a</sub><sup>b</sup> f(x) dx = lim<sub>n→∞</sub> Σ<sub>i=1</sub><sup>n</sup> f(x<sub>i</sub>)Δx'],
+  ['Standard sums', 'Σ<sub>i=1</sub><sup>n</sup> 1 = n<br>Σ<sub>i=1</sub><sup>n</sup> i = n(n + 1)/2<br>Σ<sub>i=1</sub><sup>n</sup> i² = n(n + 1)(2n + 1)/6<br>Σ<sub>i=1</sub><sup>n</sup> i³ = [n(n + 1)/2]²']
+];
 COURSES.push({
   id: 'math116', code: 'MATH 116', name: 'Calculus 1 for Engineering', key: 'math116-midterm-gym-v1', hue: 'c4',
   exam: { at: '2026-12-14T09:00:00-05:00', label: 'Mon Dec 14, 9:00 AM', name: 'Final' },
   scope: 'Functions to integration by substitution',
   topics: T, Q: Q, limHint: L,
   titles: ['Domain Rookie', 'Inverse Explorer', 'Odd/Even Detective', 'Log Lifter', 'Sinusoid Surfer', 'Hyperbolic Hiker', 'Limit Climber', 'Continuity Keeper', 'Derivative Driver', 'Midterm Integrator'],
-  formula: { kind: 'html', title: 'MATH 116 formula sheet (typed)', note: 'A typed version of the identities and derivatives the MATH 116 midterm provides. No calculators are allowed on that exam.',
+  formula: { kind: 'html', title: 'MATH 116 formula sheet (typed)', extra: RSUM, extraTitle: 'Riemann sums and standard sums', sheetTitle: 'Formula sheet', note: 'A typed version of the identities and derivatives the MATH 116 midterm provided, plus the Riemann sums and standard sums for the final. No calculators are allowed.',
     items: [
       ['Pythagorean identities', 'sin²θ + cos²θ = 1 · tan²θ + 1 = sec²θ · 1 + cot²θ = csc²θ'],
       ['Sum and double angle', 'sin(A ± B) = sin A cos B ± cos A sin B<br>cos(A ± B) = cos A cos B ∓ sin A sin B<br>sin(2θ) = 2 sin θ cos θ<br>cos(2θ) = cos²θ − sin²θ = 2cos²θ − 1 = 1 − 2sin²θ'],
