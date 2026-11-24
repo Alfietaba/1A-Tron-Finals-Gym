@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="Finals Gym: a learning-first study app for first-year engineering exams. Spaced repetition, exam-style mocks, fresh generated questions and explanations for every answer.">
+<meta name="description" content="1A-Tron Finals Gym: a learning-first study app for first-year engineering exams. Spaced repetition, exam-style mocks, fresh generated questions and explanations for every answer.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%232f5bea%22/%3E%3Cpath d=%22M8 16h16M6 12v8M26 12v8M10 10v12M22 10v12%22 stroke=%22white%22 stroke-width=%222.6%22 stroke-linecap=%22round%22/%3E%3C/svg%3E">
 </head>
 <body>
-<title>Finals Gym</title>
+<title>1A-Tron Finals Gym</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400;1,600&family=JetBrains+Mono:wght@400;500;600&display=swap">
@@ -908,6 +908,20 @@ h2 { font-weight: 700; letter-spacing: -.01em; }
   .bd .bd-all, .bd .bd-eye, .flap .bd .bd-all, .flap .bd .bd-prop { animation: none; }
   .flap .bd .bd-wing { animation: bd-flap .3s ease-in-out 1; }
 }
+/* ---------- Latent invite ---------- */
+.modal.lt-modal { width: min(32rem, 100%); }
+.lt h3 { font-size: 1.35rem; margin: .1rem 0 .55rem; }
+.lt p { margin: 0 0 .7rem; line-height: 1.5; }
+.lt-k { display: inline-block; font-size: .75rem; font-weight: 700; color: #6e3bff; background: rgba(110, 59, 255, .1); padding: .15rem .55rem; border-radius: 999px; margin-bottom: .5rem !important; }
+.lt-steps { margin: .2rem 0 .8rem; padding-left: 1.3rem; display: grid; gap: .7rem; }
+.lt-steps li { line-height: 1.45; }
+.lt-row { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-top: .35rem; }
+.lt-code { flex: 1 1 12rem; min-width: 0; font-family: var(--font-mono); font-size: .86rem; background: var(--surface-2); border: 1px solid var(--rule); border-radius: .55rem; padding: .5rem .65rem; overflow-wrap: anywhere; user-select: all; -webkit-user-select: all; }
+.lt-code.big { flex: 0 1 auto; font-size: 1.15rem; font-weight: 600; letter-spacing: .12em; }
+.lt-btn { min-height: 44px; white-space: nowrap; }
+.lt-open { display: inline-block; margin-top: .35rem; font-size: .85rem; font-weight: 600; color: var(--brand); }
+.lt-note { font-size: .8rem; color: var(--muted); }
+.foot .lt-foot { background: none; border: 0; padding: 0; font: inherit; color: var(--brand); font-weight: 600; cursor: pointer; }
 </style>
 
 <div class="app" id="app"></div>
@@ -7716,6 +7730,62 @@ function showBirdShop() {
 }
 
 /* ============================================================
+   LATENT INVITE: a one-time pop-up on the Summary page inviting people to study with Alfie and the
+   Tron group on Latent (an invite-only iPhone app). It can be opened again from Settings or the footer.
+   ============================================================ */
+var LATENT = { link: 'https://trylatent.co/i/XTC7JU', group: 'BKEBT2' };
+function copyText(text, btn) {
+  var done = function (ok) {
+    if (!btn) return;
+    var was = btn.getAttribute('data-label') || btn.textContent;
+    btn.setAttribute('data-label', was);
+    btn.textContent = ok ? 'Copied' : 'Select and copy it';
+    setTimeout(function () { if (btn.isConnected) btn.textContent = was; }, 1800);
+  };
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(fallback()); }); return; }
+  } catch (e) { /* fall through */ }
+  done(fallback());
+  function fallback() {
+    try { var ta = document.createElement('textarea'); ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); var ok = document.execCommand('copy'); ta.remove(); return ok; }
+    catch (e) { return false; }
+  }
+}
+function showLatent() {
+  G.latent = 1; save();
+  var m = overlay(
+    '<div class="lt">' +
+    '<p class="lt-k">Invite only</p>' +
+    '<h3>Study with me on Latent</h3>' +
+    '<p>Latent is an iPhone app that turns your phone into a study camera. You prop it up, start a session, and it records a timelapse of you working. It pauses if you leave the app, logs your hours, keeps a streak, and shares your sessions with friends and groups. Think Strava, but for studying.</p>' +
+    '<p>Why I use it: the Tron group can see when I\'m studying and when I\'m not, which is what gets me to sit down and start. And with my phone filming, it\'s not in my hand. Finals Gym is what I study with; Latent is what keeps me showing up.</p>' +
+    '<ol class="lt-steps">' +
+      '<li><b>Get Latent</b> on your iPhone. It\'s invite only, so you need the link below.</li>' +
+      '<li><b>Copy this link into the app to get in:</b><div class="lt-row"><code class="lt-code">' + LATENT.link + '</code><button class="btn ghost lt-btn" type="button" id="lt-cl">Copy link</button></div><a class="lt-open" href="' + LATENT.link + '" target="_blank" rel="noopener">Open the invite page</a></li>' +
+      '<li><b>Join the Tron group</b> with this code:<div class="lt-row"><code class="lt-code big">' + LATENT.group + '</code><button class="btn ghost lt-btn" type="button" id="lt-cg">Copy code</button></div></li>' +
+    '</ol>' +
+    '<p class="lt-note">Latent is a separate app, not part of Finals Gym.</p>' +
+    '<div class="aid-acts"><button class="btn" type="button" id="lt-x">Maybe later</button></div>' +
+    '</div>', 'lt-modal');
+  m.m.setAttribute('aria-label', 'Study with me on Latent');
+  m.m.querySelector('#lt-cl').addEventListener('click', function (e) { Snd.tap(); copyText(LATENT.link, e.currentTarget); });
+  m.m.querySelector('#lt-cg').addEventListener('click', function (e) { Snd.tap(); copyText(LATENT.group, e.currentTarget); });
+  m.m.querySelector('#lt-x').addEventListener('click', m.close);
+  try { m.m.querySelector('#lt-x').focus({ preventScroll: true }); } catch (e) { /* older browsers */ }
+  m.m.scrollTop = 0;
+}
+/* shown once per browser, a few seconds after the Summary page first opens, and only if you are still there */
+var latentArmed = false;
+function latentMaybe() {
+  if (latentArmed || G.latent) return;
+  latentArmed = true;
+  setTimeout(function () {
+    if (G.latent || CUR || run || exam || document.querySelector('.overlay') || !app.querySelector('.hl-top')) return;
+    showLatent();
+  }, 6000);
+}
+
+/* ============================================================
    APP
    ============================================================ */
 var PRAISE = ['Correct.', 'Nailed it.', 'Clean.', 'Exactly.', 'Yes.', 'That is it.'];
@@ -8711,9 +8781,10 @@ function showGym() {
       '<div class="hl-li"><span>Haptics</span><button class="tgl sw" type="button" data-tgl="hap" aria-pressed="' + G.hap + '" aria-label="Haptics"><i></i></button></div>' +
       '<div class="hl-li"><span>Back up progress<small>Saves a file you can import on another device.</small></span><button class="hl-link" type="button" id="bk-out">Export</button></div>' +
       '<div class="hl-li"><span>Restore progress<small>From an export, on this device.</small></span><button class="hl-link" type="button" id="bk-in">Import</button></div>' +
+      '<div class="hl-li"><span>Study with me on Latent<small>An invite to my study group on the Latent app.</small></span><button class="hl-link" type="button" id="lt-open">Invite</button></div>' +
     '</div>' +
     '<details class="how"><summary>How this works</summary><ul><li>You answer before you see anything. Pulling the answer out of your head is what builds memory.</li><li>Missed questions come back in the same run, then again after 8 hours, 1 day, 2 days and 4 days.</li><li>Each ring is one course. It fills with the XP you earn in that course today, and closes at your daily XP goal (change it in Settings). A ring streak counts the days in a row you closed it.</li><li>Smart runs mix topics, like the exam does. Tap a topic on a course page to drill just that topic.</li><li>Infinite mode never runs out. Generators write new versions of the calculation questions with fresh numbers each time.</li><li>The formula sheet button sits at the top of every question for courses that have one.</li><li>On a keyboard: 1 to 5 picks an option, Enter checks or moves on, H opens a hint, F opens the formula sheet.</li></ul></details>' +
-    '<div class="foot"><span>Progress saves in this browser. Use Export in Settings to move it to another device.</span></div>';
+    '<div class="foot"><span>1A-Tron Finals Gym · Progress saves in this browser. Use Export in Settings to move it to another device. <button class="lt-foot" type="button" id="lt-foot">Study with me on Latent</button></span></div>';
   animateRings(app);
   bindToggles();
   birdCardBind(); birdDraw();
@@ -8725,6 +8796,8 @@ function showGym() {
   document.getElementById('xg-p').addEventListener('click', function () { Snd.tap(); setGoal(goal + 25); });
   document.getElementById('bk-out').addEventListener('click', function (e) { Snd.tap(); exportProgress(e.currentTarget); });
   document.getElementById('bk-in').addEventListener('click', function () { Snd.tap(); importProgress(); });
+  ['lt-open', 'lt-foot'].forEach(function (id) { document.getElementById(id).addEventListener('click', function () { Snd.tap(); showLatent(); }); });
+  latentMaybe();
   window.scrollTo(0, 0);
 }
 function gearIcon() { return '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M12 8.6a3.4 3.4 0 1 0 0 6.8 3.4 3.4 0 0 0 0-6.8zm7.4 4.6.1-1.2-.1-1.2 2-1.6-2-3.4-2.4.9c-.6-.5-1.3-.9-2-1.2L14.6 3h-4l-.4 2.5c-.7.3-1.4.7-2 1.2l-2.4-.9-2 3.4 2 1.6-.1 1.2.1 1.2-2 1.6 2 3.4 2.4-.9c.6.5 1.3.9 2 1.2l.4 2.5h4l.4-2.5c.7-.3 1.4-.7 2-1.2l2.4.9 2-3.4z"/></svg>'; }

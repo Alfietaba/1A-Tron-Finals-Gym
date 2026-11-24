@@ -994,9 +994,10 @@ function showGym() {
       '<div class="hl-li"><span>Haptics</span><button class="tgl sw" type="button" data-tgl="hap" aria-pressed="' + G.hap + '" aria-label="Haptics"><i></i></button></div>' +
       '<div class="hl-li"><span>Back up progress<small>Saves a file you can import on another device.</small></span><button class="hl-link" type="button" id="bk-out">Export</button></div>' +
       '<div class="hl-li"><span>Restore progress<small>From an export, on this device.</small></span><button class="hl-link" type="button" id="bk-in">Import</button></div>' +
+      '<div class="hl-li"><span>Study with me on Latent<small>An invite to my study group on the Latent app.</small></span><button class="hl-link" type="button" id="lt-open">Invite</button></div>' +
     '</div>' +
     '<details class="how"><summary>How this works</summary><ul><li>You answer before you see anything. Pulling the answer out of your head is what builds memory.</li><li>Missed questions come back in the same run, then again after 8 hours, 1 day, 2 days and 4 days.</li><li>Each ring is one course. It fills with the XP you earn in that course today, and closes at your daily XP goal (change it in Settings). A ring streak counts the days in a row you closed it.</li><li>Smart runs mix topics, like the exam does. Tap a topic on a course page to drill just that topic.</li><li>Infinite mode never runs out. Generators write new versions of the calculation questions with fresh numbers each time.</li><li>The formula sheet button sits at the top of every question for courses that have one.</li><li>On a keyboard: 1 to 5 picks an option, Enter checks or moves on, H opens a hint, F opens the formula sheet.</li></ul></details>' +
-    '<div class="foot"><span>Progress saves in this browser. Use Export in Settings to move it to another device.</span></div>';
+    '<div class="foot"><span>1A-Tron Finals Gym · Progress saves in this browser. Use Export in Settings to move it to another device. <button class="lt-foot" type="button" id="lt-foot">Study with me on Latent</button></span></div>';
   animateRings(app);
   bindToggles();
   birdCardBind(); birdDraw();
@@ -1008,6 +1009,8 @@ function showGym() {
   document.getElementById('xg-p').addEventListener('click', function () { Snd.tap(); setGoal(goal + 25); });
   document.getElementById('bk-out').addEventListener('click', function (e) { Snd.tap(); exportProgress(e.currentTarget); });
   document.getElementById('bk-in').addEventListener('click', function () { Snd.tap(); importProgress(); });
+  ['lt-open', 'lt-foot'].forEach(function (id) { document.getElementById(id).addEventListener('click', function () { Snd.tap(); showLatent(); }); });
+  latentMaybe();
   window.scrollTo(0, 0);
 }
 function gearIcon() { return '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M12 8.6a3.4 3.4 0 1 0 0 6.8 3.4 3.4 0 0 0 0-6.8zm7.4 4.6.1-1.2-.1-1.2 2-1.6-2-3.4-2.4.9c-.6-.5-1.3-.9-2-1.2L14.6 3h-4l-.4 2.5c-.7.3-1.4.7-2 1.2l-2.4-.9-2 3.4 2 1.6-.1 1.2.1 1.2-2 1.6 2 3.4 2.4-.9c.6.5 1.3.9 2 1.2l.4 2.5h4l.4-2.5c.7-.3 1.4-.7 2-1.2l2.4.9 2-3.4z"/></svg>'; }

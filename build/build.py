@@ -20,10 +20,10 @@ def main():
     page = (read('build/template.html')
             .replace('/*@HELPERS@*/', read('build/helpers.js'))
             .replace('/*@DATA@*/', data)
-            .replace('/*@APP@*/', read('build/bird.js') + '\n' + read('build/app.js')))
+            .replace('/*@APP@*/', read('build/bird.js') + '\n' + read('build/latent.js') + '\n' + read('build/app.js')))
     head = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
             '<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">\n'
-            '<meta name="description" content="Finals Gym: a learning-first study app for first-year engineering exams. '
+            '<meta name="description" content="1A-Tron Finals Gym: a learning-first study app for first-year engineering exams. '
             'Spaced repetition, exam-style mocks, fresh generated questions and explanations for every answer.">\n'
             '<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E'
             '%3Crect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%232f5bea%22/%3E%3Cpath d=%22M8 16h16M6 12v8M26 12v8M10 10v12M22 10v12%22 '

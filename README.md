@@ -1,6 +1,6 @@
-# Finals Gym
+# 1A-Tron Finals Gym
 
-A study app I built for my first-term Mechatronics Engineering exams at the University of Waterloo. It started as Midterm Gym and became Finals Gym once midterms were over. It's designed around one rule: **the AI helps me practise, but it doesn't do the thinking for me.**
+A study app I built for my first-term Mechatronics Engineering exams at the University of Waterloo. It started as Midterm Gym and became 1A-Tron Finals Gym once midterms were over. It's designed around one rule: **the AI helps me practise, but it doesn't do the thinking for me.**
 
 **Try it: [alfietaba.github.io/1A-Tron-Finals-Gym](https://alfietaba.github.io/1A-Tron-Finals-Gym/)**. It runs in any browser, on a phone or a laptop, and saves your progress on your own device. Settings has Export and Import, so you can back up your progress or move it to another device.
 
