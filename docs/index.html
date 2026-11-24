@@ -1032,6 +1032,8 @@ h2 { font-weight: 700; letter-spacing: -.01em; }
 .btn.warm { display: flex; justify-content: space-between; align-items: center; gap: .6rem; color: var(--good); }
 .btn.warm span { white-space: nowrap; text-align: left; flex: none; }
 .btn.warm small { text-align: right; min-width: 0; }
+.hl-li .tgl.sw { flex: none; }
+.hl-li > span { min-width: 0; }
 </style>
 
 <div class="app" id="app"></div>
@@ -2552,7 +2554,7 @@ order('c4-9', 'c4', 'Build forceChange: return mass · 10 for an arriving ship a
   'ΔF = (Δm)a, with Δm positive for arriving. Once the arriving branch returns, anything after the if only runs for departing ships. A function should return its result, not print it.',
   { code: true, label: 'Your function, top to bottom' }),
 mc('c4-10', 'c4', 'main calls numInc(num), but numInc is defined below main. Without anything else, the compiler says numInc was not declared. What is the usual fix?',
-  ['Put int numInc(int number); above main', 'Add #include "numInc" at the top', 'Call it as main.numInc(num) instead', 'Change numInc to return void instead'], 0,
+  ['Put int numInc(int number); above main', 'Add #include "numInc" at the top', 'Call it as main.numInc(num) instead', 'Change numInc to return void instead of int'], 0,
   'A function prototype tells the compiler the function\'s name, return type and parameter types before main uses it. The full definition can then stay below main.'),
 txt('c4-11', 'c4', P + C`
 void order(int &lo, int &hi)
@@ -2747,7 +2749,7 @@ for (int n = 1; n <= 20; n++)
     if (prime)
         cout << n << " ";
 }`,
-  ['For n = 1 the inner loop never runs, so prime stays true', '1 % 2 is 1, and a nonzero remainder is read as prime', 'The outer loop runs 21 times, so 1 is tested twice', 'prime is set once before the loop and never reset to true'], 0,
+  ['For n = 1 the inner loop never runs, so prime stays true', '1 % 2 is 1, and any nonzero remainder gets counted as a prime', 'The outer loop runs 21 times, so 1 is tested twice', 'prime is set once before the loop and never reset to true'], 0,
   'With n = 1 the inner loop does not run at all, so nothing sets prime to false. 1 is not prime by definition, so start at 2 or add if (n < 2) prime = false.'),
 txt('c3-19', 'c3', 'The first 6 primes. ' + W + C`
 int found = 0, n = 2;
@@ -2781,7 +2783,7 @@ cout << squares << " " << total;`,
   'After k squares the total is 2^k − 1.',
   'Totals: 1, 3, 7, 15, …, 511 after 9 squares (still under 1000), then 1023 after 10. Stop: 10 squares, 1023 grains.'),
 mc('c3-21', 'c3', 'The rice program is rewritten with ' + K`int total, onSquare` + ' and a target of 1,000,000,000,000 grains. What goes wrong?',
-  ['An int holds at most about 2.1 billion, so the total overflows', 'Nothing: it prints 40, the number of squares needed', 'It does not compile, because the number has too many digits', 'The loop runs zero times, because the target is too large'], 0,
+  ['An int holds at most about 2.1 billion, so the total overflows', 'Nothing: it prints 40, the number of squares needed', 'It does not compile, because the number has too many digits', 'The loop runs zero times, because the target is too large to compare'], 0,
   'A 32-bit int tops out at 2,147,483,647. The total passes that around square 31 and overflows, so it never reaches 10^12. This is why the textbook asks you to "check what happens". Use long long, which goes up to about 9.2 × 10^18.'),
 txt('c3-22', 'c3', 'Restaurant inventory: fries (dish 1) cost $1, hummus (2) $2, cake (3) $3, and tax is 13%. Stock is 2 of each here, to keep the trace short. numbers.txt holds the orders ' + K`1 3 7 3 2 1` + '. ' + W + C`
 ifstream fin("numbers.txt");
@@ -2853,7 +2855,7 @@ while (fin >> r)
         low = r;
 }
 cout << low;`,
-  ['It never skips the −1 readings, and −1 is lower than any real one', 'low should start at 0, so the first reading is always lower', 'fin >> r reads the −1 as a 1, because the minus is skipped', 'The loop stops at the first −1, so later readings are lost'], 0,
+  ['It never skips the −1 readings, and −1 is lower than any real one', 'low should start at 0, so the first reading is always lower than it', 'fin >> r reads the −1 as a 1, because the minus sign is skipped over', 'The loop stops at the first −1, so later readings are lost'], 0,
   'The −1 values are flags, not measurements, but this loop compares them like readings. Add r != −1 to the condition. Starting low at 0 would be worse: nothing is lower than 0, so it would print 0.'),
 mc('c3-28', 'c3', 'What does this print?' + C`
 double f = 78;
@@ -2966,7 +2968,7 @@ fin.close();`,
   'The trend is February minus January. Find the largest in each riding.',
   'Cambridge: LIB −5.1, GRN +4.2, PC +1.2, so GRN 4.2. Waterloo: NDP +1.5, PC −0.7, so NDP 1.5. best resets to −100 for each riding.', { test: { file: 'Cambridge 3 LIB 20.7 15.6 GRN 8.7 12.9 PC 37.0 38.2\nWaterloo 2 NDP 25.5 27.0 PC 30.1 29.4\n' } }),
 mc('c3-34', 'c3', 'In the poll program, a classmate starts each riding with ' + K`double best = 0;` + ' What goes wrong for a riding where every party\'s trend is negative?',
-  ['No trend beats 0, so the riding keeps the previous winner and 0 is printed', 'It prints the party with the smallest drop, which is what we want', 'It does not compile, because best is redeclared inside the loop', 'The inner loop is skipped, so that riding is never printed'], 0,
+  ['No trend beats 0, so the riding keeps the previous winner and 0 is printed', 'It prints the party with the smallest drop, which is exactly what the question asks for', 'It does not compile, because best is redeclared inside the loop', 'The inner loop is skipped, so that riding is never printed'], 0,
   'With best = 0, a trend of −0.7 never counts as larger, so nothing is updated. Start below any possible trend (like −100), or set best from the first party read.'),
 mc('c3-35', 'c3', 'You do not know how many integers are in the file. Which loop prints every one of them?',
   [K`while (fin >> x) cout << x << " ";`, K`for (int i = 0; i < 10; i++) { fin >> x; cout << x << " "; }`, K`while (!fin.fail()) { fin >> x; cout << x << " "; }`, K`if (fin >> x) cout << x << " ";`], 0,
@@ -3073,7 +3075,7 @@ int main()
     cout << recordSum(fin, count);
     return 0;
 }`,
-  ['It does not compile: a file stream cannot be passed by value', 'It compiles and prints the sum of the record correctly', 'It compiles, but fin in main does not move forward', 'It compiles, but it prints 0 because the copy is empty'], 0,
+  ['It does not compile: a file stream cannot be passed by value', 'It compiles and prints the sum of the record correctly', 'It compiles, but fin in main does not move forward past the first record', 'It compiles, but it prints 0 because the copy is empty'], 0,
   'Passing by value makes a copy, and file streams cannot be copied, so the compiler rejects it. Pass streams by reference: int recordSum(ifstream &fin, int count).', { test: { err: true } }),
 txt('c4-18', 'c4', P + C`
 int squaresNeeded(long long target)
@@ -3139,10 +3141,10 @@ mc('c5-6', 'c5', 'BrainInertial was set to 0 and the robot is spinning clockwise
 mc('c5-7', 'c5', 'The robot must wait for the touch sensor to be tapped. Why does this code use a second loop?' + C`
 while (!TouchLED10.pressing()) {}
 while (TouchLED10.pressing()) {}`,
-  ['To debounce the motor encoder before the robot starts moving', 'To wait for the finger to come off, so one tap counts only once', 'To wait for a second tap, so a single bump does not start it', 'Nothing: it is redundant, since the first loop already waits'], 1,
+  ['To debounce the motor encoder before the robot starts moving', 'To wait for the finger to come off, so one tap counts only once', 'To wait for a second tap, so a single bump does not start the robot', 'Nothing: it is redundant, since the first loop already waits'], 1,
   'A tap is a press and a release. The first loop waits for the press, the second for the release. Without the second loop, a program that waits for several taps would count one long press many times.'),
 mc('c5-8', 'c5', 'A program drives 1 m, turns, then drives 1 m again using the motor encoder. The second leg stops right away. What was most likely forgotten?',
-  ['Resetting the encoder with setPosition before the second leg', 'Calling wait(20, msec) inside the turn so it can finish', 'Using percent instead of rpm for the motor velocity', 'Declaring the conversion factor as const before using it'], 0,
+  ['Resetting the encoder with setPosition before the second leg', 'Calling wait(20, msec) inside the turn so it can finish', 'Using percent instead of rpm for the motor velocity', 'Declaring the conversion factor as a const double before using it'], 0,
   'The encoder keeps counting from where it was. If it is not reset, it already reads past the 1 m target at the start of the second leg, so the loop condition is false at once. Putting the reset inside driveDistance means you cannot forget it.'),
 order('c5-9', 'c5', 'Build code that waits for 4 separate bumper presses, then starts driving forward at 40%. Some tiles are decoys.',
   ['int presses = 0;',
@@ -3168,7 +3170,7 @@ RightMotor.spin(forward, 50, percent);
 LeftMotor.stop();
 RightMotor.stop();
 wait(1, seconds);`,
-  ['Nothing: spin keeps the motors on for one second by default', 'The wait is after the stop, so the robot stops almost instantly', 'spin needs a while loop around it, or the motors never start', 'wait only accepts msec, so wait(1, seconds) is ignored'], 1,
+  ['Nothing: spin keeps the motors on for one second by default', 'The wait is after the stop, so the robot stops almost instantly', 'spin needs a while loop around it, or the motors never actually start', 'wait only accepts msec, so wait(1, seconds) is ignored'], 1,
   'spin starts the motor and returns at once, and so does stop. With no wait between them the motors run for a split second. Move wait(1, seconds) between the spin and stop lines.'),
 order('c5-13', 'c5', 'Build a function that waits until the touch sensor has been tapped (pressed and released). Some tiles are decoys.',
   ['void waitForTap()\n{', '    while (!TouchLED10.pressing())\n    {}', '    while (TouchLED10.pressing())\n    {}', '}'],
@@ -3176,10 +3178,10 @@ order('c5-13', 'c5', 'Build a function that waits until the touch sensor has bee
   'First wait while it is NOT pressed, then wait while it IS pressed. When the second loop ends the finger has come off: one full tap.',
   { code: true, label: 'Your code, top to bottom' }),
 mc('c5-14', 'c5', 'Beet juice driveway. Part (b) asks for an issue that may make the plan fail, other than sensor or motor accuracy, a failing component, a low battery or poorly written code. Which answer earns the mark?',
-  ['Snow may hide the green turf, so the robot never detects the edge', 'The battery may run out halfway down the 8 m driveway', 'The encoders may drift, so each 1 m step comes out a bit short', 'I might forget to reset the encoder at the start of each pass'], 0,
+  ['Snow may hide the green turf, so the robot never detects the edge', 'The battery may run out halfway down the 8 m driveway', 'The encoders may drift, so each 1 m step comes out a little bit short of 1 m', 'I might forget to reset the encoder at the start of each pass'], 0,
   'The issue must come from the situation itself. The other three are exactly the excluded categories: battery, accuracy and code. Other good answers: the wheels slip on ice, or a parked car blocks the path.'),
 mc('c5-15', 'c5', 'Hallway washer robot. Part (a) asks you to state an assumption. Which is a sensible one?',
-  ['Nobody walks through the hallway while the robot is washing', 'The washer might run out of water before the third pass', 'The wet floor may make the wheels slip on the way back', 'My code will have no bugs, so the robot follows the plan'], 0,
+  ['Nobody walks through the hallway while the robot is washing', 'The washer might run out of water before the third pass', 'The wet floor may make the wheels slip on the way back', 'My code will have no bugs, so the robot follows the plan exactly'], 0,
   'An assumption is a condition you take as true so the plan can work. Running out of water and slipping are issues (things that could make it fail). Assuming bug-free code is not about the situation.'),
 mc('c5-16', 'c5', 'The washer robot repeats passes until 3 passes are done OR the washer needs refilling (' + K`Volume.fill()` + ' returns 1). pass starts at 0. Which loop header is right?',
   [K`while (pass < 3 && Volume.fill() == 0)`, K`while (pass < 3 || Volume.fill() == 0)`, K`while (pass <= 3 && Volume.fill() == 1)`, K`while (!(pass < 3) && Volume.fill() == 0)`], 0,
@@ -3206,7 +3208,7 @@ void rotateRobot(int angle, int speed)
     LeftMotor.stop();
     RightMotor.stop();
 }`,
-  ['The loop test 0 < −90 is false, so it stops right away', 'It turns left 90°, because the angle is negative', 'It turns right 90°, because speed is always positive', 'It turns right forever, since rotation never reaches −90'], 0,
+  ['The loop test 0 < −90 is false, so it stops right away', 'It turns left 90°, because the angle is negative', 'It turns right 90°, because the speed passed in is always positive', 'It turns right forever, since rotation never reaches −90'], 0,
   'This version only handles clockwise turns. For a negative angle it needs the opposite motor directions and the loop while (rotation > angle). Test the sign of angle with an if, or turn using the absolute value and a direction.'),
 mc('c5-19', 'c5', 'Why does this function not compile?' + C`
 void driveTime(int seconds)
@@ -3217,7 +3219,7 @@ void driveTime(int seconds)
     LeftMotor.stop();
     RightMotor.stop();
 }`,
-  ['The parameter named seconds hides the unit seconds in the wait call', 'wait cannot take a variable, only a number written in the code', 'The function must return the time it drove, not void', 'spin needs a third argument for the run time in seconds'], 0,
+  ['The parameter named seconds hides the unit seconds in the wait call', 'wait cannot take a variable, only a number written directly in the code', 'The function must return the time it drove, not void', 'spin needs a third argument for the run time in seconds'], 0,
   'Inside the function, seconds now means the int parameter, so wait(seconds, seconds) passes two ints. Rename the parameter, for example void driveTime(int sec) and wait(sec, seconds).', { test: { vex: true, err: true } }),
 mc('c5-20', 'c5', 'The plant stand turns the platform every 15 minutes. Which line waits 15 minutes?',
   [K`wait(15 * 60, seconds);`, K`wait(15, seconds);`, K`wait(15 * 60, msec);`, K`wait(15 * 60 * 1000, seconds);`], 0,
@@ -3232,7 +3234,7 @@ RightMotor.stop();`,
   [K`if (Bumper8.pressing())`, K`if (Optical3.brightness() <= 75 && !Bumper8.pressing())`, K`while (Bumper8.pressing())`, 'It cannot tell which condition ended the loop'], 0,
   'The loop ends when either condition changes. Test one of them again with an if: if the bumper is pressed, it reached the edge, so turn around and return. The loop condition itself is always false once the loop has ended.'),
 mc('c5-22', 'c5', 'The plant robot hit the far edge and must return to where it started. Why read ' + K`LeftMotor.position(degrees)` + ' right after it stops, before turning around?',
-  ['To know how far it drove, so it can drive the same distance back', 'To reset the encoder to zero before the robot turns around', 'To check that the motor is still connected and turning', 'To measure the angle of the turn it is about to make'], 0,
+  ['To know how far it drove, so it can drive the same distance back', 'To reset the encoder to zero before the robot turns around to come back', 'To check that the motor is still connected and turning', 'To measure the angle of the turn it is about to make'], 0,
   'The distance out is not known in advance, because it depends on when the bumper was hit. Save the encoder reading in a variable, turn 180°, reset, and drive until the encoder reaches the saved value.'),
 order('c5-23', 'c5', 'Dinosaur prints: until 30 minutes have passed or green is seen, drive 5 s, make a print, move the foot to the other side, and turn 45° if something is closer than 1000 mm. driveTime, makePrint, moveFoot and rotateRobot are written. Some tiles are decoys.',
   ['Brain.Timer.clear();\nbool toBumper = true;',
@@ -3524,10 +3526,10 @@ int main()
     cout << b.voltage;
     return 0;
 }`,
-  ['It does not compile, because voltage is private', 'It prints 7.2', 'It prints 0', 'It prints garbage, because voltage was never set'], 0,
+  ['It does not compile, because voltage is private', 'It prints 7.2, the value the constructor stored in it', 'It prints 0', 'It prints garbage, because voltage was never set'], 0,
   'Private members can only be used inside the class\'s own member functions. main has to go through the public getter: cout << b.getVoltage();', { test: { err: true } }),
 mc('c8-3', 'c8', 'Why is ' + K`int getSeconds() const` + ' marked const?',
-  ['It promises not to change the object, so it works on a const Song', 'It makes the return value a constant that the caller cannot change', 'It makes seconds a constant that can never be changed again', 'It makes the function run faster, but it is optional style'], 0,
+  ['It promises not to change the object, so it works on a const Song', 'It makes the return value a constant that the caller cannot change', 'It makes seconds a constant that can never be changed again, even by setters', 'It makes the function run faster, but it is optional style'], 0,
   'const after the parameter list means the function does not change any member. The compiler enforces it, and only const functions can be called on a const object or through a const reference, like const Song & s.'),
 txt('c8-4', 'c8', 'songs.txt contains:' + C`
 Run 210
@@ -3616,7 +3618,7 @@ int main()
   'spin ignores anything that is not positive.',
   'turns = 3 + 2 = 5 (the −2 is ignored). 3.14 × 10 × 5 = 157, and cout prints a whole-number double without a decimal point. The object remembers turns between calls, which a plain function could not.'),
 mc('c8-6', 'c8', 'The Wheel class above has only the constructor ' + K`Wheel(double d)` + '. What happens to ' + K`Wheel spare;` + '?',
-  ['It does not compile: there is no Wheel() constructor', 'spare gets diameter 0 and turns 0 automatically', 'spare is created, but its members hold garbage values', 'It compiles, but calling spare.distance() crashes'], 0,
+  ['It does not compile: there is no Wheel() constructor', 'spare gets diameter 0 and turns 0 automatically', 'spare is created, but its members hold garbage values', 'It compiles, but calling spare.distance() crashes the program'], 0,
   'C++ only writes a default constructor for you when the class has no constructors at all. Once you write Wheel(double), Wheel spare; and Wheel arr[5]; both need a Wheel() you write yourself.', { test: { err: true, pre: 'class Wheel { double diameter; int turns; public: Wheel(double d) { diameter = d; turns = 0; } };', code: 'Wheel spare;' } }),
 txt('c8-7', 'c8', P + C`
 class Sensor
@@ -4281,7 +4283,7 @@ txt('w-6', 'tw', W + C`
 double d = 7 / 2;
 cout << d;`, '3', 'Which division happens first: int or double?', '7 / 2 is integer division, giving 3, which is then stored as 3.0 and printed as 3. Write 7.0 / 2 to get 3.5.'),
 mc('w-7', 'tw', 'Which keyword makes a class member usable only inside the class\'s own functions?', ['private', 'public', 'const', 'virtual'], 0, 'private hides data so only member functions can touch it. public members are open to everyone.'),
-mc('w-8', 'tw', 'What does the & do in ' + K`void addOne(int & x)` + '?', ['x is the caller\'s variable, so changes stick', 'x is a separate copy of the caller\'s variable', 'x can never change inside the function', 'It prints the address of x'], 0, 'A reference parameter is another name for the caller\'s variable. Without &, the function works on a copy.'),
+mc('w-8', 'tw', 'What does the & do in ' + K`void addOne(int & x)` + '?', ['x is the caller\'s variable, so changes stick', 'x is a separate copy of the caller\'s variable', 'x can never be changed inside the function body', 'It prints the address of x'], 0, 'A reference parameter is another name for the caller\'s variable. Without &, the function works on a copy.'),
 txt('w-9', 'tw', W + C`
 string s = "Hi";
 s += "!";
@@ -4290,7 +4292,7 @@ mc('w-10', 'tw', 'What does ' + K`#include <fstream>` + ' give you?', ['ifstream
 txt('w-11', 'tw', W + C`
 bool b = 0;
 cout << !b;`, '1', '! flips true and false.', 'b is false, so !b is true, which cout prints as 1.'),
-mc('w-12', 'tw', 'What does const after a member function\'s brackets promise, as in ' + K`int getSeconds() const` + '?', ['The function does not change the object', 'The returned value can never be changed', 'The function can only run once per object', 'Nothing: it is optional decoration'], 0, 'A const member function only reads the object, and the compiler checks it. Getters should be const.')
+mc('w-12', 'tw', 'What does const after a member function\'s brackets promise, as in ' + K`int getSeconds() const` + '?', ['The function does not change the object', 'The returned value can never be changed', 'The function can only run once per object', 'Nothing: it is optional decoration for readers'], 0, 'A const member function only reads the object, and the compiler checks it. Getters should be const.')
 ];
 
 /* ---------- WRITE THE CODE: whole programs, marked by Claude (separate section) ---------- */
@@ -6829,7 +6831,7 @@ mc('d1-4', 'd1', 'Lecture split a mechatronic system into Move, Interact, Contro
   ['Move', 'Interact', 'Control', 'Connect'], 1,
   'Interact: sensors get information from the environment, and actuators cause changes in it. Move is the mechanical side, Control is computers and logic, and Connect is the human and machine interfaces.'),
 mc('d1-5', 'd1', 'Which statement about digital versus analog control matches lecture?',
-  ['Digital is flexible and reprogrammable, but more complex and expensive', 'Analog is cheap and easy to modify, but less precise than digital', 'Digital is cheaper to build, but harder to reprogram than analog', 'Analog is not electronic, so it cannot count as mechatronic control'], 0,
+  ['Digital is flexible and reprogrammable, but more complex and expensive', 'Analog is cheap and easy to modify, but less precise than digital', 'Digital is cheaper to build, but harder to reprogram than analog', 'Analog is not electronic at all, so it cannot count as mechatronic control'], 0,
   'Digital control is flexible and reprogrammable, but more complex and expensive. Analog is simple and cheap to build, but not simple to modify. Both count as electronic control.'),
 mc('d1-6', 'd1', 'How did the LUKE arm deal with the hard problem of grasping?',
   ['It learns each new grasp from scratch, using EMG signals from the arm muscles', 'The user picks one of 10 common grasps, and sensors let the hand conform to the object', 'It offers one strong power grip and adjusts only the grip force to the object\'s weight', 'It mirrors the user\'s other hand, which wears a glove full of position sensors'], 1,
@@ -6872,7 +6874,7 @@ mc('d2-7', 'd2', 'Which is part of problem identification, according to lecture?
   ['Isolate and identify the problem, not its symptoms', 'Choose the cheapest solution that meets the constraints', 'Build a quick prototype before defining the problem', 'Skip background research when the problem is obvious'], 0,
   'Ascertain the decision makers\' objectives, understand the background, isolate the problem rather than its symptoms, determine the unit of analysis, and state the objectives clearly.'),
 mc('d2-8', 'd2', 'After you pick the design with the highest weighted score, why do a sensitivity analysis?',
-  ['To check whether the winner changes when the weights shift a little', 'To measure how sensitive each design\'s sensors are to noise', 'To give the lower-ranked designs a second chance at winning', 'To replace the weighted sum with a more accurate final score'], 0,
+  ['To check whether the winner changes when the weights shift a little', 'To measure how sensitive each design\'s sensors are to noise', 'To give the lower-ranked designs a second chance at winning', 'To replace the weighted sum with a more accurate, unweighted final score'], 0,
   'Weights are judgment calls. If a small change in them flips the ranking, the decision is fragile and worth a closer look.'),
 mc('d2-9', 'd2', 'Which is NOT one of the brainstorming rules from the ideation slides?',
   ['No criticism of any idea during the session', 'Mix participants from different backgrounds', 'Collect every idea, even the strange ones', 'Cut weak ideas early to keep things focused'], 3,
@@ -6880,7 +6882,7 @@ mc('d2-9', 'd2', 'Which is NOT one of the brainstorming rules from the ideation 
 
 /* ---------- Ethics ---------- */
 mc('d3-1', 'd3', 'Under Ontario\'s Professional Engineers Act, an activity is professional engineering if it meets three tests. Which set is right?',
-  ['It is paid work; it uses technical knowledge; and it is signed and sealed by a licensed engineer for a client', 'It is planning, designing, evaluating and so on; it needs engineering principles; and it safeguards life, health, property or the environment', 'It is done by an engineering graduate; it takes place in Ontario; and it is delivered to a client under a written contract', 'It uses mathematics and computers; it follows recognised standards; and it affects members of the public or their property'], 1,
+  ['It is paid work; it uses technical or scientific knowledge; and it is signed and sealed by a licensed engineer for a paying client', 'It is planning, designing, evaluating and so on; it needs engineering principles; and it safeguards life, health, property or the environment', 'It is done by an engineering graduate; it takes place in Ontario; and it is delivered to a paying client under a signed, written contract', 'It uses mathematics and computers; it follows recognised standards; and it affects members of the public, their safety or their property in some way'], 1,
   'If what you do meets all three of those tests, you are practising professional engineering and must be licensed.'),
 order('d3-2', 'd3', 'Order the hierarchy of obligations under the Code of Ethics, from highest to lowest.',
   ['Public welfare', 'Employer', 'Client', 'Colleagues', 'Subordinates', 'Yourself'],
@@ -6894,7 +6896,7 @@ mc('d3-4', 'd3', 'Which is NOT currently a requirement for a P.Eng. licence in O
   ['An accredited bachelor\'s degree or equivalent', 'At least 24 months of engineering experience after the degree', 'Passing the professional practice exam', '12 months of Canadian experience'], 3,
   'The Canadian experience requirement was removed, and the experience requirement dropped from 4 years to 24 months. The degree, experience with a competency-based assessment, the PPE and good character remain.'),
 mc('d3-5', 'd3', 'Under the PEO Code of Ethics, which duty must a practitioner regard as paramount?',
-  ['Duty to the employer', 'Duty to the client', 'Duty to public welfare', 'Duty to colleagues'], 2,
+  ['Duty to the employer and its clients', 'Duty to the client', 'Duty to public welfare', 'Duty to colleagues and the profession'], 2,
   'Section 77.2.i: regard the practitioner\'s duty to public welfare as paramount.'),
 mc('d3-6', 'd3', 'You are reviewing bids from several suppliers. One supplier hears it is your birthday and offers you two hockey tickets. What should you do?',
   ['Accept, since a birthday gift is personal and not related to the bid', 'Accept, but score that supplier slightly lower so you stay impartial', 'Decline, and disclose the offer if company policy requires it', 'Accept, and tell no one, since the tickets have no real influence'], 2,
@@ -6903,10 +6905,10 @@ mc('d3-7', 'd3', 'A P.Eng. colleague who did no work on your report asks you to 
   ['Add their name, since it costs nothing and helps a colleague', 'Refuse, because credit goes only to those who did the work', 'Add their name, but list them as a reviewer instead of an author', 'Ask the client to decide whether the name should be added'], 1,
   'Engineers must give due credit and act with personal honour and integrity. Listing someone who did not contribute misrepresents the work to the client.'),
 mc('d3-8', 'd3', 'The Québec Bridge (1917) is the world\'s longest cantilever bridge. Why does it come up in a history of Canadian engineering?',
-  ['It was the first major bridge in Canada designed entirely by a woman', 'Its collapses during construction are linked to the Iron Ring and regulation', 'It was the first bridge in North America built without any steel', 'It is the oldest bridge in Canada still carrying trains every day'], 1,
+  ['It was the first major bridge in Canada designed entirely by a woman engineer', 'Its collapses during construction are linked to the Iron Ring and regulation', 'It was the first bridge in North America built without any steel', 'It is the oldest bridge in Canada that still carries passenger trains every day'], 1,
   'The bridge collapsed during construction (in 1907 and 1916), killing many workers. Those failures are tied to the Iron Ring tradition and to engineering becoming a regulated profession.'),
 mc('d3-9', 'd3', 'Mike, a P.Eng., supervises co-op students and also teaches an evening course. His own co-op student enrolls in Mike\'s course. What should Mike do?',
-  ['Nothing, since teaching and supervising are separate jobs', 'Disclose the conflict and have someone else grade that student', 'Grade that student more strictly to avoid any appearance of bias', 'Ask the student to drop the course so the conflict goes away'], 1,
+  ['Nothing, since teaching and supervising are two completely separate jobs', 'Disclose the conflict and have someone else grade that student', 'Grade that student more strictly to avoid any appearance of bias', 'Ask the student to drop the course so the conflict goes away'], 1,
   'This is a moonlighting conflict of interest. Disclose it and remove yourself from decisions where you cannot be impartial.'),
 mc('d3-10', 'd3', 'What is the method from lecture for applying the Code of Ethics to a situation?',
   ['List the obligations, rank them by the hierarchy, then decide by that ranking', 'Follow your employer\'s instructions, since the employer carries the liability', 'Choose the option that costs the least, then document your reasoning', 'Ask a lawyer first, then do whatever the law strictly allows'], 0,
@@ -6917,13 +6919,13 @@ mc('d4-1', 'd4', 'Which pictorial shows one face in its true shape, with the oth
   ['Isometric', 'Oblique', 'Orthographic', 'Perspective'], 1,
   'Oblique: one true face, the others projected at an angle. Isometric is a kind of axonometric view with equal proportions and true measurements along all three axes.'),
 mc('d4-2', 'd4', 'Why is isometric the preferred pictorial in technical drawing?',
-  ['True measurements along all three axes, drawn with equal proportions', 'One face is drawn in its true shape, so it is easy to dimension', 'It looks the most realistic, because it uses vanishing points', 'It needs only two axes, so it is the fastest pictorial to sketch'], 0,
+  ['True measurements along all three axes, drawn with equal proportions', 'One face is drawn in its true shape, so it is easy to dimension', 'It looks the most realistic, because it uses vanishing points', 'It needs only two axes, so it is the fastest pictorial to sketch by hand'], 0,
   'In isometric the three axes are 120° apart and foreshortened equally, so you can measure along any of them directly.'),
 mc('d4-3', 'd4', 'What text height does EGAD use on drawings?',
   ['1/16 in (1.5 mm)', '1/8 in (3 mm)', '1/4 in (6 mm)', '1/2 in (12 mm)'], 1,
   '1/8 in, about 3 mm, in all-caps engineering lettering, always written between light guidelines.'),
 mc('d4-4', 'd4', 'Which lines are generally left out of an isometric view?',
-  ['Object lines and outlines', 'Hidden lines and centerlines', 'Visible edges and corners', 'Outlines and front edges'], 1,
+  ['Object lines and visible outlines', 'Hidden lines and centerlines', 'Visible edges and corners', 'Outlines and front edges'], 1,
   'Isometric views show the overall look. The orthographic views carry the details like hidden features and centers.'),
 mc('d4-5', 'd4', 'Which type of drawing is a fully dimensioned multi-view drawing used for manufacturing and inspection?',
   ['Concept drawing', 'Detail drawing', 'Assembly drawing', 'Isometric sketch'], 1,
@@ -6952,16 +6954,16 @@ mc('d5-5', 'd5', 'How many principal orthographic views does an object have?',
   ['3', '4', '6', '8'], 2,
   'Top, front, right side, left side, rear and bottom: 6 directions, each 90° apart. Most drawings use top, front and right side.'),
 mc('d5-6', 'd5', 'Which is a good reason to choose a different set of views than top, front and right side?',
-  ['It reduces hidden lines and shows the most relevant features', 'It makes the drawing look more interesting to the client', 'It avoids having to draw centerlines through any of the holes', 'It fits more views onto one sheet, which saves paper'], 0,
+  ['It reduces hidden lines and shows the most relevant features', 'It makes the drawing look more interesting to the client and the machinist', 'It avoids having to draw centerlines through any of the holes', 'It fits more views onto one sheet, which saves paper'], 0,
   'Maximize clarity: match an intuitive orientation, reduce hidden lines, and show the most relevant features.'),
 mc('d5-7', 'd5', 'When do you need an auxiliary view?',
-  ['When a surface is inclined, so no principal view shows its true shape', 'Whenever a part has more than one hole in the same face', 'When hidden lines would otherwise appear in the front view', 'When the part is too large to fit in the standard three views'], 0,
+  ['When a surface is inclined, so no principal view shows its true shape', 'Whenever a part has more than one hole in the same face', 'When hidden lines would otherwise appear in the front view of the part', 'When the part is too large to fit in the standard three views on one sheet'], 0,
   'An auxiliary view is an orthographic projection at an angle to the principal views, onto a plane parallel to the inclined surface.'),
 mc('d5-8', 'd5', 'A flat face blends smoothly into a curved face, with no edge. How is that blend shown in an orthographic view?',
   ['With a thin solid line', 'With a dashed hidden line', 'It is not drawn at all', 'With a thin centerline'], 2,
   'Orthographic views only include hard edges. A tangent change in curvature is not an edge.'),
 mc('d5-9', 'd5', 'What is a miter line used for?',
-  ['A 45° line used to transfer features between the top and side views', 'A line that marks where two parts are welded together', 'The thick line that separates the title block from the drawing', 'A line that shows where a cutting plane passes through the part'], 0,
+  ['A 45° line used to transfer features between the top and side views', 'A line that marks where two parts are welded together', 'The thick line that separates the title block from the drawing area', 'A line that shows where a cutting plane passes through the part'], 0,
   'Project from the top view to the 45° miter line, then turn down into the side view. Construction lines are the thin temporary lines you use along the way.'),
 
 /* ---------- Standards and linetypes ---------- */
@@ -6969,10 +6971,10 @@ mc('d6-1', 'd6', 'Where is the title block on an engineering drawing?',
   ['Top left', 'Top right', 'Bottom left', 'Bottom right'], 3,
   'Bottom right. It holds the company name, title, date, scale, creator and approvals, and the drawing and revision numbers.'),
 mc('d6-2', 'd6', 'Which item does NOT belong in a bill of materials?',
-  ['The name of each part', 'The quantity of each part', 'The material of each part', 'The tolerances of each part'], 3,
+  ['The name of each part', 'The quantity needed of each part', 'The material of each part', 'The tolerances of each part'], 3,
   'A BOM lists each component\'s name, quantity, part number and material. Tolerances go on the detail drawings.'),
 mc('d6-3', 'd6', 'What does the revision column record?',
-  ['Every change since the drawing was first made, with dates and approvals', 'The scale of each view, and any views that are not drawn to scale', 'The materials list, with the quantity and part number of each item', 'The drawing number and the sheet size to use when printing it'], 0,
+  ['Every change since the drawing was first made, with dates and approvals', 'The scale of each view, and any views that are not drawn to scale', 'The materials list, with the quantity and part number of each item in the assembly', 'The drawing number and the sheet size to use when printing it'], 0,
   'Revisions are numbered and dated, with a brief description and signatures. An ECN (Engineering Change Notice) explains the change in detail.'),
 mc('d6-4', 'd6', 'Which line has the heaviest weight?',
   ['Object (visible) line', 'Hidden (dashed) line', 'Center (chain) line', 'Cutting plane line'], 3,
@@ -6990,12 +6992,12 @@ mc('d6-8', 'd6', 'Why does a fillet at an inside corner make a part last longer?
   ['It reduces the stress concentration, so cracks are less likely to start', 'It removes material, which makes the part lighter and less brittle', 'It hides the machining marks, which are where corrosion usually begins', 'It lets paint flow into the corner, which protects that spot from rust'], 0,
   'Sharp inside corners concentrate stress, and cracks start there. Fillets also improve appearance and safety, and leave material where a cutter naturally would.'),
 mc('d6-9', 'd6', 'Which describes precision, technically?',
-  ['Measurements that are close to the true value', 'Repeated measurements that are close to one another', 'The smallest increment a tool can display', 'The number of digits on a calculator'], 1,
+  ['Measurements that are all close to the true, accepted value', 'Repeated measurements that are close to one another', 'The smallest increment a measuring tool is able to display', 'The number of digits on a calculator'], 1,
   'Accuracy is closeness to the true value, and resolution is the smallest displayed increment. In EGAD dimensions, precision means the number of decimal places. Never use 4.'),
 
 /* ---------- Dimensioning ---------- */
 mc('d7-1', 'd7', 'What is a main advantage of baseline dimensioning from a datum?',
-  ['Tolerance errors do not accumulate from one feature to the next', 'It needs the fewest dimensions of any dimensioning method', 'It removes the need for a scale in the title block', 'It lets every dimension be written without any units'], 0,
+  ['Tolerance errors do not accumulate from one feature to the next', 'It needs the fewest dimensions of any dimensioning method on a drawing', 'It removes the need for a scale in the title block', 'It lets every dimension on the drawing be written without any units'], 0,
   'Every location is measured from the same datum, so errors do not stack up. It also means fewer calculations at the machine, where the machinist zeroes the readout on the datum.'),
 mc('d7-2', 'd7', 'How do you dimension a through hole and a fillet?',
   ['Hole by radius (R), fillet by diameter (Ø)', 'Hole by diameter (Ø), fillet by radius (R)', 'Both by diameter', 'Both by radius'], 1,
@@ -7013,10 +7015,10 @@ mc('d7-6', 'd7', 'What does "TYP" next to a fillet dimension mean?',
   ['The dimension applies to all the identical fillets', 'The dimension is a typical value, so it has no tolerance', 'The fillet is optional and can be left out when machining', 'The dimension is approximate and is checked at assembly'], 0,
   'TYP, or a note like "4 HOLES", means the same feature repeats. Only use it when there is no ambiguity about what it covers.'),
 mc('d7-7', 'd7', 'What should you do instead of dimensioning to a hidden line?',
-  ['Dimension it anyway, and add a note saying the line is hidden', 'Dimension the feature in a view where it is visible, or in a section', 'Leave the feature undimensioned and let the machinist decide', 'Redraw the hidden line as a solid line so it can be dimensioned'], 1,
+  ['Dimension it anyway, and add a general note saying that line is hidden', 'Dimension the feature in a view where it is visible, or in a section', 'Leave the feature undimensioned and let the machinist decide', 'Redraw the hidden line as a solid object line so it can be dimensioned'], 1,
   'Dimension each feature in the view where its shape is shown best, and avoid hidden lines. A section view often reveals the feature.'),
 mc('d7-8', 'd7', 'A counterbored hole callout must include…',
-  ['Only the small hole diameter and the depth', 'Both diameters and the depth of the larger hole', 'Both diameters and the countersink angle', 'The large diameter and the total depth'], 1,
+  ['Only the small hole diameter and the depth of the hole', 'Both diameters and the depth of the larger hole', 'Both diameters and the 82° countersink angle of the head', 'The large diameter and the total depth'], 1,
   'Counterbore: both hole diameters and the depth of the larger one. Countersink: both diameters and the taper angle. Through holes say THRU ALL, and blind holes need a depth.'),
 mc('d7-9', 'd7', 'Which rule about leaders is correct?',
   ['A leader should be horizontal and touch the dimension text', 'A leader should be vertical and end on the edge of the hole', 'A leader is angled and points to the centre of the hole', 'A leader can be at any angle and point anywhere on the hole'], 2,
@@ -7027,7 +7029,7 @@ mc('d7-10', 'd7', 'What does NTS on a dimension mean?',
 
 /* ---------- Section views ---------- */
 mc('d8-1', 'd8', 'In a section view, what gets hatched?',
-  ['Every surface visible in the section view', 'Only the surfaces the cutting plane passes through', 'Only the surfaces behind the cutting plane', 'Only the outline of the part in that view'], 1,
+  ['Every surface you can see anywhere in the section view', 'Only the surfaces the cutting plane passes through', 'Only the surfaces behind the cutting plane, seen through it', 'Only the outline of the part in that view'], 1,
   'Imagine glass along the cutting plane: anything touching the glass is hatched with thin lines, usually at 45°.'),
 mc('d8-2', 'd8', 'In a section view, hidden lines beyond the cutting plane are…',
   ['always drawn', 'usually not shown', 'drawn as centerlines', 'drawn extra thick'], 1,
@@ -7048,7 +7050,7 @@ mc('d8-7', 'd8', 'What do the arrows at the ends of a cutting plane line show?',
   ['The direction you look to see the section', 'The direction the saw moves to cut the part', 'Where the dimensions for the section start', 'The side of the part that gets hatched'], 0,
   'The line shows where the cut is, the arrows show the viewing direction, and the letters (A–A) name the section view.'),
 mc('d8-8', 'd8', 'Which section type removes only a small local region to show something inside?',
-  ['Full section', 'Half section', 'Broken-out section', 'Assembly section'], 2,
+  ['Full section', 'Half section', 'Broken-out section', 'Offset section along a stepped plane'], 2,
   'A broken-out section cuts away just a small area, bounded by a break line. A full section cuts all the way through, and a half section cuts a quarter of a symmetric part.'),
 
 /* ---------- Threads, holes, tools ---------- */
@@ -7062,7 +7064,7 @@ num('d9-3', 'd9', 'How many full turns does an M8 × 1.25 screw need to advance 
   'Pitch is the advance per turn.',
   '10 mm ÷ 1.25 mm per turn = 8 turns.'),
 mc('d9-4', 'd9', 'When should you choose fine threads over coarse threads?',
-  ['When the screw is wider than the hole is deep, or it may vibrate loose', 'When assembling soft materials like aluminium or plastic parts', 'When you need fast assembly with as few turns as possible', 'When a large screw must resist stripping and cross-threading'], 0,
+  ['When the screw is wider than the hole is deep, or it may vibrate loose', 'When assembling soft materials like aluminium, brass or plastic parts together', 'When you need fast assembly with as few turns as possible', 'When a large screw must resist stripping and cross-threading'], 0,
   'Fine threads engage more threads per thickness and resist vibration loosening. Coarse threads suit soft materials and rugged use, resist stripping and cross-threading, and are faster. Rule from class: diameter &gt; depth, use fine.'),
 mc('d9-5', 'd9', 'What does a tap do, and what does a die do?',
   ['A tap cuts internal threads; a die cuts external threads', 'A tap cuts external threads; a die cuts internal threads', 'Both cut internal threads', 'A tap drills holes; a die polishes them'], 0,
@@ -7101,7 +7103,7 @@ mc('d10-4', 'd10', 'What does locking a layer do?',
   ['Hides it, so its objects disappear from the screen', 'Keeps it visible but stops its objects being edited', 'Deletes it, along with every object drawn on it', 'Keeps it on screen but stops it from printing'], 1,
   'Off hides a layer. Freeze also hides it while saving memory in big drawings. Lock leaves it visible but uneditable. Plot settings control printing.'),
 mc('d10-5', 'd10', 'What units does an AutoCAD model use?',
-  ['Millimetres, since AutoCAD is a metric program', 'Inches, unless you change the drawing template', 'None: it is unitless, so you choose and draw at 1:1', 'Whatever units the printer is set up to use'], 2,
+  ['Millimetres, since AutoCAD is a metric program', 'Inches, unless you change the units in the drawing template', 'None: it is unitless, so you choose and draw at 1:1', 'Whatever units the printer is set up to use'], 2,
   'AutoCAD does not know or care about units, so you must. Draw everything at full size in your chosen units and scale only in the layout.'),
 mc('d10-6', 'd10', 'Your hidden lines look like solid lines because the drawing is very large. What should you adjust?',
   ['LWEIGHT', 'LTSCALE', 'ZOOM', 'OSNAP'], 1,
@@ -7113,13 +7115,13 @@ mc('d10-8', 'd10', 'In the ROTATE command, a positive angle turns objects…',
   ['clockwise', 'counter-clockwise', 'whichever way the cursor moves', 'about the origin only'], 1,
   'All AutoCAD rotations are counter-clockwise for positive angles, about the base point you pick.'),
 mc('d10-9', 'd10', 'Where should you put the title block and notes?',
-  ['In model space at 1:1, next to the part', 'In paper space (the layout), outside the viewport', 'On the same layer as the object lines', 'In a separate drawing file that gets inserted'], 1,
+  ['In model space at 1:1, next to the part', 'In paper space (the layout), outside the viewport', 'On the same layer as the object lines', 'In a separate drawing file that gets inserted as a block'], 1,
   'The model lives in model space at full size. The layout\'s paper space holds the title block and notes, and a viewport shows the model at a chosen scale.'),
 num('d10-10', 'd10', 'A drawing is plotted at 1:4. How long, in inches, does a 10 in edge appear on the paper?', '2.5',
   '1:4 means the real object is 4 times the size shown.',
   '10 ÷ 4 = 2.5 in on paper. It is still dimensioned as 10.'),
 mc('d10-11', 'd10', 'Why should you avoid turning on every Object Snap mode at once?',
-  ['It slows AutoCAD down on large drawings', 'You may snap to a point you did not intend', 'It turns off the grid and ortho mode', 'Some snap modes cannot run at the same time'], 1,
+  ['It slows AutoCAD down a lot on large drawings', 'You may snap to a point you did not intend', 'It turns off the grid and ortho mode', 'Some snap modes cannot run at the same time'], 1,
   'The snap list works in priority order. Turn on only the snaps you need, and use Shift + right-click for a one-off snap.'),
 order('d10-12', 'd10', 'Order the steps for setting up a drawing to plot, from the week 4 slides.',
   ['Complete the model at 1:1 scale', 'Set up the page layout: AutoCAD PDF printer, ANSI A paper, correct units', 'Size the viewport to fit the printable area', 'Set a whole-number scale for the viewport', 'Move the model into position on the page', 'Add notes and the title block in paper space'],
@@ -7127,13 +7129,13 @@ order('d10-12', 'd10', 'Order the steps for setting up a drawing to plot, from t
   'Model first at full size, then the page, then the viewport and its scale, and finally the annotations in paper space.',
   { label: 'First to last' }),
 mc('d3-11', 'd3', 'Engineering is a self-regulated profession. According to lecture, what does that make engineers responsible for?',
-  ['Protecting the profession, governing themselves and making their voices heard', 'Nothing: the provincial government handles all discipline for engineers', 'Setting their own fees by law and limiting how many people are licensed', 'Writing the laws that govern engineering and enforcing them in court'], 0,
+  ['Protecting the profession, governing themselves and making their voices heard', 'Nothing: the provincial government handles all discipline for engineers', 'Setting their own fees by law and limiting how many people can be licensed each year', 'Writing the laws that govern engineering and enforcing them in court'], 0,
   'Self-regulation means the profession polices itself: dealing with problems promptly (reported in the blue pages of Engineering Dimensions), electing its own council and speaking up in public policy.'),
 mc('d3-12', 'd3', 'In practice, what does the hierarchy of obligations require of a practitioner?',
-  ['Report unsafe work, explain consequences and inform the public objectively', 'Side with the employer, since the employer pays and carries the risk', 'Keep safety concerns inside the company until a manager approves', 'Refuse any pay for work that is done in the public interest'], 0,
+  ['Report unsafe work, explain consequences and inform the public objectively', 'Side with the employer, since the employer pays and carries all of the legal risk', 'Keep safety concerns inside the company until a manager approves', 'Refuse any pay for work that is done in the public interest'], 0,
   'Duty to the public comes first, so a practitioner must report unsafe work ("whistleblowing") and explain consequences. Accepting fair compensation is fine.'),
 mc('d3-13', 'd3', 'Which of these comes with being a licensed engineer in Ontario, according to the slides?',
-  ['A duty to stay current and to practise only within your field', 'The right to sign off on designs in any engineering discipline', 'No responsibility for the work done by your subordinates', 'The right to share client information with other engineers'], 0,
+  ['A duty to stay current and to practise only within your field', 'The right to sign off on designs in any engineering discipline', 'No responsibility for the work done by your subordinates', 'The right to share client information with other licensed engineers'], 0,
   'A P.Eng. may use the title and stamp designs, but takes responsibility for their own work and their subordinates\', keeps confidences, gives due credit, avoids or discloses conflicts of interest, and must practise only within their competence.'),
 mc('d3-14', 'd3', 'Who may use the title "engineer" and stamp engineering designs in Ontario?',
   ['A licensed professional engineer (P.Eng.)', 'Anyone with an accredited engineering degree', 'Anyone working in a technical job', 'Any member of Engineers Canada'], 0,
@@ -7142,16 +7144,16 @@ mc('d7-11', 'd7', 'How should dimension figures be lettered on a drawing?',
   ['Horizontally, including angle dimensions', 'Aligned with each dimension line', 'Vertically for vertical dimensions', 'In any direction, as long as they are readable'], 0,
   'Best practice 2 from the week 4 slides: letter dimensions horizontally, so the drawing reads from the bottom without turning the page. That includes angles.'),
 mc('d7-12', 'd7', 'Where should the units of a drawing appear?',
-  ['Once in the notes, and on a dimension only when needed for clarity', 'After every dimension, so no measurement can be misread', 'In the scale field of the title block, next to the scale', 'Nowhere, because drawings are always in millimetres'], 0,
+  ['Once in the notes, and on a dimension only when needed for clarity', 'After every dimension, so no measurement can be misread', 'In the scale field of the title block, written right next to the scale', 'Nowhere, because drawings are always in millimetres'], 0,
   'Repeating mm on every dimension adds clutter. State the units once in the notes, and add them to a single dimension only when it would otherwise be unclear.'),
 mc('d7-13', 'd7', 'Where are the diameter and length of a solid cylinder preferably dimensioned?',
   ['In the rectangular view', 'In the circular view', 'In an isometric view', 'Split between the two views'], 0,
   'Best practice 16: show both in the rectangular (side-on) view. It does not apply to holes, which are called out with a leader to the circular view.'),
 mc('d7-14', 'd7', 'Should a dimension that can be worked out from two others also be shown?',
-  ['No: show only the dimensions needed to make or inspect the part', 'Yes: extra dimensions make the drawing safer to manufacture', 'Yes, but only if it is placed in a different view', 'Only if it is the overall length or the overall width'], 0,
+  ['No: show only the dimensions needed to make or inspect the part', 'Yes: extra dimensions make the drawing safer and easier to manufacture', 'Yes, but only if it is placed in a different view', 'Only if it is the overall length or the overall width'], 0,
   'Best practice 9. Redundant dimensions can conflict once tolerances come in, and they clutter the drawing.'),
 mc('d7-15', 'd7', 'Which scales does the week 4 lecture suggest for a metric drawing?',
-  ['Whole-number scales in steps of 5, like 1:10 or 1:25', 'Fractions of an inch, like 1:4, 1:8 or 1:16', 'Any scale that fills the page best, like 1:3.7', 'Always 1:1, so the part is shown at true size'], 0,
+  ['Whole-number scales in steps of 5, like 1:10 or 1:25', 'Fractions of an inch, like 1:4, 1:8 or 1:16', 'Any scale that fills the page best, even one like 1:3.7', 'Always 1:1, so the part is shown at true size'], 0,
   'Use whole-number scales. Metric drawings use steps of 5 (1:10, 1:25), and imperial drawings use inch fractions (1:4, 1:8, 1:16). Whatever you pick, put it in the title block.'),
 mc('d10-13', 'd10', 'In AutoCAD, at what scale should you draw the model?',
   ['1:1 in the Model tab, then set the print scale in the layout viewport', 'At the final print scale in the Model tab, so it fits the sheet', 'Any scale in the Model tab, then stretch the drawing to fit the page', '1:2 in the Model tab, so the part fits inside the title block'], 0,
@@ -7192,7 +7194,7 @@ mc('d12-1', 'd12', 'A part is located against a primary, a secondary and a terti
   ['3, 2, 1', '2, 2, 2', '1, 2, 3', '6, 0, 0'], 0,
   'The primary datum plane touches at least 3 points and removes 3 degrees of freedom (one translation, two rotations). The secondary touches 2 points and removes 2. The tertiary touches 1 point and removes the last 1. Together: all 6.'),
 mc('d12-2', 'd12', 'In what order are the compartments of a feature control frame read?',
-  ['Symbol, then tolerance (with Ø and modifier), then datums in order of precedence', 'Datums in order of precedence, then the symbol, then the tolerance zone size', 'Tolerance first, then the symbol, then the datums from tertiary to primary', 'Symbol, then the datums from primary to tertiary, then the tolerance'], 0,
+  ['Symbol, then tolerance (with Ø and modifier), then datums in order of precedence', 'Datums in order of precedence, then the symbol, then the tolerance zone size and modifier', 'Tolerance first, then the symbol, then the datums from tertiary to primary', 'Symbol, then the datums from primary to tertiary, then the tolerance'], 0,
   'Left to right: what is controlled (for example position), how much (Ø0.1 Ⓜ), and relative to what (A, then B, then C). The datum order matters because it is the order the part is set up in.'),
 mc('d12-3', 'd12', 'A hole has a position tolerance of Ø0.2 relative to datums A, B and C. What is the tolerance zone?',
   ['A Ø0.2 cylinder around the true position that the hole\'s axis must stay inside', 'A 0.2 mm square around the true position that the hole\'s centre must stay inside', 'The hole\'s diameter may be up to 0.2 mm bigger or smaller than its nominal size', 'The edge of the hole may sit up to 0.2 mm from where the drawing puts it'], 0,
@@ -7210,7 +7212,7 @@ mc('d12-7', 'd12', 'Which geometric control never uses a datum?',
   ['Flatness', 'Perpendicularity', 'Parallelism', 'Position'], 0,
   'Form controls (flatness, straightness, circularity, cylindricity) describe a feature by itself, so they have no datum. Orientation controls (perpendicularity, parallelism, angularity) and position only make sense relative to a datum.'),
 mc('d12-8', 'd12', 'A straightness frame is attached to the Ø dimension of a pin, and its tolerance starts with Ø. What does it control?',
-  ['The straightness of the pin\'s axis, in a cylindrical zone', 'The straightness of each line element on the pin\'s surface', 'The flatness of the end face of the pin', 'The location of the pin\'s axis relative to the datums'], 0,
+  ['The straightness of the pin\'s axis, in a cylindrical zone', 'The straightness of each line element on the pin\'s surface', 'The flatness of the end face of the pin', 'The location of the pin\'s axis relative to the datum reference frame'], 0,
   'Attached to the size dimension, with Ø, straightness applies to the derived axis and may use MMC. Attached to the surface (or to an extension line from it), it controls each line element on the surface, and the zone is two parallel lines.'),
 mc('d12-9', 'd12', 'What does RFS (regardless of feature size) mean for a geometric tolerance?',
   ['The tolerance stays the same at every actual size: no bonus', 'The tolerance grows as the feature departs from MMC, giving a bonus', 'The feature itself may be made at any size at all', 'The tolerance only applies when the feature is at its largest size'], 0,
@@ -7227,16 +7229,16 @@ mc('d13-3', 'd13', 'Which bearing suits a car wheel hub, which carries large rad
   ['Tapered roller bearing', 'Deep-groove ball bearing', 'Thrust bearing', 'Linear bearing'], 0,
   'Tapered rollers sit at an angle, so they carry heavy radial and axial loads together. A thrust bearing is mainly for axial load, and a linear bearing guides sliding motion, not rotation.'),
 mc('d13-4', 'd13', 'Why do roller bearings carry more load than ball bearings of the same size?',
-  ['Rollers touch the races along a line, balls only at a point', 'Rollers are always made from a harder grade of bearing steel', 'Rollers spin faster, so they share the load more evenly', 'Ball bearings have no cage, so the balls can bunch up'], 0,
+  ['Rollers touch the races along a line, balls only at a point', 'Rollers are always made from a harder grade of bearing steel', 'Rollers spin faster, so they share the load more evenly between them', 'Ball bearings have no cage, so the balls can bunch up'], 0,
   'Line contact spreads the load over more area. The trade-off is that ball bearings have less friction and run at higher speeds.'),
 mc('d13-5', 'd13', 'What is a sleeve bearing (bushing)?',
-  ['A plain tube the shaft turns in, with no rolling elements', 'A ball bearing pressed into a protective metal sleeve', 'A bearing that is designed to carry only axial (thrust) load', 'A bearing that guides straight-line sliding, not rotation'], 0,
+  ['A plain tube the shaft turns in, with no rolling elements', 'A ball bearing pressed into a protective metal sleeve', 'A bearing that is designed to carry only axial (thrust) load', 'A bearing that guides straight-line sliding along a rail, not rotation'], 0,
   'A bushing is just a sliding surface, often bronze or plastic. It is cheap, compact and quiet, but has more friction and wear than a rolling-element bearing.'),
 mc('d13-6', 'd13', 'A motor drives a spur gear mounted on a shaft. Which loads does the shaft carry?',
   ['Torsion from the torque, plus bending from the tooth forces', 'Only torsion, because a spur gear makes no sideways force', 'Only axial load, pushing the shaft along its own length', 'Only bending, since all the torque goes into the gear'], 0,
   'The torque twists the shaft (torsion), and the force on the gear teeth pushes the shaft sideways (transverse load, which bends it). Helical gears add an axial load as well.'),
 mc('d13-7', 'd13', 'What does a key in a keyway do?',
-  ['Makes a gear or pulley turn with its shaft, so torque gets through', 'Holds a bearing in its housing so the outer race cannot spin', 'Locks a nut onto a bolt so vibration cannot loosen it', 'Lines up two shafts end to end inside a rigid coupling'], 0,
+  ['Makes a gear or pulley turn with its shaft, so torque gets through', 'Holds a bearing tightly in its housing so the outer race cannot spin', 'Locks a nut onto a bolt so vibration cannot loosen it', 'Lines up two shafts end to end inside a rigid sleeve coupling housing'], 0,
   'The key sits in a slot in both the shaft and the hub, so the two must turn together. A set screw or a shoulder stops axial sliding.'),
 
 /* ---------- Power transmission ---------- */
@@ -7267,7 +7269,7 @@ mc('d14-8', 'd14', 'Which coupling should join two shafts that may be slightly m
 
 /* ---------- Actuators and control ---------- */
 mc('d15-1', 'd15', 'On a DC motor\'s torque–speed curve, where is torque largest?',
-  ['At zero speed (the stall torque)', 'At the no-load speed', 'Halfway between', 'Torque is the same at every speed'], 0,
+  ['At zero speed (the stall torque)', 'At the no-load speed (the top speed)', 'Halfway between', 'Torque is the same at every speed'], 0,
   'For a DC motor the curve is a straight line from the stall torque at zero speed down to zero torque at the no-load speed. Power is zero at both ends.'),
 num('d15-2', 'd15', 'A motor gives 0.10 N·m at 3000 rpm. What mechanical power is that, in W? Give 3 significant figures.', '31.4',
   'P = Tω, with ω in rad/s.',
@@ -7279,16 +7281,16 @@ num('d15-4', 'd15', 'A stepper motor has 200 steps per revolution. How many step
   'Find the angle of one step first.',
   '360° ÷ 200 = 1.8° per step, and 90 ÷ 1.8 = 50 steps. Counting steps gives the position without a sensor (open loop), as long as no steps are skipped.'),
 mc('d15-5', 'd15', 'What makes a servo motor different from a plain DC motor?',
-  ['It has built-in position feedback, so it holds a commanded angle', 'It has no brushes, so it lasts much longer than a plain DC motor', 'It moves in fixed angular steps that are counted without a sensor', 'It runs on compressed air instead of electricity'], 0,
+  ['It has built-in position feedback, so it holds a commanded angle', 'It has no brushes, so it lasts much longer than a plain brushed DC motor', 'It moves in fixed angular steps that are counted without a sensor', 'It runs on compressed air instead of electricity'], 0,
   'A hobby servo combines a DC motor, a gearbox, a potentiometer or encoder, and a control circuit. You command an angle and it drives until the feedback matches.'),
 mc('d15-6', 'd15', 'Why does a motor need an H-bridge?',
-  ['Its four switches can reverse the motor voltage, so it runs both ways', 'It steps the supply voltage up so the motor can reach full speed', 'It measures the motor\'s speed so the controller can correct it', 'It converts the AC from the wall outlet into DC for the motor'], 0,
+  ['Its four switches can reverse the motor voltage, so it runs both ways', 'It steps the supply voltage up so the motor can reach its full rated speed', 'It measures the motor\'s speed so the controller can correct it', 'It converts the AC from the wall outlet into DC for the motor'], 0,
   'Closing one diagonal pair of switches drives current one way, and the other pair drives it the other way. Combined with PWM, it controls both speed and direction.'),
 num('d15-7', 'd15', 'A 12 V PWM signal is on for 2 ms of every 8 ms period. What average voltage does the motor see, in V?', '3',
   'Duty cycle = on time ÷ period.',
   'Duty = 2/8 = 25%, and 0.25 × 12 = 3 V. The motor\'s inertia smooths the pulses, so it runs as if given 3 V.'),
 mc('d15-8', 'd15', 'Which statement about pneumatic and hydraulic actuators is true?',
-  ['Hydraulics give huge forces; pneumatics are fast but hard to stop mid-stroke', 'Pneumatics give larger forces than hydraulics, because air is lighter than oil', 'Hydraulics run on compressed air, and pneumatics run on pressurized oil', 'Both can be stopped at any exact position as easily as an electric motor'], 0,
+  ['Hydraulics give huge forces; pneumatics are fast but hard to stop mid-stroke', 'Pneumatics give larger forces than hydraulics, because air is lighter than oil', 'Hydraulics run on compressed air, and pneumatics run on pressurized oil', 'Both can be stopped at any exact position as easily as an electric servo motor'], 0,
   'Oil barely compresses and runs at high pressure, so hydraulics are strong and stiff. Air compresses, so pneumatic cylinders are springy and mostly used end to end.'),
 mc('d15-9', 'd15', 'What is an advantage of a brushless DC motor over a brushed one?',
   ['No brushes to wear out, and higher efficiency', 'It needs no controller', 'It is always cheaper', 'It can run directly on a battery with no electronics'], 0,
@@ -7314,7 +7316,7 @@ mc('d16-6', 'd16', 'A scale always reads 2.0 kg too high, but repeats the same r
   ['Precise (repeatable) but not accurate', 'Accurate (close to true) but not precise', 'Both accurate and precise, since it repeats', 'Neither, because the readings repeat'], 0,
   'Accuracy is closeness to the true value. Precision (repeatability) is how close repeated readings are. A constant offset like this can be calibrated out.'),
 mc('d16-7', 'd16', 'What does linearity describe for a sensor?',
-  ['How closely its output follows a straight line', 'The smallest change in input it can detect', 'The span from its lowest to its highest reading', 'How quickly the output responds to a change'], 0,
+  ['How closely its output follows a straight line', 'The smallest change in input it can detect', 'The span from its lowest to its highest reading', 'How quickly the output responds to a sudden change'], 0,
   'Linearity is how far the calibration curve strays from a straight line. The smallest detectable change is resolution, the span is range, and response time is a separate property.'),
 mc('d16-8', 'd16', 'A small sensor signal is buried in electrical noise from nearby motors. What helps?',
   ['Shielded cables, filtering and averaging', 'Using a longer unshielded wire to the sensor', 'Reading the sensor less often to save time', 'Raising the motor voltage so it runs smoother'], 0,
@@ -7322,7 +7324,7 @@ mc('d16-8', 'd16', 'A small sensor signal is buried in electrical noise from nea
 
 /* ---------- Project management ---------- */
 mc('d17-1', 'd17', 'What does a Gantt chart show?',
-  ['Tasks as bars on a timeline, with dependencies and milestones', 'The cost of every part and how it adds up over the project', 'The weights and scores from the decision matrix for each design', 'Who reports to whom on the team, as an organization chart'], 0,
+  ['Tasks as bars on a timeline, with dependencies and milestones', 'The cost of every part and how it adds up over the whole project', 'The weights and scores from the decision matrix for each design', 'Who reports to whom on the team, as an organization chart'], 0,
   'Each row is a task, and its bar spans its scheduled time. Arrows show which tasks must finish first, and diamonds mark milestones such as design reviews.'),
 num('d17-2', 'd17', 'Task A takes 3 days. B (4 days) and C (2 days) both need A to finish first. D (3 days) needs both B and C. What is the shortest time to finish the project, in days?', '10',
   'Find the longest path through the dependent tasks.',
@@ -7331,7 +7333,7 @@ mc('d17-3', 'd17', 'In that project, what happens if task C slips by 1 day?',
   ['Nothing: C has 2 days of slack', 'The project finishes 1 day late', 'The project finishes 2 days late', 'B has to start later'], 0,
   'C takes 2 days but runs alongside B, which takes 4. C can slip up to 2 days before it holds up D. Any delay on the critical path (A, B or D) delays the whole project.'),
 mc('d3-x1', 'd3', 'Who holds the duty to consult Indigenous peoples when a project may affect their Aboriginal or treaty rights?',
-  ['The Crown (the federal or provincial government)', 'Only the engineer of record', 'The company building the project, and nobody else', 'Professional Engineers Ontario'], 0,
+  ['The Crown (the federal or provincial government)', 'Only the engineer of record', 'The company building the project, and nobody else', 'Professional Engineers Ontario (PEO), the regulator'], 0,
   'The duty comes from section 35 of the Constitution Act, 1982 and belongs to the Crown. Some procedural parts can be delegated to the project proponent, so engineers on such projects need to understand it and plan consultation into the schedule.'),
 
 num('w-1', 'tw', 'A part is dimensioned 10.0 ± 0.1 mm. What is its tolerance, in mm?', '0.2', 'Tolerance = upper limit − lower limit.', '10.1 − 9.9 = 0.2 mm.', null, null, { tol: 0.001 }),
@@ -7366,7 +7368,7 @@ mc('d11-13', 'd11', 'Why not give every dimension the tightest tolerance possibl
   'Each extra decimal place needs better machines, slower machining and more inspection. Tolerances should be as loose as the function allows.'),
 
 mc('d12-10', 'd12', 'What is a basic dimension, the one drawn in a box?',
-  ['A theoretically exact value with no ± of its own', 'A reference dimension that is never inspected', 'A dimension that takes the general tolerance block', 'The single most important dimension on a drawing'], 0,
+  ['A theoretically exact value with no ± of its own', 'A reference dimension that is never inspected', 'A dimension that takes the general tolerance block', 'The single most important dimension on the whole drawing'], 0,
   'Basic dimensions locate the true position or profile exactly. The feature control frame then says how far the real feature may deviate from it.'),
 num('d12-11', 'd12', 'A hole is toleranced Ø12.0 to Ø12.3 mm, with a position tolerance of Ø0.2 at MMC. It is made at its largest size, Ø12.3. How big is the position tolerance zone now, in mm?', '0.5',
   'Bonus = departure from MMC, which for a hole is its smallest size.',
@@ -7420,14 +7422,14 @@ num('d15-11', 'd15', 'A stepper motor moves 1.8° per step. How many steps make 
   'Steps per revolution = 360° ÷ step angle.',
   '360 ÷ 1.8 = 200 steps per revolution, so 400 for two.'),
 mc('d15-12', 'd15', 'What is a DC motor\'s stall torque?',
-  ['The torque at zero speed, with the most current', 'The torque when it spins at no-load speed', 'The torque at maximum power output', 'The smallest torque that starts it turning'], 0,
+  ['The torque at zero speed, with the most current', 'The torque when it spins at no-load speed', 'The torque at maximum power output', 'The smallest torque that is able to start it turning'], 0,
   'At stall nothing turns, so there is no back-EMF and the current is limited only by the winding resistance. Holding a motor stalled overheats it.'),
 num('d15-13', 'd15', 'What PWM duty cycle, in %, gives a 9 V average from a 12 V supply?', '75',
   'Duty = average ÷ supply.',
   '9 ÷ 12 = 0.75 = 75%.'),
 
 mc('d16-9', 'd16', 'What is a sensor\'s resolution?',
-  ['The smallest change in the input it can detect', 'How close it reads to the true value', 'The span from its lowest to its highest reading', 'How quickly it responds to a change'], 0,
+  ['The smallest change in the input it can detect', 'How close its reading is to the true, accepted value', 'The span from its lowest to its highest reading', 'How quickly it responds to a change'], 0,
   'Resolution is the smallest step. Closeness to the truth is accuracy, the span is range, and speed is response time.'),
 num('d16-10', 'd16', 'A thermometer reads 102 °C when the true temperature is 100 °C. What is its error as a percentage of the true value?', '2',
   'Error = (reading − true) ÷ true × 100%.',
@@ -7452,13 +7454,13 @@ num('d17-6', 'd17', 'In that same project, how many days of slack does task B ha
   'Compare B\'s chain with the critical path.',
   'B\'s chain takes 8 days against the critical path\'s 9, so B can slip 1 day without delaying E.'),
 mc('d17-7', 'd17', 'A task on the critical path finishes 2 days late. What happens to the project?',
-  ['It ends 2 days late unless later work speeds up', 'Nothing, because slack absorbs the delay', 'It finishes 1 day late on average', 'Only the next task in line is affected'], 0,
+  ['It ends 2 days late unless later work speeds up', 'Nothing, because the project slack absorbs the delay', 'It finishes 1 day late on average', 'Only the next task in line is affected, not the end'], 0,
   'Critical tasks have zero slack, so any delay pushes back the end date directly.'),
 mc('d17-8', 'd17', 'What is a work breakdown structure (WBS)?',
   ['The project split into smaller tasks', 'A chart showing who reports to whom', 'The budget for each part of the work', 'A list of the risks in the project'], 0,
   'Breaking work down until each piece can be estimated and assigned is what makes a Gantt chart possible.'),
 mc('d17-9', 'd17', 'What does a finish-to-start dependency from task A to task B mean?',
-  ['B cannot start until A has finished', 'A and B must finish at the same time', 'B must finish before A starts', 'A and B can run in any order'], 0,
+  ['B cannot start until A has finished', 'A and B must finish at the same time', 'B must finish completely before A starts', 'A and B can run in any order'], 0,
   'It is the usual arrow on a Gantt chart: for example, the prototype must be built before testing can begin.'),
 ];
 
@@ -10126,11 +10128,12 @@ function showGym() {
       '<div class="hl-li"><span>Daily XP to close a ring</span><span class="stepper hl-step"><button type="button" id="xg-m" aria-label="Lower the goal">−</button><b id="xg-v">' + goal + '</b><button type="button" id="xg-p" aria-label="Raise the goal">+</button></span></div>' +
       '<div class="hl-li"><span>Sound</span><button class="tgl sw" type="button" data-tgl="snd" aria-pressed="' + G.snd + '" aria-label="Sound"><i></i></button></div>' +
       '<div class="hl-li"><span>Haptics</span><button class="tgl sw" type="button" data-tgl="hap" aria-pressed="' + G.hap + '" aria-label="Haptics"><i></i></button></div>' +
+      '<div class="hl-li"><span>Let Infinite mode create new questions<small>When off, generated questions only appear in topics where you have mastered every question.</small></span><button class="tgl sw" type="button" data-tgl="infGen" aria-pressed="' + !!G.infGen + '" aria-label="Let Infinite mode create new questions"><i></i></button></div>' +
       '<div class="hl-li"><span>Back up progress<small>Saves a file you can import on another device.</small></span><button class="hl-link" type="button" id="bk-out">Export</button></div>' +
       '<div class="hl-li"><span>Restore progress<small>From an export, on this device.</small></span><button class="hl-link" type="button" id="bk-in">Import</button></div>' +
       '<div class="hl-li"><span>Study with me on Latent<small>An invite to my study group on the Latent app.</small></span><button class="hl-link" type="button" id="lt-open">Invite</button></div>' +
     '</div>' +
-    '<details class="how"><summary>How this works</summary><ul><li>You answer before you see anything. Pulling the answer out of your head is what builds memory.</li><li>Missed questions come back in the same run, then again after 8 hours, 1 day, 2 days and 4 days.</li><li>Each ring is one course. It fills with the XP you earn in that course today, and closes at your daily XP goal (change it in Settings). A ring streak counts the days in a row you closed it.</li><li>Smart runs mix topics, like the exam does. Tap a topic on a course page to drill just that topic.</li><li>Infinite mode never runs out. Generators write new versions of the calculation questions with fresh numbers each time.</li><li>The formula sheet button sits at the top of every question for courses that have one.</li><li>On a keyboard: 1 to 5 picks an option, Enter checks or moves on, H opens a hint, F opens the formula sheet.</li></ul></details>' +
+    '<details class="how"><summary>How this works</summary><ul><li>You answer before you see anything. Pulling the answer out of your head is what builds memory.</li><li>Missed questions come back in the same run, then again after 8 hours, 1 day, 2 days and 4 days.</li><li>Each ring is one course. It fills with the XP you earn in that course today, and closes at your daily XP goal (change it in Settings). A ring streak counts the days in a row you closed it.</li><li>Smart runs mix topics, like the exam does. Tap a topic on a course page to drill just that topic.</li><li>Infinite mode never runs out. Once you have mastered every question in a topic, generators write new versions of its calculation questions with fresh numbers. Turn on Let Infinite mode create new questions in Settings to mix them in from the start.</li><li>The formula sheet button sits at the top of every question for courses that have one.</li><li>On a keyboard: 1 to 5 picks an option, Enter checks or moves on, H opens a hint, F opens the formula sheet.</li></ul></details>' +
     '<div class="foot"><span>1A-Tron Finals Gym · Updated as new course material is posted. Progress saves in this browser; use Export in Settings to move it to another device. <button class="lt-foot" type="button" id="lt-foot">Study with me on Latent</button></span></div>';
   animateRings(app);
   bindToggles();
@@ -10183,7 +10186,7 @@ function showHome(c) {
       (CUR.formula ? '<button class="btn ghost" type="button" data-act="formula">Formula sheet<small class="muted">' + (CUR.formula.sub || (CUR.formula.kind === 'img' ? 'The real sheet, ' + CUR.formula.pages.length + ' page' + (CUR.formula.pages.length > 1 ? 's' : '') : 'What you get on the exam')) + '</small></button>' : '') +
       (CUR.progs ? '<button class="btn ghost aidb codeb" type="button" data-act="code"><span class="bl">' + codeIcon() + 'Write the code</span><small class="muted">' + CUR.progs.length + ' full programs like the real exam, ' + (codeHasClaude() ? 'marked by Claude' : 'with a rubric and model solution') + codeBestNote() + '</small></button>' : '') +
       (CUR.aid ? '<button class="btn ghost aidb" type="button" data-act="aid"><span class="bl">' + sheetIcon() + CUR.aid.title + '</span><small class="muted">Two sides, ready to print. Also in the Formulas panel while you practise.</small></button>' : '') + '</div></section>' +
-    '<section class="block"><h2>Topic map</h2><div class="map">' + mapHTML + '</div><p class="due-note" style="margin-top:.6rem">Each square is a question: grey is unseen, red is missed, amber is in progress (darker as it gets closer), and green is 100% mastered. +∞ means the topic also has generators that write fresh versions in infinite mode. Tap a topic to drill it.</p></section>' +
+    '<section class="block"><h2>Topic map</h2><div class="map">' + mapHTML + '</div><p class="due-note" style="margin-top:.6rem">Each square is a question: grey is unseen, red is missed, amber is in progress (darker as it gets closer), and green is 100% mastered. +∞ means the topic also has generators that write fresh versions in infinite mode, once you have mastered the topic or turned them on in Settings. Tap a topic to drill it.</p></section>' +
     '<details class="how"><summary>How this course works</summary><ul>' + (CUR.how || []).map(function (x) { return '<li>' + x + '</li>'; }).join('') + '<li>Missed questions come back within the same run, then again after 8 hours, 1 day, 2 days and 4 days.</li></ul></details>' +
     '<div class="foot"><span>' + CUR.Q.length + ' questions · progress saves in this browser.</span><button class="link" type="button" data-act="reset">Reset ' + CUR.code + ' progress</button></div>';
   requestAnimationFrame(function () { requestAnimationFrame(function () {
@@ -10786,7 +10789,7 @@ function showInfIntro(mix) {
   app.innerHTML =
     '<button class="back" type="button" id="back0"><span aria-hidden="true">←</span> ' + (mix ? 'All courses' : CUR.code) + '</button>' +
     '<p class="eyebrow">' + (mix ? 'All courses' : CUR.code) + ' · Infinite mode</p><h1>' + (mix ? 'Infinite mix' : 'Infinite mode') + '</h1>' +
-    '<p class="sub">Questions never run out. The ' + nBank + ' written questions mix with ' + nGen + ' generators that make new versions with fresh numbers every time. Misses come back a few questions later.</p>' +
+    '<p class="sub">Questions never run out. ' + (G.infGen ? 'The ' + nBank + ' written questions mix with ' + nGen + ' generators that make new versions with fresh numbers every time.' : 'You get the ' + nBank + ' written questions. Once you have mastered every question in a topic, ' + nGen + ' generators start making new versions with fresh numbers. To mix them in from the start, turn on <b>Let Infinite mode create new questions</b> in Settings on the Summary page.') + ' Misses come back a few questions later.</p>' +
     '<section class="block"><h2>Mode</h2><div class="seg" role="group" aria-label="Mode">' +
       '<button type="button" data-mode="0" aria-pressed="' + !lives + '"><b>Endless</b><span>Go as long as you like and chase your best streak. End whenever you want.</span></button>' +
       '<button type="button" data-mode="1" aria-pressed="' + lives + '"><b>' + heartSVG(true) + heartSVG(true) + heartSVG(true) + ' 3 lives</b><span>Three misses and it is over. Every 10 in a row wins a life back.</span></button>' +
@@ -10826,6 +10829,9 @@ function startInf(cfg) {
     res: [], queue: [], recent: [], seenTxt: {}, lastT: null, rec0: JSON.parse(JSON.stringify(infRec(cfg.key))), flags: {} };
   infNext();
 }
+/* generated questions: always if the setting is on, otherwise only once every written question in the topic is mastered */
+function topicDone(c, t) { var qs = c.Q.filter(function (q) { return q.t === t; }); return qs.every(function (q) { var r = c.S.q[q.id]; return r && r.b >= 5; }); }
+function infGenOK(c, t) { return !!G.infGen || topicDone(c, t); }
 function genItem(c, gens, fresh) {
   for (var k = 0; k < 8; k++) {
     var g = gens[Math.floor(Math.random() * gens.length)], q;
@@ -10855,7 +10861,7 @@ function infPick() {
     var bank = c.Q.filter(function (q) { return q.t === t && !recent[q.id]; });
     var due = bank.filter(function (q) { var r = c.S.q[q.id]; return r && r.due <= now; });
     var unseen = bank.filter(function (q) { return !c.S.q[q.id]; });
-    var gens = (c.gens || []).filter(function (g) { return g.t === t; });
+    var gens = infGenOK(c, t) ? (c.gens || []).filter(function (g) { return g.t === t; }) : [];
     var srcs = [];
     if (due.length) srcs.push(['due', 3]);
     if (unseen.length) srcs.push(['new', 2.5]);

@@ -435,7 +435,7 @@ order('c4-9', 'c4', 'Build forceChange: return mass · 10 for an arriving ship a
   'ΔF = (Δm)a, with Δm positive for arriving. Once the arriving branch returns, anything after the if only runs for departing ships. A function should return its result, not print it.',
   { code: true, label: 'Your function, top to bottom' }),
 mc('c4-10', 'c4', 'main calls numInc(num), but numInc is defined below main. Without anything else, the compiler says numInc was not declared. What is the usual fix?',
-  ['Put int numInc(int number); above main', 'Add #include "numInc" at the top', 'Call it as main.numInc(num) instead', 'Change numInc to return void instead'], 0,
+  ['Put int numInc(int number); above main', 'Add #include "numInc" at the top', 'Call it as main.numInc(num) instead', 'Change numInc to return void instead of int'], 0,
   'A function prototype tells the compiler the function\'s name, return type and parameter types before main uses it. The full definition can then stay below main.'),
 txt('c4-11', 'c4', P + C`
 void order(int &lo, int &hi)
@@ -630,7 +630,7 @@ for (int n = 1; n <= 20; n++)
     if (prime)
         cout << n << " ";
 }`,
-  ['For n = 1 the inner loop never runs, so prime stays true', '1 % 2 is 1, and a nonzero remainder is read as prime', 'The outer loop runs 21 times, so 1 is tested twice', 'prime is set once before the loop and never reset to true'], 0,
+  ['For n = 1 the inner loop never runs, so prime stays true', '1 % 2 is 1, and any nonzero remainder gets counted as a prime', 'The outer loop runs 21 times, so 1 is tested twice', 'prime is set once before the loop and never reset to true'], 0,
   'With n = 1 the inner loop does not run at all, so nothing sets prime to false. 1 is not prime by definition, so start at 2 or add if (n < 2) prime = false.'),
 txt('c3-19', 'c3', 'The first 6 primes. ' + W + C`
 int found = 0, n = 2;
@@ -664,7 +664,7 @@ cout << squares << " " << total;`,
   'After k squares the total is 2^k − 1.',
   'Totals: 1, 3, 7, 15, …, 511 after 9 squares (still under 1000), then 1023 after 10. Stop: 10 squares, 1023 grains.'),
 mc('c3-21', 'c3', 'The rice program is rewritten with ' + K`int total, onSquare` + ' and a target of 1,000,000,000,000 grains. What goes wrong?',
-  ['An int holds at most about 2.1 billion, so the total overflows', 'Nothing: it prints 40, the number of squares needed', 'It does not compile, because the number has too many digits', 'The loop runs zero times, because the target is too large'], 0,
+  ['An int holds at most about 2.1 billion, so the total overflows', 'Nothing: it prints 40, the number of squares needed', 'It does not compile, because the number has too many digits', 'The loop runs zero times, because the target is too large to compare'], 0,
   'A 32-bit int tops out at 2,147,483,647. The total passes that around square 31 and overflows, so it never reaches 10^12. This is why the textbook asks you to "check what happens". Use long long, which goes up to about 9.2 × 10^18.'),
 txt('c3-22', 'c3', 'Restaurant inventory: fries (dish 1) cost $1, hummus (2) $2, cake (3) $3, and tax is 13%. Stock is 2 of each here, to keep the trace short. numbers.txt holds the orders ' + K`1 3 7 3 2 1` + '. ' + W + C`
 ifstream fin("numbers.txt");
@@ -736,7 +736,7 @@ while (fin >> r)
         low = r;
 }
 cout << low;`,
-  ['It never skips the −1 readings, and −1 is lower than any real one', 'low should start at 0, so the first reading is always lower', 'fin >> r reads the −1 as a 1, because the minus is skipped', 'The loop stops at the first −1, so later readings are lost'], 0,
+  ['It never skips the −1 readings, and −1 is lower than any real one', 'low should start at 0, so the first reading is always lower than it', 'fin >> r reads the −1 as a 1, because the minus sign is skipped over', 'The loop stops at the first −1, so later readings are lost'], 0,
   'The −1 values are flags, not measurements, but this loop compares them like readings. Add r != −1 to the condition. Starting low at 0 would be worse: nothing is lower than 0, so it would print 0.'),
 mc('c3-28', 'c3', 'What does this print?' + C`
 double f = 78;
@@ -849,7 +849,7 @@ fin.close();`,
   'The trend is February minus January. Find the largest in each riding.',
   'Cambridge: LIB −5.1, GRN +4.2, PC +1.2, so GRN 4.2. Waterloo: NDP +1.5, PC −0.7, so NDP 1.5. best resets to −100 for each riding.', { test: { file: 'Cambridge 3 LIB 20.7 15.6 GRN 8.7 12.9 PC 37.0 38.2\nWaterloo 2 NDP 25.5 27.0 PC 30.1 29.4\n' } }),
 mc('c3-34', 'c3', 'In the poll program, a classmate starts each riding with ' + K`double best = 0;` + ' What goes wrong for a riding where every party\'s trend is negative?',
-  ['No trend beats 0, so the riding keeps the previous winner and 0 is printed', 'It prints the party with the smallest drop, which is what we want', 'It does not compile, because best is redeclared inside the loop', 'The inner loop is skipped, so that riding is never printed'], 0,
+  ['No trend beats 0, so the riding keeps the previous winner and 0 is printed', 'It prints the party with the smallest drop, which is exactly what the question asks for', 'It does not compile, because best is redeclared inside the loop', 'The inner loop is skipped, so that riding is never printed'], 0,
   'With best = 0, a trend of −0.7 never counts as larger, so nothing is updated. Start below any possible trend (like −100), or set best from the first party read.'),
 mc('c3-35', 'c3', 'You do not know how many integers are in the file. Which loop prints every one of them?',
   [K`while (fin >> x) cout << x << " ";`, K`for (int i = 0; i < 10; i++) { fin >> x; cout << x << " "; }`, K`while (!fin.fail()) { fin >> x; cout << x << " "; }`, K`if (fin >> x) cout << x << " ";`], 0,
@@ -956,7 +956,7 @@ int main()
     cout << recordSum(fin, count);
     return 0;
 }`,
-  ['It does not compile: a file stream cannot be passed by value', 'It compiles and prints the sum of the record correctly', 'It compiles, but fin in main does not move forward', 'It compiles, but it prints 0 because the copy is empty'], 0,
+  ['It does not compile: a file stream cannot be passed by value', 'It compiles and prints the sum of the record correctly', 'It compiles, but fin in main does not move forward past the first record', 'It compiles, but it prints 0 because the copy is empty'], 0,
   'Passing by value makes a copy, and file streams cannot be copied, so the compiler rejects it. Pass streams by reference: int recordSum(ifstream &fin, int count).', { test: { err: true } }),
 txt('c4-18', 'c4', P + C`
 int squaresNeeded(long long target)
@@ -1022,10 +1022,10 @@ mc('c5-6', 'c5', 'BrainInertial was set to 0 and the robot is spinning clockwise
 mc('c5-7', 'c5', 'The robot must wait for the touch sensor to be tapped. Why does this code use a second loop?' + C`
 while (!TouchLED10.pressing()) {}
 while (TouchLED10.pressing()) {}`,
-  ['To debounce the motor encoder before the robot starts moving', 'To wait for the finger to come off, so one tap counts only once', 'To wait for a second tap, so a single bump does not start it', 'Nothing: it is redundant, since the first loop already waits'], 1,
+  ['To debounce the motor encoder before the robot starts moving', 'To wait for the finger to come off, so one tap counts only once', 'To wait for a second tap, so a single bump does not start the robot', 'Nothing: it is redundant, since the first loop already waits'], 1,
   'A tap is a press and a release. The first loop waits for the press, the second for the release. Without the second loop, a program that waits for several taps would count one long press many times.'),
 mc('c5-8', 'c5', 'A program drives 1 m, turns, then drives 1 m again using the motor encoder. The second leg stops right away. What was most likely forgotten?',
-  ['Resetting the encoder with setPosition before the second leg', 'Calling wait(20, msec) inside the turn so it can finish', 'Using percent instead of rpm for the motor velocity', 'Declaring the conversion factor as const before using it'], 0,
+  ['Resetting the encoder with setPosition before the second leg', 'Calling wait(20, msec) inside the turn so it can finish', 'Using percent instead of rpm for the motor velocity', 'Declaring the conversion factor as a const double before using it'], 0,
   'The encoder keeps counting from where it was. If it is not reset, it already reads past the 1 m target at the start of the second leg, so the loop condition is false at once. Putting the reset inside driveDistance means you cannot forget it.'),
 order('c5-9', 'c5', 'Build code that waits for 4 separate bumper presses, then starts driving forward at 40%. Some tiles are decoys.',
   ['int presses = 0;',
@@ -1051,7 +1051,7 @@ RightMotor.spin(forward, 50, percent);
 LeftMotor.stop();
 RightMotor.stop();
 wait(1, seconds);`,
-  ['Nothing: spin keeps the motors on for one second by default', 'The wait is after the stop, so the robot stops almost instantly', 'spin needs a while loop around it, or the motors never start', 'wait only accepts msec, so wait(1, seconds) is ignored'], 1,
+  ['Nothing: spin keeps the motors on for one second by default', 'The wait is after the stop, so the robot stops almost instantly', 'spin needs a while loop around it, or the motors never actually start', 'wait only accepts msec, so wait(1, seconds) is ignored'], 1,
   'spin starts the motor and returns at once, and so does stop. With no wait between them the motors run for a split second. Move wait(1, seconds) between the spin and stop lines.'),
 order('c5-13', 'c5', 'Build a function that waits until the touch sensor has been tapped (pressed and released). Some tiles are decoys.',
   ['void waitForTap()\n{', '    while (!TouchLED10.pressing())\n    {}', '    while (TouchLED10.pressing())\n    {}', '}'],
@@ -1059,10 +1059,10 @@ order('c5-13', 'c5', 'Build a function that waits until the touch sensor has bee
   'First wait while it is NOT pressed, then wait while it IS pressed. When the second loop ends the finger has come off: one full tap.',
   { code: true, label: 'Your code, top to bottom' }),
 mc('c5-14', 'c5', 'Beet juice driveway. Part (b) asks for an issue that may make the plan fail, other than sensor or motor accuracy, a failing component, a low battery or poorly written code. Which answer earns the mark?',
-  ['Snow may hide the green turf, so the robot never detects the edge', 'The battery may run out halfway down the 8 m driveway', 'The encoders may drift, so each 1 m step comes out a bit short', 'I might forget to reset the encoder at the start of each pass'], 0,
+  ['Snow may hide the green turf, so the robot never detects the edge', 'The battery may run out halfway down the 8 m driveway', 'The encoders may drift, so each 1 m step comes out a little bit short of 1 m', 'I might forget to reset the encoder at the start of each pass'], 0,
   'The issue must come from the situation itself. The other three are exactly the excluded categories: battery, accuracy and code. Other good answers: the wheels slip on ice, or a parked car blocks the path.'),
 mc('c5-15', 'c5', 'Hallway washer robot. Part (a) asks you to state an assumption. Which is a sensible one?',
-  ['Nobody walks through the hallway while the robot is washing', 'The washer might run out of water before the third pass', 'The wet floor may make the wheels slip on the way back', 'My code will have no bugs, so the robot follows the plan'], 0,
+  ['Nobody walks through the hallway while the robot is washing', 'The washer might run out of water before the third pass', 'The wet floor may make the wheels slip on the way back', 'My code will have no bugs, so the robot follows the plan exactly'], 0,
   'An assumption is a condition you take as true so the plan can work. Running out of water and slipping are issues (things that could make it fail). Assuming bug-free code is not about the situation.'),
 mc('c5-16', 'c5', 'The washer robot repeats passes until 3 passes are done OR the washer needs refilling (' + K`Volume.fill()` + ' returns 1). pass starts at 0. Which loop header is right?',
   [K`while (pass < 3 && Volume.fill() == 0)`, K`while (pass < 3 || Volume.fill() == 0)`, K`while (pass <= 3 && Volume.fill() == 1)`, K`while (!(pass < 3) && Volume.fill() == 0)`], 0,
@@ -1089,7 +1089,7 @@ void rotateRobot(int angle, int speed)
     LeftMotor.stop();
     RightMotor.stop();
 }`,
-  ['The loop test 0 < −90 is false, so it stops right away', 'It turns left 90°, because the angle is negative', 'It turns right 90°, because speed is always positive', 'It turns right forever, since rotation never reaches −90'], 0,
+  ['The loop test 0 < −90 is false, so it stops right away', 'It turns left 90°, because the angle is negative', 'It turns right 90°, because the speed passed in is always positive', 'It turns right forever, since rotation never reaches −90'], 0,
   'This version only handles clockwise turns. For a negative angle it needs the opposite motor directions and the loop while (rotation > angle). Test the sign of angle with an if, or turn using the absolute value and a direction.'),
 mc('c5-19', 'c5', 'Why does this function not compile?' + C`
 void driveTime(int seconds)
@@ -1100,7 +1100,7 @@ void driveTime(int seconds)
     LeftMotor.stop();
     RightMotor.stop();
 }`,
-  ['The parameter named seconds hides the unit seconds in the wait call', 'wait cannot take a variable, only a number written in the code', 'The function must return the time it drove, not void', 'spin needs a third argument for the run time in seconds'], 0,
+  ['The parameter named seconds hides the unit seconds in the wait call', 'wait cannot take a variable, only a number written directly in the code', 'The function must return the time it drove, not void', 'spin needs a third argument for the run time in seconds'], 0,
   'Inside the function, seconds now means the int parameter, so wait(seconds, seconds) passes two ints. Rename the parameter, for example void driveTime(int sec) and wait(sec, seconds).', { test: { vex: true, err: true } }),
 mc('c5-20', 'c5', 'The plant stand turns the platform every 15 minutes. Which line waits 15 minutes?',
   [K`wait(15 * 60, seconds);`, K`wait(15, seconds);`, K`wait(15 * 60, msec);`, K`wait(15 * 60 * 1000, seconds);`], 0,
@@ -1115,7 +1115,7 @@ RightMotor.stop();`,
   [K`if (Bumper8.pressing())`, K`if (Optical3.brightness() <= 75 && !Bumper8.pressing())`, K`while (Bumper8.pressing())`, 'It cannot tell which condition ended the loop'], 0,
   'The loop ends when either condition changes. Test one of them again with an if: if the bumper is pressed, it reached the edge, so turn around and return. The loop condition itself is always false once the loop has ended.'),
 mc('c5-22', 'c5', 'The plant robot hit the far edge and must return to where it started. Why read ' + K`LeftMotor.position(degrees)` + ' right after it stops, before turning around?',
-  ['To know how far it drove, so it can drive the same distance back', 'To reset the encoder to zero before the robot turns around', 'To check that the motor is still connected and turning', 'To measure the angle of the turn it is about to make'], 0,
+  ['To know how far it drove, so it can drive the same distance back', 'To reset the encoder to zero before the robot turns around to come back', 'To check that the motor is still connected and turning', 'To measure the angle of the turn it is about to make'], 0,
   'The distance out is not known in advance, because it depends on when the bumper was hit. Save the encoder reading in a variable, turn 180°, reset, and drive until the encoder reaches the saved value.'),
 order('c5-23', 'c5', 'Dinosaur prints: until 30 minutes have passed or green is seen, drive 5 s, make a print, move the foot to the other side, and turn 45° if something is closer than 1000 mm. driveTime, makePrint, moveFoot and rotateRobot are written. Some tiles are decoys.',
   ['Brain.Timer.clear();\nbool toBumper = true;',
@@ -1407,10 +1407,10 @@ int main()
     cout << b.voltage;
     return 0;
 }`,
-  ['It does not compile, because voltage is private', 'It prints 7.2', 'It prints 0', 'It prints garbage, because voltage was never set'], 0,
+  ['It does not compile, because voltage is private', 'It prints 7.2, the value the constructor stored in it', 'It prints 0', 'It prints garbage, because voltage was never set'], 0,
   'Private members can only be used inside the class\'s own member functions. main has to go through the public getter: cout << b.getVoltage();', { test: { err: true } }),
 mc('c8-3', 'c8', 'Why is ' + K`int getSeconds() const` + ' marked const?',
-  ['It promises not to change the object, so it works on a const Song', 'It makes the return value a constant that the caller cannot change', 'It makes seconds a constant that can never be changed again', 'It makes the function run faster, but it is optional style'], 0,
+  ['It promises not to change the object, so it works on a const Song', 'It makes the return value a constant that the caller cannot change', 'It makes seconds a constant that can never be changed again, even by setters', 'It makes the function run faster, but it is optional style'], 0,
   'const after the parameter list means the function does not change any member. The compiler enforces it, and only const functions can be called on a const object or through a const reference, like const Song & s.'),
 txt('c8-4', 'c8', 'songs.txt contains:' + C`
 Run 210
@@ -1499,7 +1499,7 @@ int main()
   'spin ignores anything that is not positive.',
   'turns = 3 + 2 = 5 (the −2 is ignored). 3.14 × 10 × 5 = 157, and cout prints a whole-number double without a decimal point. The object remembers turns between calls, which a plain function could not.'),
 mc('c8-6', 'c8', 'The Wheel class above has only the constructor ' + K`Wheel(double d)` + '. What happens to ' + K`Wheel spare;` + '?',
-  ['It does not compile: there is no Wheel() constructor', 'spare gets diameter 0 and turns 0 automatically', 'spare is created, but its members hold garbage values', 'It compiles, but calling spare.distance() crashes'], 0,
+  ['It does not compile: there is no Wheel() constructor', 'spare gets diameter 0 and turns 0 automatically', 'spare is created, but its members hold garbage values', 'It compiles, but calling spare.distance() crashes the program'], 0,
   'C++ only writes a default constructor for you when the class has no constructors at all. Once you write Wheel(double), Wheel spare; and Wheel arr[5]; both need a Wheel() you write yourself.', { test: { err: true, pre: 'class Wheel { double diameter; int turns; public: Wheel(double d) { diameter = d; turns = 0; } };', code: 'Wheel spare;' } }),
 txt('c8-7', 'c8', P + C`
 class Sensor
@@ -2164,7 +2164,7 @@ txt('w-6', 'tw', W + C`
 double d = 7 / 2;
 cout << d;`, '3', 'Which division happens first: int or double?', '7 / 2 is integer division, giving 3, which is then stored as 3.0 and printed as 3. Write 7.0 / 2 to get 3.5.'),
 mc('w-7', 'tw', 'Which keyword makes a class member usable only inside the class\'s own functions?', ['private', 'public', 'const', 'virtual'], 0, 'private hides data so only member functions can touch it. public members are open to everyone.'),
-mc('w-8', 'tw', 'What does the & do in ' + K`void addOne(int & x)` + '?', ['x is the caller\'s variable, so changes stick', 'x is a separate copy of the caller\'s variable', 'x can never change inside the function', 'It prints the address of x'], 0, 'A reference parameter is another name for the caller\'s variable. Without &, the function works on a copy.'),
+mc('w-8', 'tw', 'What does the & do in ' + K`void addOne(int & x)` + '?', ['x is the caller\'s variable, so changes stick', 'x is a separate copy of the caller\'s variable', 'x can never be changed inside the function body', 'It prints the address of x'], 0, 'A reference parameter is another name for the caller\'s variable. Without &, the function works on a copy.'),
 txt('w-9', 'tw', W + C`
 string s = "Hi";
 s += "!";
@@ -2173,7 +2173,7 @@ mc('w-10', 'tw', 'What does ' + K`#include <fstream>` + ' give you?', ['ifstream
 txt('w-11', 'tw', W + C`
 bool b = 0;
 cout << !b;`, '1', '! flips true and false.', 'b is false, so !b is true, which cout prints as 1.'),
-mc('w-12', 'tw', 'What does const after a member function\'s brackets promise, as in ' + K`int getSeconds() const` + '?', ['The function does not change the object', 'The returned value can never be changed', 'The function can only run once per object', 'Nothing: it is optional decoration'], 0, 'A const member function only reads the object, and the compiler checks it. Getters should be const.')
+mc('w-12', 'tw', 'What does const after a member function\'s brackets promise, as in ' + K`int getSeconds() const` + '?', ['The function does not change the object', 'The returned value can never be changed', 'The function can only run once per object', 'Nothing: it is optional decoration for readers'], 0, 'A const member function only reads the object, and the compiler checks it. Getters should be const.')
 ];
 
 /* ---------- WRITE THE CODE: whole programs, marked by Claude (separate section) ---------- */

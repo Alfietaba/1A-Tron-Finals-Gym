@@ -31,7 +31,7 @@ Moxie, a small duckling named after my first dog, sits in the corner. Click it a
 - **It only covers what's on the exam.** Anything that didn't fit a category on the course outline was removed.
 - **A pre-exam warm-up in every course.** Easy questions on the basics that you can do in your head, to settle your nerves right before an exam. They don't count toward mastery or mock exams.
 - **Mock exams have the same shape as the real ones:** the same sections, point weights and time limit. There's no feedback until you submit, then you get a breakdown by section and a "Fix my mistakes" run.
-- **Fresh questions on demand.** 118 generators write new versions with new numbers, so infinite mode (endless, or three lives) never runs out.
+- **Fresh questions on demand.** 118 generators write new versions with new numbers for infinite mode (endless, or three lives). By default they only kick in for topics you've fully mastered, so you work through the written questions first. A setting lets them mix in from the start.
 - **The formula sheet sits beside the question,** like it does on the exam.
 - **Real working, not just bubbles:**
   - numeric answers with significant-figure checking (the right value with the wrong sig figs earns half credit)

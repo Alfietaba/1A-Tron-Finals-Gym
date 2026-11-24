@@ -997,11 +997,12 @@ function showGym() {
       '<div class="hl-li"><span>Daily XP to close a ring</span><span class="stepper hl-step"><button type="button" id="xg-m" aria-label="Lower the goal">−</button><b id="xg-v">' + goal + '</b><button type="button" id="xg-p" aria-label="Raise the goal">+</button></span></div>' +
       '<div class="hl-li"><span>Sound</span><button class="tgl sw" type="button" data-tgl="snd" aria-pressed="' + G.snd + '" aria-label="Sound"><i></i></button></div>' +
       '<div class="hl-li"><span>Haptics</span><button class="tgl sw" type="button" data-tgl="hap" aria-pressed="' + G.hap + '" aria-label="Haptics"><i></i></button></div>' +
+      '<div class="hl-li"><span>Let Infinite mode create new questions<small>When off, generated questions only appear in topics where you have mastered every question.</small></span><button class="tgl sw" type="button" data-tgl="infGen" aria-pressed="' + !!G.infGen + '" aria-label="Let Infinite mode create new questions"><i></i></button></div>' +
       '<div class="hl-li"><span>Back up progress<small>Saves a file you can import on another device.</small></span><button class="hl-link" type="button" id="bk-out">Export</button></div>' +
       '<div class="hl-li"><span>Restore progress<small>From an export, on this device.</small></span><button class="hl-link" type="button" id="bk-in">Import</button></div>' +
       '<div class="hl-li"><span>Study with me on Latent<small>An invite to my study group on the Latent app.</small></span><button class="hl-link" type="button" id="lt-open">Invite</button></div>' +
     '</div>' +
-    '<details class="how"><summary>How this works</summary><ul><li>You answer before you see anything. Pulling the answer out of your head is what builds memory.</li><li>Missed questions come back in the same run, then again after 8 hours, 1 day, 2 days and 4 days.</li><li>Each ring is one course. It fills with the XP you earn in that course today, and closes at your daily XP goal (change it in Settings). A ring streak counts the days in a row you closed it.</li><li>Smart runs mix topics, like the exam does. Tap a topic on a course page to drill just that topic.</li><li>Infinite mode never runs out. Generators write new versions of the calculation questions with fresh numbers each time.</li><li>The formula sheet button sits at the top of every question for courses that have one.</li><li>On a keyboard: 1 to 5 picks an option, Enter checks or moves on, H opens a hint, F opens the formula sheet.</li></ul></details>' +
+    '<details class="how"><summary>How this works</summary><ul><li>You answer before you see anything. Pulling the answer out of your head is what builds memory.</li><li>Missed questions come back in the same run, then again after 8 hours, 1 day, 2 days and 4 days.</li><li>Each ring is one course. It fills with the XP you earn in that course today, and closes at your daily XP goal (change it in Settings). A ring streak counts the days in a row you closed it.</li><li>Smart runs mix topics, like the exam does. Tap a topic on a course page to drill just that topic.</li><li>Infinite mode never runs out. Once you have mastered every question in a topic, generators write new versions of its calculation questions with fresh numbers. Turn on Let Infinite mode create new questions in Settings to mix them in from the start.</li><li>The formula sheet button sits at the top of every question for courses that have one.</li><li>On a keyboard: 1 to 5 picks an option, Enter checks or moves on, H opens a hint, F opens the formula sheet.</li></ul></details>' +
     '<div class="foot"><span>1A-Tron Finals Gym · Updated as new course material is posted. Progress saves in this browser; use Export in Settings to move it to another device. <button class="lt-foot" type="button" id="lt-foot">Study with me on Latent</button></span></div>';
   animateRings(app);
   bindToggles();
@@ -1054,7 +1055,7 @@ function showHome(c) {
       (CUR.formula ? '<button class="btn ghost" type="button" data-act="formula">Formula sheet<small class="muted">' + (CUR.formula.sub || (CUR.formula.kind === 'img' ? 'The real sheet, ' + CUR.formula.pages.length + ' page' + (CUR.formula.pages.length > 1 ? 's' : '') : 'What you get on the exam')) + '</small></button>' : '') +
       (CUR.progs ? '<button class="btn ghost aidb codeb" type="button" data-act="code"><span class="bl">' + codeIcon() + 'Write the code</span><small class="muted">' + CUR.progs.length + ' full programs like the real exam, ' + (codeHasClaude() ? 'marked by Claude' : 'with a rubric and model solution') + codeBestNote() + '</small></button>' : '') +
       (CUR.aid ? '<button class="btn ghost aidb" type="button" data-act="aid"><span class="bl">' + sheetIcon() + CUR.aid.title + '</span><small class="muted">Two sides, ready to print. Also in the Formulas panel while you practise.</small></button>' : '') + '</div></section>' +
-    '<section class="block"><h2>Topic map</h2><div class="map">' + mapHTML + '</div><p class="due-note" style="margin-top:.6rem">Each square is a question: grey is unseen, red is missed, amber is in progress (darker as it gets closer), and green is 100% mastered. +∞ means the topic also has generators that write fresh versions in infinite mode. Tap a topic to drill it.</p></section>' +
+    '<section class="block"><h2>Topic map</h2><div class="map">' + mapHTML + '</div><p class="due-note" style="margin-top:.6rem">Each square is a question: grey is unseen, red is missed, amber is in progress (darker as it gets closer), and green is 100% mastered. +∞ means the topic also has generators that write fresh versions in infinite mode, once you have mastered the topic or turned them on in Settings. Tap a topic to drill it.</p></section>' +
     '<details class="how"><summary>How this course works</summary><ul>' + (CUR.how || []).map(function (x) { return '<li>' + x + '</li>'; }).join('') + '<li>Missed questions come back within the same run, then again after 8 hours, 1 day, 2 days and 4 days.</li></ul></details>' +
     '<div class="foot"><span>' + CUR.Q.length + ' questions · progress saves in this browser.</span><button class="link" type="button" data-act="reset">Reset ' + CUR.code + ' progress</button></div>';
   requestAnimationFrame(function () { requestAnimationFrame(function () {
@@ -1657,7 +1658,7 @@ function showInfIntro(mix) {
   app.innerHTML =
     '<button class="back" type="button" id="back0"><span aria-hidden="true">←</span> ' + (mix ? 'All courses' : CUR.code) + '</button>' +
     '<p class="eyebrow">' + (mix ? 'All courses' : CUR.code) + ' · Infinite mode</p><h1>' + (mix ? 'Infinite mix' : 'Infinite mode') + '</h1>' +
-    '<p class="sub">Questions never run out. The ' + nBank + ' written questions mix with ' + nGen + ' generators that make new versions with fresh numbers every time. Misses come back a few questions later.</p>' +
+    '<p class="sub">Questions never run out. ' + (G.infGen ? 'The ' + nBank + ' written questions mix with ' + nGen + ' generators that make new versions with fresh numbers every time.' : 'You get the ' + nBank + ' written questions. Once you have mastered every question in a topic, ' + nGen + ' generators start making new versions with fresh numbers. To mix them in from the start, turn on <b>Let Infinite mode create new questions</b> in Settings on the Summary page.') + ' Misses come back a few questions later.</p>' +
     '<section class="block"><h2>Mode</h2><div class="seg" role="group" aria-label="Mode">' +
       '<button type="button" data-mode="0" aria-pressed="' + !lives + '"><b>Endless</b><span>Go as long as you like and chase your best streak. End whenever you want.</span></button>' +
       '<button type="button" data-mode="1" aria-pressed="' + lives + '"><b>' + heartSVG(true) + heartSVG(true) + heartSVG(true) + ' 3 lives</b><span>Three misses and it is over. Every 10 in a row wins a life back.</span></button>' +
@@ -1697,6 +1698,9 @@ function startInf(cfg) {
     res: [], queue: [], recent: [], seenTxt: {}, lastT: null, rec0: JSON.parse(JSON.stringify(infRec(cfg.key))), flags: {} };
   infNext();
 }
+/* generated questions: always if the setting is on, otherwise only once every written question in the topic is mastered */
+function topicDone(c, t) { var qs = c.Q.filter(function (q) { return q.t === t; }); return qs.every(function (q) { var r = c.S.q[q.id]; return r && r.b >= 5; }); }
+function infGenOK(c, t) { return !!G.infGen || topicDone(c, t); }
 function genItem(c, gens, fresh) {
   for (var k = 0; k < 8; k++) {
     var g = gens[Math.floor(Math.random() * gens.length)], q;
@@ -1726,7 +1730,7 @@ function infPick() {
     var bank = c.Q.filter(function (q) { return q.t === t && !recent[q.id]; });
     var due = bank.filter(function (q) { var r = c.S.q[q.id]; return r && r.due <= now; });
     var unseen = bank.filter(function (q) { return !c.S.q[q.id]; });
-    var gens = (c.gens || []).filter(function (g) { return g.t === t; });
+    var gens = infGenOK(c, t) ? (c.gens || []).filter(function (g) { return g.t === t; }) : [];
     var srcs = [];
     if (due.length) srcs.push(['due', 3]);
     if (unseen.length) srcs.push(['new', 2.5]);
