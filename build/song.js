@@ -32,7 +32,7 @@ function songPost(rec, from) {
 /* ---------- the Settings row ---------- */
 function songRowHTML() {
   if (!songReady()) return '';
-  var s = songCfg(), nm = esc(birdCfg().name);
+  var s = songCfg(), nm = '<span class="duck-nm">' + esc(birdCfg().name) + '</span>';
   var sub = s.sent ? (s.cookie ? 'Sent. Your cookie is waiting by ' + nm + '.' : 'Sent from this device. Thank you!') : 'Send me a song rec and ' + nm + ' gets a cookie.';
   return '<div class="hl-li sg-li"><span><span class="sg-lab">' + songEnvIcon() + 'Put Alfie on a good song for a treat</span><small>' + sub + '</small></span>' +
     '<button class="hl-link" type="button" id="sg-open"' + (s.sent ? ' disabled' : '') + '>' + (s.sent ? 'Sent' : 'Open') + '</button></div>';
@@ -74,7 +74,7 @@ function showSong() {
       '</div>' +
       '<p class="sg-err" id="sg-err" role="alert"></p>' +
       '<div class="aid-acts sg-acts"><button class="btn ghost" type="button" id="sg-x">Not now</button><button class="btn sg-go" type="submit" form="sg-form" id="sg-go">Send</button></div>' +
-      '<p class="sg-note">One per device. ' + esc(b.name) + ' gets a cookie for it.</p>' +
+      '<p class="sg-note">One per device. <span class="duck-nm">' + esc(b.name) + '</span> gets a cookie for it.</p>' +
     '</div>', 'sg-modal');
   m.m.setAttribute('aria-label', 'Put Alfie on a good song');
   var env = m.m.querySelector('#sg-env'), ta = m.m.querySelector('#sg-song'), from = m.m.querySelector('#sg-from');
@@ -125,7 +125,7 @@ function songCookie(fresh) {
   var nm = birdCfg().name;
   var c = h('button', 'sg-cookie' + (fresh && !reduced ? ' pop' : ''), '<span class="sg-glow"></span>' + songCookieSVG() +
     '<i class="sg-tw" style="--d:0s;left:-6%;top:8%"></i><i class="sg-tw" style="--d:.7s;right:-4%;top:-6%"></i><i class="sg-tw" style="--d:1.3s;right:6%;bottom:-2%"></i>' +
-    '<span class="sg-tip">Feed ' + esc(nm) + '</span>');
+    '<span class="sg-tip">Feed <span class="duck-nm">' + esc(nm) + '</span></span>');
   c.type = 'button';
   c.setAttribute('aria-label', 'A cookie from Alfie. Feed it to ' + nm + '.');
   w.insertBefore(c, w.firstChild); w.classList.add('has-cookie');
@@ -214,6 +214,11 @@ function songSploosh() {
   songNoise(0, 0.55, 'lowpass', 3000, 260, 0.5, 0.7);
   if (!G.snd || !Snd.ctx) return;
   [0.08, 0.17, 0.27].forEach(function (t, i) { Snd.tone(520 + i * 140, t, 0.09, 'sine', 0.07, 1100 + i * 200); });
+}
+/* keep the duck's name in step everywhere when it is renamed in the shop */
+function songNames(name) {
+  document.querySelectorAll('.duck-nm').forEach(function (e) { e.textContent = name; });
+  var c = document.querySelector('.sg-cookie'); if (c) c.setAttribute('aria-label', 'A cookie from Alfie. Feed it to ' + name + '.');
 }
 /* opened from a link like …/#song */
 function songMaybeOpen() {

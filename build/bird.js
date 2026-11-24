@@ -229,6 +229,7 @@ function birdDraw() {
   var btn = w.querySelector('.bird-btn');
   btn.innerHTML = birdSVG(b, 'flip');
   btn.setAttribute('aria-label', b.name + ' the duck. Click to say hi.');
+  songNames(b.name);
   var pic = document.getElementById('hb-pic');   /* keep the Summary card in step */
   if (pic) { var sv = pic.querySelector('svg'); if (sv) sv.outerHTML = birdSVG(b); pic.setAttribute('aria-label', 'Say hi to ' + b.name); var nm = document.querySelector('.hb-name'); if (nm) nm.textContent = b.name; }
   birdPlace();
