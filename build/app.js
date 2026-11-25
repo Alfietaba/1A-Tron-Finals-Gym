@@ -975,6 +975,7 @@ function showGym() {
   }).join('');
   var mixRec = infRec('mix'), cd = G.candle && !G.candle.done ? G.candle : null;
   var today = new Date().toLocaleDateString('en-CA', { weekday: 'long', month: 'long', day: 'numeric' });
+  app.setAttribute('data-v', 'home');
   app.innerHTML =
     '<header class="hl-top"><div><p class="hl-date">' + today + '</p><h1>Summary</h1></div><button class="hl-av" type="button" id="hl-set" aria-label="Settings">' + gearIcon() + '</button></header>' +
     '<section class="hl-card hl-act" aria-label="Today\'s rings">' +
@@ -1036,10 +1037,11 @@ function showHome(c) {
   var mapHTML = CUR.topics.map(function (t) {
     var qs = CUR.Q.filter(function (q) { return q.t === t.id; });
     var pips = qs.map(function (q) { var r = CUR.S.q[q.id]; return '<i class="pip p' + (r ? r.b : 0) + '"></i>'; }).join('');
-    return '<button class="topic' + (t.extra ? ' extra' : '') + '" type="button" data-topic="' + t.id + '"><div class="row"><span class="sec">' + t.sec + '</span><span class="pct">' + Math.round(mastery(t.id) * 100) + '%</span></div><div class="tn">' + t.name + '</div>' +
-      (t.extra ? '<div class="xt">' + t.extra + '</div>' : '') + '<div class="pips" aria-hidden="true">' + pips + (genBy[t.id] ? '<span class="gen-n" title="Question generators">+' + infIcon() + '</span>' : '') + '</div></button>';
+    return '<div class="topic-w"><button class="topic' + (t.extra ? ' extra' : '') + '" type="button" data-topic="' + t.id + '"><div class="row"><span class="sec">' + t.sec + '</span><span class="pct">' + Math.round(mastery(t.id) * 100) + '%</span></div><div class="tn">' + t.name + '</div>' +
+      (t.extra ? '<div class="xt">' + t.extra + '</div>' : '') + '<div class="pips" aria-hidden="true">' + pips + (genBy[t.id] ? '<span class="gen-n" title="Question generators">+' + infIcon() + '</span>' : '') + '</div></button>' + vidBtnHTML(CUR, t) + '</div>';
   }).join('');
   var mockSub = CUR.mock.sections.map(function (s) { return (s.n || s.lps.length) + ' ' + s.short; }).join(' + ') + ', timed';
+  app.setAttribute('data-v', 'course');
   app.innerHTML =
     '<button class="back" type="button" id="gym"><span aria-hidden="true">←</span> All courses</button>' +
     '<header class="top"><div><p class="eyebrow"><span class="hue-chip" style="--hue:var(--' + CUR.hue + ')"></span>' + CUR.scope + ' · ' + (CUR.exam.name || 'Exam') + ' ' + cdText(d) + '</p><h1>' + CUR.code + '</h1><p class="sub">' + CUR.name + ' · ' + CUR.exam.label + '</p></div>' + togglesHTML() + '</header>' +
@@ -1057,7 +1059,7 @@ function showHome(c) {
       (CUR.formula ? '<button class="btn ghost" type="button" data-act="formula">Formula sheet<small class="muted">' + (CUR.formula.sub || (CUR.formula.kind === 'img' ? 'The real sheet, ' + CUR.formula.pages.length + ' page' + (CUR.formula.pages.length > 1 ? 's' : '') : 'What you get on the exam')) + '</small></button>' : '') +
       (CUR.progs ? '<button class="btn ghost aidb codeb" type="button" data-act="code"><span class="bl">' + codeIcon() + 'Write the code</span><small class="muted">' + CUR.progs.length + ' full programs like the real exam, ' + (codeHasClaude() ? 'marked by Claude' : 'with a rubric and model solution') + codeBestNote() + '</small></button>' : '') +
       (CUR.aid ? '<button class="btn ghost aidb" type="button" data-act="aid"><span class="bl">' + sheetIcon() + CUR.aid.title + '</span><small class="muted">Two sides, ready to print. Also in the Formulas panel while you practise.</small></button>' : '') + '</div></section>' +
-    '<section class="block"><h2>Topic map</h2><div class="map">' + mapHTML + '</div><p class="due-note" style="margin-top:.6rem">Each square is a question: grey is unseen, red is missed, amber is in progress (darker as it gets closer), and green is 100% mastered. +∞ means the topic also has generators that write fresh versions in infinite mode, once you have mastered the topic or turned them on in Settings. Tap a topic to drill it.</p></section>' +
+    '<section class="block"><h2>Topic map</h2><div class="map">' + mapHTML + '</div><p class="due-note" style="margin-top:.6rem">Each square is a question: grey is unseen, red is missed, amber is in progress (darker as it gets closer), and green is 100% mastered. +∞ means the topic also has generators that write fresh versions in infinite mode, once you have mastered the topic or turned them on in Settings. Tap a topic to drill it, or tap “I don’t understand this unit” under it for videos that explain it.</p></section>' +
     '<details class="how"><summary>How this course works</summary><ul>' + (CUR.how || []).map(function (x) { return '<li>' + x + '</li>'; }).join('') + '<li>Missed questions come back within the same run, then again after 8 hours, 1 day, 2 days and 4 days.</li></ul></details>' +
     '<div class="foot"><span>' + CUR.Q.length + ' questions · progress saves in this browser.</span><button class="link" type="button" data-act="reset">Reset ' + CUR.code + ' progress</button></div>';
   requestAnimationFrame(function () { requestAnimationFrame(function () {
@@ -1067,6 +1069,7 @@ function showHome(c) {
   bindToggles();
   document.getElementById('gym').addEventListener('click', function () { Snd.tap(); showGym(); });
   app.querySelectorAll('[data-topic]').forEach(function (b) { b.addEventListener('click', function () { Snd.tap(); startRun(pickSmart(10, b.getAttribute('data-topic')), 'drill'); }); });
+  app.querySelectorAll('[data-vids]').forEach(function (b) { b.addEventListener('click', function () { Snd.tap(); showVideos(CUR, b.getAttribute('data-vids')); }); });
   app.querySelector('[data-act="smart"]').addEventListener('click', function () { Snd.tap(); startRun(pickSmart(10), 'smart'); });
   app.querySelector('[data-act="mock"]').addEventListener('click', function () { Snd.tap(); showMockIntro(); });
   var wb = app.querySelector('[data-act="warm"]');
@@ -1216,6 +1219,7 @@ function codeStarter(p) {
 function showCodeList() {
   dropBars(); leaveQuestions();
   var o = CUR.S.code || {};
+  app.removeAttribute('data-v');
   app.innerHTML = '<button class="back" type="button" id="cw-home"><span aria-hidden="true">←</span> ' + CUR.code + '</button>' +
     '<header class="top"><div><p class="eyebrow">Separate section · not part of mastery</p><h1>Write the code</h1><p class="sub">Whole programs, written the way the real exam asks. ' + (codeHasClaude() ? 'Type your answer, then Claude marks it out of 10 against a rubric and traces it on test files.' : 'Type your answer, then mark it out of 10 against the rubric, with the model solution beside it.') + '</p></div></header>' +
     '<section class="cw-list">' + CUR.progs.map(function (p) {
@@ -1237,6 +1241,7 @@ function testHTML(t) {
 function showCodeProblem(p) {
   dropBars(); leaveQuestions();
   var rec = codeRec(p.id), self = !codeHasClaude(), shown = p.tests.filter(function (t) { return t.show || self; }), hidden = p.tests.filter(function (t) { return !t.show && !self; });
+  app.removeAttribute('data-v');
   app.innerHTML = '<button class="back" type="button" id="cw-back"><span aria-hidden="true">←</span> All programs</button>' +
     '<section class="cw"><p class="eyebrow">' + CUR.code + ' · Write the code · about ' + p.mins + ' min</p><h1>' + p.title + '</h1>' +
     '<div class="cw-spec" id="cw-spec">' + p.q + '</div>' +
@@ -1510,6 +1515,7 @@ function runNext() {
   run.seenOnce = run.seenOnce || {};
   var isRetry = !!run.seenOnce[q.id];
   run.seenOnce[q.id] = true;
+  app.removeAttribute('data-v');
   app.innerHTML = runHud() + '<div class="stage" id="stage"></div>';
   var card = qCard(q, { mode: 'practice', state: st, uid: 'r' + run.i, onAuto: function () { submit(false); } });
   document.getElementById('stage').appendChild(card.el);
@@ -1586,6 +1592,7 @@ function finishRun() {
     var q = CUR.QBY[r.id], T = CUR.TBY[q.t], cls = r.ok ? '' : (r.frac > 0 ? ' part' : ' no');
     return '<div class="ritem"><button type="button" data-rv="' + r.id + '" aria-expanded="false"><span class="st' + cls + '">' + stIcon(r) + '</span><span class="nm"><b>' + T.name + '</b></span><span class="muted">Review</span></button><div class="rv" hidden></div></div>';
   }).join('');
+  app.removeAttribute('data-v');
   app.innerHTML =
     '<div class="sum-top"><p class="eyebrow">' + CUR.code + ' · ' + (run.kind === 'fix' ? 'Mistakes run' : 'Run') + ' complete</p><div class="score" id="acc">0%</div><p class="muted">first-try accuracy' + (acc === 100 ? ' · perfect run, +50 bonus XP' : '') + '</p></div>' +
     '<div class="kpis"><div class="stat"><span class="lab">XP earned</span><div class="big-n" id="kxp">0</div></div><div class="stat"><span class="lab">Best combo</span><div class="big-n">' + run.best + '</div></div><div class="stat"><span class="lab">Level</span><div class="big-n">' + lvlInfo(CUR.S.xp).L + '</div></div></div>' +
@@ -1657,6 +1664,7 @@ function showInfIntro(mix) {
     return '<button class="tchip" type="button" data-sel="' + it.id + '" aria-pressed="' + !!sel[it.id] + '"' + (it.hue ? ' style="--hue:var(--' + it.hue + ')"' : '') + '>' +
       (it.hue ? '<span class="hue-chip"></span>' : '') + '<span>' + it.label + '</span><span class="s">' + (it.extra ? 'bonus' : it.sub) + '</span></button>';
   }).join('');
+  app.removeAttribute('data-v');
   app.innerHTML =
     '<button class="back" type="button" id="back0"><span aria-hidden="true">←</span> ' + (mix ? 'All courses' : CUR.code) + '</button>' +
     '<p class="eyebrow">' + (mix ? 'All courses' : CUR.code) + ' · Infinite mode</p><h1>' + (mix ? 'Infinite mix' : 'Infinite mode') + '</h1>' +
@@ -1768,6 +1776,7 @@ function infNext() {
   var q = it.q, st = {}, answered = false;
   if (!it.gen && !it.retry) { run.recent.push(q.id); if (run.recent.length > 14) run.recent.shift(); }
   run.lastT = q.t;
+  app.removeAttribute('data-v');
   app.innerHTML = infHud() + '<div class="stage" id="stage"></div>';
   var card = qCard(q, { mode: 'practice', state: st, uid: 'i' + run.n, onAuto: function () { submit(false); } });
   document.getElementById('stage').appendChild(card.el);
@@ -1880,6 +1889,7 @@ function finishInf() {
   });
   var items = missRows.slice(0, 8).join('') + (missRows.length > 8 ? '<details class="more"><summary>' + (missRows.length - 8) + ' more</summary><div class="rlist">' + missRows.slice(8).join('') + '</div></details>' : '');
   var label = cfg.mix ? 'All courses' : r.home.code;
+  app.removeAttribute('data-v');
   app.innerHTML =
     '<div class="sum-top"><p class="eyebrow">' + label + ' · Infinite · ' + (cfg.lives ? (r.over ? 'Out of lives' : '3 lives') : 'Endless') + '</p><div class="score" id="acc">0</div><p class="muted">correct · ' + acc + '% of ' + r.n + ' answered</p>' +
       (newSt || newLv ? '<p class="newrec">' + (newSt ? 'New best streak: ' + r.best : '') + (newSt && newLv ? ' · ' : '') + (newLv ? 'New 3-lives record: ' + r.ok : '') + '</p>' : '') + '</div>' +
@@ -1919,6 +1929,7 @@ function pickMock() {
 function showMockIntro() {
   dropBars(); leaveQuestions();
   var mins = CUR.mockMin || CUR.mock.minutes;
+  app.removeAttribute('data-v');
   app.innerHTML =
     '<button class="back" type="button" id="back0"><span aria-hidden="true">←</span> ' + CUR.code + '</button>' +
     '<p class="eyebrow">' + CUR.code + ' · Mock exam</p><h1>Exam conditions</h1>' +
@@ -1958,6 +1969,7 @@ function renderExam() {
   var q = CUR.QBY[exam.ids[exam.i]], st = exam.st[exam.i], S = CUR.mock.sections[exam.sec[exam.i]];
   var pills = exam.ids.map(function (id, i) { return '<button class="pill' + (answeredMock(i) ? ' done' : '') + (i === exam.i ? ' cur' : '') + '" type="button" data-p="' + i + '" aria-label="Question ' + (i + 1) + '">' + (i + 1) + '</button>'; }).join('');
   var left = exam.limit - (Date.now() - exam.t0);
+  app.removeAttribute('data-v');
   app.innerHTML =
     '<div class="hud"><span class="chip"><b class="timer' + (left < 0 ? ' late' : '') + '" id="clock">' + fmtTime(left) + '</b></span><span class="muted" style="flex:1;font-size:.85rem;min-width:0">Q' + (exam.i + 1) + ' of ' + exam.ids.length + ' · ' + S.short + ' · ' + S.pts + ' pt' + (S.pts > 1 ? 's' : '') + '</span>' + fsBtn() + '</div>' +
     '<div class="pills">' + pills + '</div><div class="stage" id="stage"></div>';
@@ -2013,6 +2025,7 @@ function finishMock() {
     var T = CUR.TBY[CUR.QBY[r.id].t], cls = r.ok ? '' : (r.frac > 0 ? ' part' : ' no');
     return '<div class="ritem"><button type="button" data-rv="' + r.id + '" aria-expanded="false"><span class="st' + cls + '">' + stIcon(r) + '</span><span class="nm"><b>Q' + (i + 1) + '</b> · ' + T.name + '</span><span class="muted mono">' + (Math.round(r.frac * r.w * 10) / 10) + '/' + r.w + '</span></button><div class="rv" hidden></div></div>';
   }).join('');
+  app.removeAttribute('data-v');
   app.innerHTML =
     '<div class="sum-top"><p class="eyebrow">' + CUR.code + ' · Mock exam result</p><div class="score" id="acc">0%</div><p class="muted">' + (Math.round(got * 10) / 10) + ' of ' + max + ' points · ' + fmtTime(used) + ' used of ' + exam.mins + ':00</p></div>' +
     '<div class="kpis"><div class="stat"><span class="lab">XP earned</span><div class="big-n" id="kxp">0</div></div><div class="stat"><span class="lab">Missed</span><div class="big-n">' + rows.filter(function (r) { return !r.ok; }).length + '</div></div><div class="stat"><span class="lab">Level</span><div class="big-n">' + lvlInfo(CUR.S.xp).L + '</div></div></div>' +

@@ -16,7 +16,7 @@ So I built the opposite: a tool that makes me attempt every question first, tell
 
 The home screen is modelled on Apple Health's activity rings. Each course gets its own coloured ring, which closes when you earn that day's XP goal in it (100 XP by default, and you can change it in Settings). Next to each ring is the date of that course's final. Below the rings are a week of past days, your study streak, the next exam and the daily question goal. Only the look changed: the practice works the same way.
 
-Moxie, a small duckling named after my first dog, sits in the corner. Click it and it jumps, flaps and quacks, and every so often it lands on its butt, sees stars and gets back up with a scuff. Colours, hats and extras unlock as your total XP grows and as you reach milestones: your first mastered question, a 7-day streak, a finished mock exam, and fully mastering half a course, a whole course or every course. Nothing is spent, and Moxie hides during mock exams and while you answer on a phone.
+Moxie, a small duckling named after my first dog, sits in the corner. Click it and it jumps, flaps and quacks, and every so often it lands on its butt, sees stars and gets back up with a scuff. Colours, hats and extras unlock as your total XP grows and as you reach milestones: your first mastered question, a 7-day streak, a finished mock exam, and fully mastering half a course, a whole course or every course. Nothing is spent, and Moxie hides during mock exams and while you answer on a phone. On a laptop or a big monitor the Summary and course pages spread into columns, so the whole screen gets used.
 
 Put Alfie on a good song for a treat: in Settings, write a song rec in the envelope and send it (one per device). It lands in my inbox, and you get a cookie to feed Moxie, who does a double backflip for it.
 
@@ -34,6 +34,7 @@ Put Alfie on a good song for a treat: in Settings, write a song rec in the envel
 - **A pre-exam warm-up in every course.** Easy questions on the basics that you can do in your head, to settle your nerves right before an exam. They don't count toward mastery or mock exams.
 - **Mock exams have the same shape as the real ones:** the same sections, point weights and time limit. There's no feedback until you submit, then you get a breakdown by section and a "Fix my mistakes" run.
 - **Fresh questions on demand.** 118 generators write new versions with new numbers for infinite mode (endless, or three lives). By default they only kick in for topics you've fully mastered, so you work through the written questions first. A setting lets them mix in from the start.
+- **Stuck on a whole unit?** Every topic has an "I don't understand this unit" button with a few YouTube videos that explain it (280 in total, each one found by search), then a one-tap drill to practise while it's fresh.
 - **The formula sheet sits beside the question,** like it does on the exam.
 - **Real working, not just bubbles:**
   - numeric answers with significant-figure checking (the right value with the wrong sig figs earns half credit)
