@@ -1180,6 +1180,13 @@ h2 { font-weight: 700; letter-spacing: -.01em; }
 @media (min-width: 48rem) and (max-width: 63.99rem) {
   .app[data-v] { max-width: 50rem; }
 }
+/* new high-XP duck items */
+.bd .bd-halo { transform-box: fill-box; transform-origin: 50% 50%; animation: bd-halo 3s ease-in-out infinite; }
+.bd .bd-flame { transform-box: fill-box; transform-origin: 50% 0%; animation: bd-flame .22s ease-in-out infinite alternate; }
+.flap .bd .bd-flame, .sg-flip .bd .bd-flame { animation-duration: .1s; transform: scaleY(1.5); }
+@keyframes bd-halo { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+@keyframes bd-flame { from { transform: scaleY(.75); opacity: .85; } to { transform: scaleY(1.1); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .bd .bd-halo, .bd .bd-flame { animation: none; } }
 </style>
 
 <div class="app" id="app"></div>

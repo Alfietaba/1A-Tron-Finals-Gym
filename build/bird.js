@@ -12,6 +12,13 @@ var BIRD_COLS = [
   { id: 'night', name: 'Night', xp: 1500, body: '#3b4a7a', dark: '#283359', belly: '#8796cc' },
   { id: 'snow', name: 'Snow', xp: 2200, body: '#f3f5fa', dark: '#cfd6e4', belly: '#ffffff' },
   { id: 'gold', name: 'Gold', xp: 3200, body: '#f6c33b', dark: '#d99a0b', belly: '#fff0b8', shine: true },
+  { id: 'ocean', name: 'Ocean', xp: 6000, body: '#1fb5c9', dark: '#0e8fa3', belly: '#c8f3f8' },
+  { id: 'forest', name: 'Forest', xp: 10000, body: '#3e9b57', dark: '#2b7a41', belly: '#cdeccf' },
+  { id: 'cherry', name: 'Cherry blossom', xp: 16500, body: '#ffb0cd', dark: '#f088ae', belly: '#ffe6f0' },
+  { id: 'sunset', name: 'Sunset', xp: 25000, body: '#ff9966', dark: '#e2553f', belly: '#fff1dc', grad: ['#ff5e62', '#ff9966', '#ffcc33'] },
+  { id: 'galaxy', name: 'Galaxy', xp: 38000, body: '#4b2a8c', dark: '#1d1550', belly: '#b6a8ff', grad: ['#1a1446', '#4b2a8c', '#2b5fbf'], shine: true, ring: true },
+  { id: 'ruby', name: 'Ruby', xp: 49000, body: '#e0245e', dark: '#b0123f', belly: '#ffc6d6', shine: true },
+  { id: 'diamond', name: 'Diamond', xp: 70000, body: '#d8f2ff', dark: '#8fbfe0', belly: '#ffffff', grad: ['#e0f7ff', '#b8e8ff', '#ffffff', '#c9d8ff'], shine: true },
   { id: 'rainbow', name: 'Rainbow', ach: 'all', body: '#ffcc00', dark: '#5856d6', belly: '#fff6fb', grad: ['#ff3b30', '#ff9500', '#ffcc00', '#34c759', '#007aff', '#af52de'] }
 ];
 var BIRD_HATS = [
@@ -23,6 +30,12 @@ var BIRD_HATS = [
   { id: 'wizard', name: 'Wizard hat', xp: 1300 },
   { id: 'grad', name: 'Graduation cap', xp: 2000 },
   { id: 'crown', name: 'Crown', xp: 4000 },
+  { id: 'chef', name: 'Chef hat', xp: 7200 },
+  { id: 'top', name: 'Top hat', xp: 12000 },
+  { id: 'viking', name: 'Viking helmet', xp: 19000 },
+  { id: 'halo', name: 'Halo', xp: 29000 },
+  { id: 'astro', name: 'Space helmet', xp: 43000 },
+  { id: 'dcrown', name: 'Diamond crown', xp: 62000 },
   { id: 'sprout', name: 'Sprout', ach: 'q1' },
   { id: 'visor', name: 'Visor', ach: 'mock' },
   { id: 'sweat', name: 'Sweatband', ach: 'st7' },
@@ -36,6 +49,12 @@ var BIRD_EXTRAS = [
   { id: 'scarf', name: 'Scarf', xp: 1100 },
   { id: 'phones', name: 'Headphones', xp: 1700 },
   { id: 'shades', name: 'Sunglasses', xp: 2600 },
+  { id: 'calc', name: 'Calculator', xp: 5000 },
+  { id: 'monocle', name: 'Monocle', xp: 8600 },
+  { id: 'cape', name: 'Cape', xp: 14000 },
+  { id: 'chain', name: 'Gold chain', xp: 22000 },
+  { id: 'jet', name: 'Jetpack', xp: 33000 },
+  { id: 'trophy', name: 'Trophy', xp: 55000 },
   { id: 'swim', name: 'Swim ring', ach: 'ring1' },
   { id: 'pencil', name: 'Pencil', ach: 'q50' },
   { id: 'whistle', name: 'Whistle', ach: 'ringall' },
@@ -89,6 +108,21 @@ function birdHat(id) {
     case 'visor': return '<path d="M46 31Q66 20 86 31L87 36.2Q66 26 45 36.2Z" fill="#007aff"/><path d="M84 31Q100 29 105 35.5Q95 38.5 85.5 36.6Z" fill="#0062cc"/>';
     case 'sweat': return '<path d="M46 30Q66 18 86 30L88 36.2Q66 25 44 36.2Z" fill="#ff3b30"/><path d="M45.2 33.2Q66 21.6 87 33.2" fill="none" stroke="#fff" stroke-width="1.6"/>';
     case 'laurel': return birdLaurel();
+    case 'chef': return '<rect x="50" y="22" width="32" height="11" rx="3" fill="#fff" stroke="#d8d8de" stroke-width="1.2"/>' +
+      '<path d="M50 24C42 21 42 8 52 8C53 0 63-2 67 4C71-2 81 0 81 8C91 8 91 21 82 24Z" fill="#fff" stroke="#d8d8de" stroke-width="1.2"/><path d="M58 22V13M66 22V10M74 22V13" stroke="#e6e6ec" stroke-width="1.4" stroke-linecap="round"/>';
+    case 'top': return '<ellipse cx="66" cy="31.5" rx="25" ry="4.6" fill="#1c1c22"/><path d="M52 31V3Q52 0 55 0H77Q80 0 80 3V31Z" fill="#26262e"/>' +
+      '<rect x="52" y="22.5" width="28" height="5.5" fill="#e5484d"/><path d="M56 4V20" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".18"/>';
+    case 'viking': return '<path d="M48 22C40 19 34 11 33 2C39 8 45 12 51 15Z" fill="#f3ead7" stroke="#c8bb9f" stroke-width="1.2" stroke-linejoin="round"/><path d="M84 22C92 19 98 11 99 2C93 8 87 12 81 15Z" fill="#f3ead7" stroke="#c8bb9f" stroke-width="1.2" stroke-linejoin="round"/>' +
+      '<path d="M46 33C46 16 56 9 66 9S86 16 86 33Z" fill="#a3acba"/><path d="M66 9V31" stroke="#8a93a2" stroke-width="3"/><path d="M53 15Q57 12 60 11" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".45"/>' +
+      '<rect x="43.5" y="29" width="45" height="7" rx="3" fill="#7c8596"/><circle cx="51" cy="32.5" r="1.3" fill="#d3d8e0"/><circle cx="61" cy="32.5" r="1.3" fill="#d3d8e0"/><circle cx="71" cy="32.5" r="1.3" fill="#d3d8e0"/><circle cx="81" cy="32.5" r="1.3" fill="#d3d8e0"/>';
+    case 'halo': return '<g class="bd-halo"><ellipse cx="66" cy="9" rx="18" ry="4.6" fill="none" stroke="rgba(255,214,10,.35)" stroke-width="7"/><ellipse cx="66" cy="9" rx="18" ry="4.6" fill="none" stroke="#ffd60a" stroke-width="3"/>' +
+      '<path d="M52 7.5Q58 5.2 64 5" stroke="#fff" stroke-width="1.3" stroke-linecap="round" opacity=".8"/></g>';
+    case 'astro': return '<path d="M42 68Q66 80 90 68L92 75Q66 89 40 75Z" fill="#e4e8ee" stroke="#b9c1cc" stroke-width="1.2"/>' +
+      '<circle cx="66" cy="44" r="33.5" fill="rgba(190,230,255,.12)" stroke="#dfe6ef" stroke-width="3.2"/><path d="M42 29Q49 17 61 13.5" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".8"/>' +
+      '<path d="M86 18L93 6" stroke="#b9c1cc" stroke-width="2"/><circle cx="94" cy="4.5" r="3" fill="#ff3b30"/>';
+    case 'dcrown': return '<path d="M47 31V13L56.5 22L66 6L75.5 22L85 13V31Z" fill="#e3f6ff" stroke="#7fb2d6" stroke-width="1.4" stroke-linejoin="round"/>' +
+      '<rect x="47" y="26.5" width="38" height="5" fill="#bfe3f7"/><path d="M66 13l3.2 4.2L66 21.4l-3.2-4.2Z" fill="#3fa9f5"/><path d="M56.5 25.5l2-2.2 2 2.2-2 2.2Z" fill="#af52de"/><path d="M75.5 25.5l2-2.2 2 2.2-2 2.2Z" fill="#34c759"/>' +
+      '<path d="M88 9l1 2.4 2.4 1-2.4 1-1 2.4-1-2.4-2.4-1 2.4-1Z" fill="#fff" stroke="#7fb2d6" stroke-width=".5"/><path d="M44 7l.8 1.8 1.8.8-1.8.8-.8 1.8-.8-1.8-1.8-.8 1.8-.8Z" fill="#fff" stroke="#7fb2d6" stroke-width=".5"/>';
     case 'crown': return '<path d="M47 31V15L56.5 23L66 9L75.5 23L85 15V31Z" fill="#ffcf33" stroke="#e0a400" stroke-width="1.4" stroke-linejoin="round"/>' +
       '<rect x="47" y="27" width="38" height="5" fill="#f2b705"/><circle cx="56" cy="29.5" r="1.9" fill="#e5484d"/><circle cx="66" cy="29.5" r="2.2" fill="#3fa9f5"/><circle cx="76" cy="29.5" r="1.9" fill="#36b37e"/>';
   }
@@ -110,8 +144,29 @@ function birdExtra(id) {
       '<rect x="86" y="72.4" width="5.5" height="3" rx="1" fill="#9aa1ad"/><circle cx="79.5" cy="74.5" r="1.4" fill="#9aa1ad"/>';
     case 'silver': return birdMedal('#007aff', '#d1d5dc', '#9aa1ad');
     case 'gold': return birdMedal('#ff3b30', '#ffcc00', '#d4a000');
+    case 'calc': return '<g transform="rotate(-8 77 82)"><rect x="69" y="70" width="16" height="22" rx="2.6" fill="#3a3f4b" stroke="#262a33" stroke-width="1"/><rect x="71.2" y="72.4" width="11.6" height="5" rx="1" fill="#b7f0c1"/>' +
+      '<g fill="#d7dbe3"><circle cx="73.4" cy="81" r="1.3"/><circle cx="77" cy="81" r="1.3"/><circle cx="80.6" cy="81" r="1.3"/><circle cx="73.4" cy="84.6" r="1.3"/><circle cx="77" cy="84.6" r="1.3"/><circle cx="73.4" cy="88.2" r="1.3"/><circle cx="77" cy="88.2" r="1.3"/></g>' +
+      '<rect x="79.4" y="83.4" width="2.4" height="6" rx="1" fill="#ff9500"/></g>';
+    case 'monocle': return '<path d="M71 52.3Q66 62 59.5 68" fill="none" stroke="#d4a000" stroke-width="1.3" stroke-dasharray="2.2 1.2"/><circle cx="72" cy="43.5" r="9" fill="rgba(255,255,255,.22)" stroke="#d4a000" stroke-width="2.2"/>' +
+      '<path d="M66.5 39.5Q68.5 37 71.5 36.4" stroke="#fff" stroke-width="1.3" stroke-linecap="round" opacity=".8"/>';
+    case 'cape': return '<path d="M48 64Q62 71 78 64" fill="none" stroke="#c91f37" stroke-width="3.2" stroke-linecap="round"/><circle cx="78.5" cy="64.5" r="2.6" fill="#ffcc00" stroke="#d4a000" stroke-width=".8"/>';
+    case 'chain': return '<path d="M46 63Q66 80 87 62" fill="none" stroke="#d4a000" stroke-width="3.4" stroke-linecap="round"/><path d="M46 63Q66 80 87 62" fill="none" stroke="#ffd23f" stroke-width="2.2" stroke-dasharray="3.4 1.6" stroke-linecap="round"/>' +
+      '<circle cx="68" cy="75.5" r="5.2" fill="#ffcf33" stroke="#d4a000" stroke-width="1.2"/><path d="M68 72.3l.9 2 2.2.3-1.6 1.5.4 2.2-1.9-1-1.9 1 .4-2.2-1.6-1.5 2.2-.3Z" fill="#d4a000"/>';
+    case 'jet': return '<path d="M42 72Q62 81 85 70" fill="none" stroke="#5a6170" stroke-width="3.4" stroke-linecap="round"/><rect x="60.5" y="73.5" width="7" height="6" rx="1.4" fill="#c7ccd6" stroke="#5a6170" stroke-width="1.2"/>';
+    case 'trophy': return '<g transform="rotate(-6 77 82)"><path d="M70.5 69H83.5V75Q83.5 82 77 82Q70.5 82 70.5 75Z" fill="#ffcf33" stroke="#d4a000" stroke-width="1.2"/>' +
+      '<path d="M70.5 71.5Q66 71.5 66.5 75Q67 78 71 78M83.5 71.5Q88 71.5 87.5 75Q87 78 83 78" fill="none" stroke="#d4a000" stroke-width="1.5"/>' +
+      '<rect x="75.6" y="81.5" width="2.8" height="5" fill="#d4a000"/><rect x="71.5" y="86" width="11" height="4.2" rx="1" fill="#8a5a2b"/><path d="M73.5 71V77" stroke="#fff" stroke-width="1.3" stroke-linecap="round" opacity=".6"/></g>';
     case 'shades': return '<g transform="translate(0 -1.8)"><path d="M63.4 41.5L46 39" stroke="#1d1f2b" stroke-width="2.2" stroke-linecap="round"/><path d="M62.5 38.5H82Q84 38.5 83.5 41L81.5 47.5Q80.5 51 77 51H69Q65.5 51 64.5 47.5L62 41Q61.5 38.5 62.5 38.5Z" fill="#1d1f2b"/>' +
       '<path d="M66.5 41.2l3.6-.1" stroke="#fff" stroke-width="1.4" stroke-linecap="round" opacity=".7"/></g>';
+  }
+  return '';
+}
+function birdBack(id) {   /* things worn on the back sit behind the body */
+  switch (id) {
+    case 'cape': return '<path d="M52 62Q24 64 6 108Q24 100 38 106Q48 99 56 104Q58 86 62 68Z" fill="#e5484d"/><path d="M47 66Q28 80 18 102M52 70Q42 86 40 102" fill="none" stroke="#c91f37" stroke-width="2" stroke-linecap="round" opacity=".7"/>';
+    case 'jet': return '<g><rect x="17" y="58" width="11" height="30" rx="5" fill="#9aa3b2" stroke="#6f7887" stroke-width="1.2"/><rect x="28" y="58" width="11" height="30" rx="5" fill="#b4bcc8" stroke="#6f7887" stroke-width="1.2"/>' +
+      '<rect x="17" y="58" width="22" height="6" rx="3" fill="#ff3b30"/><path d="M19 88h7l-1 4h-5ZM30 88h7l-1 4h-5Z" fill="#5a6170"/>' +
+      '<g class="bd-flame"><path d="M22.5 92Q19 99 22.5 106Q26 99 22.5 92Z" fill="#ff9500"/><path d="M33.5 92Q30 99 33.5 106Q37 99 33.5 92Z" fill="#ff9500"/><path d="M22.5 93Q21 98 22.5 101.5Q24 98 22.5 93ZM33.5 93Q32 98 33.5 101.5Q35 98 33.5 93Z" fill="#ffd60a"/></g></g>';
   }
   return '';
 }
@@ -132,7 +187,7 @@ var birdUid = 0;
 function birdSVG(b, cls) {
   var c = birdFind(BIRD_COLS, b.col), uid = 'bdg' + (++birdUid), fill = c.body, defs = '';
   if (c.grad) { fill = 'url(#' + uid + ')'; defs = '<defs><linearGradient id="' + uid + '" x1="0" y1="0" x2="1" y2="1">' + c.grad.map(function (g, i) { return '<stop offset="' + (i / (c.grad.length - 1)).toFixed(2) + '" stop-color="' + g + '"/>'; }).join('') + '</linearGradient></defs>'; }
-  var eyeRing = c.id === 'night' ? '<circle cx="72" cy="43.5" r="8.3" fill="#fff" opacity=".9"/>' : '';
+  var eyeRing = (c.id === 'night' || c.ring) ? '<circle cx="72" cy="43.5" r="8.3" fill="#fff" opacity=".9"/>' : '';
   return '<svg class="bd ' + (cls || '') + '" viewBox="-4 -18 112 136" aria-hidden="true">' + defs +
     '<ellipse class="bd-sh" cx="58" cy="112" rx="29" ry="4.2" fill="rgba(0,0,0,.13)"/>' +
     '<g class="bd-fx" aria-hidden="true"><g class="bd-boom" stroke="#ff9500" stroke-width="2.2" stroke-linecap="round"><path d="M33 104l-4-7M39 103l1-8M27 107l-8-3M45 106l7-4"/></g>' +
@@ -140,6 +195,7 @@ function birdSVG(b, cls) {
     '<g class="bd-all"><g class="bd-tilt">' +
     '<g class="bd-fl"><path d="M47.5 96V104" stroke="#ff9a1f" stroke-width="2.6" stroke-linecap="round"/><path d="M41 111L47.5 102.5L54 111Q51 109 47.5 111.5Q44 109 41 111Z" fill="#ff9a1f"/></g>' +
     '<g class="bd-fr"><path d="M63.5 96V104" stroke="#f08a10" stroke-width="2.6" stroke-linecap="round"/><path d="M57 111L63.5 102.5L70 111Q67 109 63.5 111.5Q60 109 57 111Z" fill="#f08a10"/></g>' +
+    birdBack(b.acc) +
     '<path d="M27 78Q12 71 15 59Q24 70 35 71Z" fill="' + c.dark + '"/>' +
     '<ellipse cx="58" cy="82" rx="34" ry="27" fill="' + fill + '"/>' +
     '<ellipse cx="66" cy="89.5" rx="21" ry="15" fill="' + c.belly + '"/>' +
