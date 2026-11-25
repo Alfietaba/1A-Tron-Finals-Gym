@@ -1498,7 +1498,23 @@ int main()
   '157',
   'spin ignores anything that is not positive.',
   'turns = 3 + 2 = 5 (the −2 is ignored). 3.14 × 10 × 5 = 157, and cout prints a whole-number double without a decimal point. The object remembers turns between calls, which a plain function could not.'),
-mc('c8-6', 'c8', 'The Wheel class above has only the constructor ' + K`Wheel(double d)` + '. What happens to ' + K`Wheel spare;` + '?',
+mc('c8-6', 'c8', 'This class has only one constructor:' + C`
+class Wheel
+{
+private:
+    double diameter;
+    int turns;
+public:
+    Wheel(double d)
+    {
+        diameter = d;
+        turns = 0;
+    }
+    double distance() const
+    {
+        return 3.14 * diameter * turns;
+    }
+};` + 'What happens to ' + K`Wheel spare;` + '?',
   ['It does not compile: there is no Wheel() constructor', 'spare gets diameter 0 and turns 0 automatically', 'spare is created, but its members hold garbage values', 'It compiles, but calling spare.distance() crashes the program'], 0,
   'C++ only writes a default constructor for you when the class has no constructors at all. Once you write Wheel(double), Wheel spare; and Wheel arr[5]; both need a Wheel() you write yourself.', { test: { err: true, pre: 'class Wheel { double diameter; int turns; public: Wheel(double d) { diameter = d; turns = 0; } };', code: 'Wheel spare;' } }),
 txt('c8-7', 'c8', P + C`
@@ -1924,8 +1940,30 @@ int main()
   '1 0 30',
   'A bool prints as 1 or 0. Track the balance after each call.',
   'The first withdrawal works: 50 − 20 = 30. The second asks for 40 &gt; 30, so it returns false and leaves the balance at 30. The class refuses to go negative, which plain variables could not enforce.'),
-mc('c8-10', 'c8', 'Using the Account class above, which line compiles?' + C`
-const Account c(100);`,
+mc('c8-10', 'c8', 'Using this class:' + C`
+class Account
+{
+private:
+    double balance;
+public:
+    Account(double start)
+    {
+        balance = start;
+    }
+    bool withdraw(double amt)
+    {
+        if (amt > balance)
+            return false;
+        balance -= amt;
+        return true;
+    }
+    double getBalance() const
+    {
+        return balance;
+    }
+};
+
+const Account c(100);` + 'Which line compiles?',
   [K`cout << c.getBalance();`, K`cout << c.withdraw(5);`, K`c.balance = c.balance - 5;`, 'None of them'], 0,
   'A const object can only call const member functions. getBalance is const, withdraw changes the object so it is not, and balance is private anyway.'),
 txt('c8-11', 'c8', P + C`

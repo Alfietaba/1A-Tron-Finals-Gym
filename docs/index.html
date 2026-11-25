@@ -3871,7 +3871,23 @@ int main()
   '157',
   'spin ignores anything that is not positive.',
   'turns = 3 + 2 = 5 (the −2 is ignored). 3.14 × 10 × 5 = 157, and cout prints a whole-number double without a decimal point. The object remembers turns between calls, which a plain function could not.'),
-mc('c8-6', 'c8', 'The Wheel class above has only the constructor ' + K`Wheel(double d)` + '. What happens to ' + K`Wheel spare;` + '?',
+mc('c8-6', 'c8', 'This class has only one constructor:' + C`
+class Wheel
+{
+private:
+    double diameter;
+    int turns;
+public:
+    Wheel(double d)
+    {
+        diameter = d;
+        turns = 0;
+    }
+    double distance() const
+    {
+        return 3.14 * diameter * turns;
+    }
+};` + 'What happens to ' + K`Wheel spare;` + '?',
   ['It does not compile: there is no Wheel() constructor', 'spare gets diameter 0 and turns 0 automatically', 'spare is created, but its members hold garbage values', 'It compiles, but calling spare.distance() crashes the program'], 0,
   'C++ only writes a default constructor for you when the class has no constructors at all. Once you write Wheel(double), Wheel spare; and Wheel arr[5]; both need a Wheel() you write yourself.', { test: { err: true, pre: 'class Wheel { double diameter; int turns; public: Wheel(double d) { diameter = d; turns = 0; } };', code: 'Wheel spare;' } }),
 txt('c8-7', 'c8', P + C`
@@ -4297,8 +4313,30 @@ int main()
   '1 0 30',
   'A bool prints as 1 or 0. Track the balance after each call.',
   'The first withdrawal works: 50 − 20 = 30. The second asks for 40 &gt; 30, so it returns false and leaves the balance at 30. The class refuses to go negative, which plain variables could not enforce.'),
-mc('c8-10', 'c8', 'Using the Account class above, which line compiles?' + C`
-const Account c(100);`,
+mc('c8-10', 'c8', 'Using this class:' + C`
+class Account
+{
+private:
+    double balance;
+public:
+    Account(double start)
+    {
+        balance = start;
+    }
+    bool withdraw(double amt)
+    {
+        if (amt > balance)
+            return false;
+        balance -= amt;
+        return true;
+    }
+    double getBalance() const
+    {
+        return balance;
+    }
+};
+
+const Account c(100);` + 'Which line compiles?',
   [K`cout << c.getBalance();`, K`cout << c.withdraw(5);`, K`c.balance = c.balance - 5;`, 'None of them'], 0,
   'A const object can only call const member functions. getBalance is const, withdraw changes the object so it is not, and balance is private anyway.'),
 txt('c8-11', 'c8', P + C`
@@ -5349,7 +5387,7 @@ num('h3-10', 'h3', 'A bottled gas is 72.7% propane ($C3H8$) and 27.3% butane ($C
 mc('h4-6', 'h4', '2.0 mol each of A, B and C react by 2A + 4B + C → 2D + 4E. Which is the limiting reactant?',
   ['A', 'B', 'C', 'None, they run out together'], 1,
   'Divide each amount by its coefficient: A 2.0/2 = 1.0, B 2.0/4 = 0.5, C 2.0/1 = 2.0. The smallest is B, so B runs out first.', { k: 'c' }),
-mc('h4-7', 'h4', 'For the same mixture (2.0 mol each of A, B and C, with 2A + 4B + C → 2D + 4E), what is the percent excess of A?',
+mc('h4-7', 'h4', '2.0 mol each of A, B and C react by 2A + 4B + C → 2D + 4E. What is the percent excess of A?',
   ['50%', '100%', '200%', '0%'], 1,
   'B is limiting. 2.0 mol B needs 2.0 × 2/4 = 1.0 mol A. A has 2.0 mol, so the excess is (2.0 − 1.0)/1.0 = 100%.', { k: 'n' }),
 mc('h4-8', 'h4', 'HCl reacts with 125% excess aluminum: 2 Al + 6 HCl → 2 $AlCl3$ + 3 $H2$. How many moles of Al should be supplied for 6 mol HCl?',
@@ -5426,13 +5464,13 @@ multi('h9-13', 'h9', 'A 10 L vessel holds ethene ($C2H4$), ethane ($C2H6$) and $
 mc('h10-12', 'h10', 'Two containers of different size hold the same number of moles of argon at the same temperature. True or false: the rms speed of the argon is the same in both.',
   ['True', 'False'], 0,
   'u(rms) = √(3RT/M) depends only on temperature and molar mass. The volume does not appear.', { k: 'c' }),
-mc('h10-13', 'h10', 'Same two containers (same n and T, different volumes). True or false: argon atoms hit the walls equally often in both.',
+mc('h10-13', 'h10', 'Two containers of different size hold the same number of moles of argon at the same temperature. True or false: argon atoms hit the walls equally often in both.',
   ['True', 'False'], 1,
   'In the bigger container the atoms travel farther between walls and the wall area is larger, so each bit of wall is hit less often. That is why its pressure is lower.', { k: 'c' }),
-mc('h10-14', 'h10', 'Same two containers (same n and T, different volumes). True or false: the average force of each collision with the wall is the same in both.',
+mc('h10-14', 'h10', 'Two containers of different size hold the same number of moles of argon at the same temperature. True or false: the average force of each collision with the wall is the same in both.',
   ['True', 'False'], 0,
   'The force of one collision depends on the atom\'s mass and speed, and both are the same at the same temperature. Only the number of collisions per second differs.', { k: 'c' }),
-mc('h10-15', 'h10', 'Same two containers (same n and T). True or false: every argon atom has the same kinetic energy.',
+mc('h10-15', 'h10', 'Two containers of different size hold the same number of moles of argon at the same temperature. True or false: every argon atom has the same kinetic energy.',
   ['True', 'False'], 1,
   'Temperature fixes the average kinetic energy. Individual atoms follow the Maxwell–Boltzmann distribution, so their energies vary widely.', { k: 'c' }),
 mc('h10-16', 'h10', 'All at 273 K. Which is described worst by the ideal gas law?',
@@ -7427,7 +7465,7 @@ multi('d11-3', 'd11', 'A hole is 12.00 to 12.05 mm. The shaft that fits in it is
   { ask: 'What is the minimum clearance (the allowance), in mm?', ans: '0.03', tol: 0.001, hint: 'The tightest fit: smallest hole, largest shaft.', why: '12.00 − 11.97 = 0.03 mm. It is positive, so the parts always clear.' },
   { ask: 'What is the maximum clearance, in mm?', ans: '0.15', tol: 0.001, hint: 'The loosest fit: largest hole, smallest shaft.', why: '12.05 − 11.90 = 0.15 mm.' }
 ], 'num'),
-mc('d11-4', 'd11', 'For the hole and shaft above, what kind of fit is it?',
+mc('d11-4', 'd11', 'A hole is 12.00 to 12.05 mm. The shaft that fits in it is 11.90 to 11.97 mm. What kind of fit is it?',
   ['Clearance fit', 'Interference fit', 'Transition fit', 'Line fit'], 0,
   'Even the largest shaft (11.97) is smaller than the smallest hole (12.00), so there is always a gap. That is a clearance fit.'),
 mc('d11-5', 'd11', 'A bearing is pressed onto a shaft so it cannot slip. Which fit is that?',
@@ -7499,7 +7537,7 @@ mc('d13-7', 'd13', 'What does a key in a keyway do?',
 num('d14-1', 'd14', 'A 12-tooth gear on a 1200 rpm motor drives a 48-tooth gear. What is the output speed, in rpm?', '300',
   'Gear ratio = driven teeth ÷ driver teeth.',
   'The ratio is 48 ÷ 12 = 4, so the output turns 4 times slower: 1200 ÷ 4 = 300 rpm.'),
-num('d14-2', 'd14', 'In the same 12 to 48 tooth pair, the motor gives 0.50 N·m. What is the output torque, in N·m, with no losses?', '2',
+num('d14-2', 'd14', 'A 12-tooth gear on the motor drives a 48-tooth gear. The motor gives 0.50 N·m. What is the output torque, in N·m, with no losses?', '2',
   'Power stays the same (ideal), so torque goes up by the same factor that speed goes down.',
   '0.50 × 4 = 2.0 N·m. A reduction trades speed for torque. With friction, the output is a little lower.', null, null, { tol: 0.001 }),
 num('d14-3', 'd14', 'A two-stage reducer has a 10-tooth gear driving a 40-tooth gear, then a 12-tooth gear on the same shaft as the 40 driving a 36-tooth gear. The input is 1800 rpm. What is the output speed, in rpm?', '150',
@@ -7583,7 +7621,7 @@ mc('d17-1', 'd17', 'What does a Gantt chart show?',
 num('d17-2', 'd17', 'Task A takes 3 days. B (4 days) and C (2 days) both need A to finish first. D (3 days) needs both B and C. What is the shortest time to finish the project, in days?', '10',
   'Find the longest path through the dependent tasks.',
   'B and C can run at the same time after A, but D must wait for the longer one, B. A → B → D = 3 + 4 + 3 = 10 days. That is the critical path.'),
-mc('d17-3', 'd17', 'In that project, what happens if task C slips by 1 day?',
+mc('d17-3', 'd17', 'Task A takes 3 days. B (4 days) and C (2 days) both need A to finish first. D (3 days) needs both B and C. What happens if task C slips by 1 day?',
   ['Nothing: C has 2 days of slack', 'The project finishes 1 day late', 'The project finishes 2 days late', 'B has to start later'], 0,
   'C takes 2 days but runs alongside B, which takes 4. C can slip up to 2 days before it holds up D. Any delay on the critical path (A, B or D) delays the whole project.'),
 mc('d3-x1', 'd3', 'Who holds the duty to consult Indigenous peoples when a project may affect their Aboriginal or treaty rights?',
@@ -7704,7 +7742,7 @@ mc('d17-4', 'd17', 'What is a milestone on a Gantt chart?',
 num('d17-5', 'd17', 'Task A takes 2 days. B (5 days) and C (4 days) both need A. D (2 days) needs C. E (1 day) needs both B and D. What is the shortest time to finish, in days?', '9',
   'Add up each chain from start to finish and take the longest.',
   'A → B → E = 2 + 5 + 1 = 8 days. A → C → D → E = 2 + 4 + 2 + 1 = 9 days. The longest chain, 9 days, is the critical path.'),
-num('d17-6', 'd17', 'In that same project, how many days of slack does task B have?', '1',
+num('d17-6', 'd17', 'Task A takes 2 days. B (5 days) and C (4 days) both need A. D (2 days) needs C. E (1 day) needs both B and D. How many days of slack does task B have?', '1',
   'Compare B\'s chain with the critical path.',
   'B\'s chain takes 8 days against the critical path\'s 9, so B can slip 1 day without delaying E.'),
 mc('d17-7', 'd17', 'A task on the critical path finishes 2 days late. What happens to the project?',

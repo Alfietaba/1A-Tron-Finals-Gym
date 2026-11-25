@@ -15,6 +15,9 @@ COURSES.forEach(c => {
     n++;
     if (ids[q.id]) { bad++; console.log('DUP id', q.id); } ids[q.id] = 1;
     if (!c.TBY[q.t]) { bad++; console.log('bad topic', q.id); }
+    // questions are shuffled, so none may lean on another question ("the class above", "that project", "same two containers")
+    { const t = String(q.q || '').replace(/<[^>]+>/g, ' ');
+      if (/\b(class|code|program|function|table|figure|diagram|hole and shaft|graph) above\b|\b(in|for|from|using) (that|the same|this same)\b|\bthat (same )?project\b|^same\b|\bsame (project|pair|two|mixture|class|circuit|drawing|schedule)\b|\bprevious (question|part)\b|\bfrom part\b/i.test(t)) { bad++; console.log('NEEDS CONTEXT', c.code, q.id, t.slice(0, 90)); } }
     try {
       if (q.type === 'mc') { if (!(q.a >= 0 && q.a < q.opts.length)) throw 'answer index'; fmt(q.q); q.opts.forEach(fmt); fmt(q.why); }
       else if (q.type === 'txt') { const r = gradeQ(q, [].concat(q.ans)[0]); if (!r.ok) throw 'txt self-grade'; }
