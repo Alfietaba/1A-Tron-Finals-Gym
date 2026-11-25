@@ -884,12 +884,24 @@ function ringsSVG(rows, size, stroke, gap, cls) {
   var need = stroke / 2 + (rows.length - 1) * (stroke + gap), room = c0 - Math.max(2, stroke * 0.75);
   if (need > room) { var f = room / need; stroke *= f; gap *= f; }
   rows.forEach(function (row, i) {
-    var r = c0 - stroke / 2 - i * (stroke + gap), circ = 2 * Math.PI * r, col = RINGC[row.hue] || RINGC.c1, p = Math.max(0, row.p);
-    defs += '<linearGradient id="' + id + i + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + col[0] + '"/><stop offset="1" stop-color="' + col[1] + '"/></linearGradient>';
+    var r = c0 - stroke / 2 - i * (stroke + gap), circ = 2 * Math.PI * r, col = RINGC[row.hue] || RINGC.c1, p = Math.max(0, row.p), gid = id + i;
+    /* the gradient is fixed to the ring, so every piece drawn on top of it (the overlap, the leader) matches the colour underneath */
+    defs += '<linearGradient id="' + gid + '" gradientUnits="userSpaceOnUse" x1="' + (c0 - r).toFixed(2) + '" y1="' + (c0 - r).toFixed(2) + '" x2="' + (c0 + r).toFixed(2) + '" y2="' + (c0 + r).toFixed(2) + '"><stop offset="0" stop-color="' + col[0] + '"/><stop offset="1" stop-color="' + col[1] + '"/></linearGradient>';
     body += '<circle cx="' + c0 + '" cy="' + c0 + '" r="' + r + '" fill="none" stroke="' + col[0] + '" stroke-opacity=".22" stroke-width="' + stroke + '"/>';
-    var arc = function (frac, extra) { return '<circle class="rg-arc" cx="' + c0 + '" cy="' + c0 + '" r="' + r + '" fill="none" stroke="url(#' + id + i + ')" stroke-width="' + stroke + '" stroke-linecap="round" stroke-dasharray="' + circ.toFixed(2) + '" data-off="' + (circ * (1 - frac)).toFixed(2) + '" stroke-dashoffset="' + circ.toFixed(2) + '" transform="rotate(-90 ' + c0 + ' ' + c0 + ')"' + (extra || '') + '/>'; };
-    if (p > 0) body += arc(Math.min(p, 1) - (p >= 1 ? 0 : 0));
-    if (p > 1) body += arc(Math.min(p - 1, 1) || 0.001, ' style="filter:drop-shadow(0 0 ' + (stroke / 3).toFixed(1) + 'px rgba(0,0,0,.6))"');
+    var arc = function (frac) { return '<circle class="rg-arc" cx="' + c0 + '" cy="' + c0 + '" r="' + r + '" fill="none" stroke="url(#' + gid + ')" stroke-width="' + stroke + '" stroke-linecap="round" stroke-dasharray="' + circ.toFixed(2) + '" data-off="' + (circ * (1 - frac)).toFixed(2) + '" stroke-dashoffset="' + circ.toFixed(2) + '"/>'; };
+    var g = '';
+    if (p > 0) g += arc(Math.min(p, 1));
+    if (p > 1) {
+      /* overfilled: the ring keeps going round, and its leading end casts a shadow forward so you can see where it is (like Apple's rings) */
+      var lap = p - Math.floor(p); if (lap < 0.002) lap = 1;
+      g += arc(lap);
+      var th = lap * 2 * Math.PI, x = c0 + r * Math.cos(th), y = c0 + r * Math.sin(th), tx = -Math.sin(th), ty = Math.cos(th);
+      var sh = stroke * 0.2, seg = Math.min(th * r, stroke * 1.3), L0 = th * r - seg;
+      defs += '<filter id="' + gid + 's" x="-100%" y="-100%" width="300%" height="300%"><feDropShadow dx="' + (tx * sh).toFixed(2) + '" dy="' + (ty * sh).toFixed(2) + '" stdDeviation="' + (stroke * 0.16).toFixed(2) + '" flood-color="#000" flood-opacity=".6"/></filter>';
+      g += '<g class="rg-lead"><circle cx="' + x.toFixed(2) + '" cy="' + y.toFixed(2) + '" r="' + (stroke / 2).toFixed(2) + '" fill="url(#' + gid + ')" filter="url(#' + gid + 's)"/>' +
+        '<circle cx="' + c0 + '" cy="' + c0 + '" r="' + r + '" fill="none" stroke="url(#' + gid + ')" stroke-width="' + stroke + '" stroke-linecap="round" stroke-dasharray="' + seg.toFixed(2) + ' ' + (2 * circ).toFixed(2) + '" stroke-dashoffset="' + (-L0).toFixed(2) + '"/></g>';
+    }
+    if (g) body += '<g transform="rotate(-90 ' + c0 + ' ' + c0 + ')">' + g + '</g>';
   });
   return '<svg class="' + (cls || 'rings') + '" viewBox="0 0 ' + size + ' ' + size + '" aria-hidden="true"><defs>' + defs + '</defs>' + body + '</svg>';
 }
