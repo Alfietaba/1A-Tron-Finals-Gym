@@ -1100,20 +1100,54 @@ function showHome(c) {
   });
   window.scrollTo(0, 0);
 }
-function typedItems(items) { return items.map(function (f) { return '<h4>' + f[0] + '</h4><div>' + fmt(f[1]) + '</div>'; }).join(''); }
-function formulaBody(F) {
-  /* extra: newer units typed from the slides, shown above the sheet itself */
-  var extra = F.extra ? '<div class="fs"><h4 class="fx-h">' + (F.extraTitle || 'More equations') + '</h4>' + typedItems(F.extra) + '</div><h4 class="sheet-h">' + (F.sheetTitle || 'Data sheet') + '</h4>' : '';
-  if (F.kind === 'img') return extra + '<p class="sheet-note">Tap a page to zoom in.</p>' +
-    F.pages.map(function (p) { return '<div class="sheet"><img src="' + p.src + '" alt="' + p.alt + '" width="' + p.w + '" height="' + p.h + '" loading="lazy"></div>'; }).join('');
-  return extra + '<div class="fs">' + typedItems(F.items) + '</div>';
+/* ---------- formula sheets: each formula is a card; "Label: equation" lines get a small label over the equation ---------- */
+function fsLines(raw) {
+  var keep = [], t = String(raw).replace(/\u0001[\s\S]*?\u0002/g, function (m) { keep.push(m); return '\u0007' + (keep.length - 1) + '\u0007'; });
+  return t.split(/<br\s*\/?>/i).map(function (ln) { return ln.replace(/\u0007(\d+)\u0007/g, function (m, i) { return keep[+i]; }).trim(); }).filter(Boolean);
 }
-function bindZoom(root) { root.querySelectorAll('.sheet').forEach(function (s) { s.addEventListener('click', function () { s.classList.toggle('zoom'); }); }); }
+function fsProse(t) { return t.length > 38 && !/[=≈≡∝→⇌⇒≤≥<>#~|^]|\u0001|\u0003/.test(t.replace(/<\/?(sub|sup|i|b|em|strong)>/g, '')); }
+function fsCard(f) {
+  var rows = fsLines(f[1]).map(function (ln) {
+    var m = /^([A-Za-z0-9][^:=<>#~$\u0001\u0003\u0007]{0,30}?):\s+([\s\S]+)$/.exec(ln), body = m ? m[2] : ln;
+    return '<div class="fl">' + (m ? '<span class="fl-l">' + m[1] + '</span>' : '') + '<span class="fl-e' + (fsProse(body) ? ' fl-p' : '') + '">' + fmt(body) + '</span></div>';
+  }).join('');
+  return '<article class="fc"><h5 class="fc-t">' + f[0] + '</h5><div class="fc-b">' + rows + '</div></article>';
+}
+function fsIsCode(items) { return items.filter(function (f) { return String(f[1]).indexOf('\u0001') >= 0; }).length * 2 >= items.length; }
+function fsSection(title, items) {
+  var code = fsIsCode(items), noun = code ? 'item' : 'formula';
+  return '<section class="fsec"><h4 class="fsec-h"><span>' + title + '</span><small>' + items.length + ' ' + noun + (items.length === 1 ? '' : 's') + '</small></h4><div class="fgrid' + (code ? ' code' : '') + '">' + items.map(fsCard).join('') + '</div></section>';
+}
+function typedItems(items) { return '<div class="fgrid">' + items.map(fsCard).join('') + '</div>'; }
+function formulaBody(F) {
+  var acc = (RINGC[(CUR && CUR.hue) || 'c1'] || RINGC.c1)[0], n = (F.extra || []).length + (F.items || []).length;
+  var out = '<div class="fwrap" style="--acc:' + acc + '">';
+  if (n > 3) out += '<div class="fsearch"><input type="search" class="fs-q" placeholder="Search this sheet" aria-label="Search this sheet" autocomplete="off" spellcheck="false"><span class="fs-n" aria-live="polite"></span></div><p class="fs-none" hidden>Nothing on this sheet matches that.</p>';
+  /* extra: newer units typed from the slides, shown above the sheet itself */
+  if (F.extra) out += fsSection(F.extraTitle || 'More equations', F.extra);
+  if (F.kind === 'img') {
+    out += '<section class="fsec fimg"><h4 class="fsec-h"><span>' + (F.sheetTitle || 'Data sheet') + '</span><small>' + F.pages.length + ' page' + (F.pages.length === 1 ? '' : 's') + ' · tap to zoom</small></h4>' +
+      F.pages.map(function (p, i) { return '<figure class="sheet"><img src="' + p.src + '" alt="' + p.alt + '" width="' + p.w + '" height="' + p.h + '" loading="lazy">' + (F.pages.length > 1 ? '<figcaption>Page ' + (i + 1) + '</figcaption>' : '') + '</figure>'; }).join('') + '</section>';
+  } else if (F.items) out += fsSection(F.extra ? (F.sheetTitle || 'Data sheet') : (F.sheetTitle || 'Formula sheet'), F.items);
+  return out + '</div>';
+}
+function bindFormulaSearch(root) {
+  var q = root.querySelector('.fs-q'); if (!q) return;
+  var cards = root.querySelectorAll('.fc'), secs = root.querySelectorAll('.fsec:not(.fimg)'), cnt = root.querySelector('.fs-n'), none = root.querySelector('.fs-none');
+  q.addEventListener('input', function () {
+    var v = q.value.trim().toLowerCase(), shown = 0;
+    cards.forEach(function (c) { var ok = !v || c.textContent.toLowerCase().indexOf(v) >= 0; c.hidden = !ok; if (ok) shown++; });
+    secs.forEach(function (s) { s.hidden = !s.querySelector('.fc:not([hidden])'); });
+    cnt.textContent = v ? shown + ' of ' + cards.length : ''; none.hidden = shown > 0;
+  });
+  q.addEventListener('keydown', function (e) { if (e.key === 'Escape' && q.value) { e.stopPropagation(); e.preventDefault(); q.value = ''; q.dispatchEvent(new Event('input')); } });
+}
+function bindZoom(root) { root.querySelectorAll('.sheet').forEach(function (s) { s.addEventListener('click', function () { s.classList.toggle('zoom'); }); }); bindFormulaSearch(root); }
 /* full-screen view, used from the course page */
 function showFormula() {
   var F = CUR.formula;
   var html = '<div class="mhead"><div><h3>' + F.title + '</h3>' + (F.note ? '<p class="sheet-note">' + F.note + '</p>' : '') + '</div><button class="btn ghost" id="f-x" type="button">Close</button></div>' + formulaBody(F);
-  var m = overlay(html, 'wide');
+  var m = overlay(html, 'wide fs-modal');
   m.m.querySelector('#f-x').addEventListener('click', m.close);
   bindZoom(m.m);
   m.m.querySelector('#f-x').focus();

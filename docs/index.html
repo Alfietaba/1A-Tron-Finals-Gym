@@ -1257,6 +1257,37 @@ h2 { font-weight: 700; letter-spacing: -.01em; }
 .cal-x small { color: rgba(255, 255, 255, .55); font-weight: 500; }
 .cal-ok { color: #7ddc12; font-weight: 800; text-align: center; }
 @media (max-width: 30rem) { .cal-day { grid-template-columns: minmax(0, 1fr); gap: .6rem; padding: .85rem; } .cal-rings { width: 8.5rem; justify-self: center; } }
+/* ---------- Formula sheets: searchable cards ---------- */
+.modal.fs-modal { width: min(72rem, 100%); padding: 1.3rem 1.4rem 1.4rem; }
+.fwrap { --fc-bg: var(--surface-2); }
+.fsearch { position: sticky; top: -1.4rem; z-index: 3; display: flex; align-items: center; gap: .6rem; margin: .8rem -.2rem .2rem; padding: .55rem .2rem; background: var(--surface); }
+.dock .fsearch { top: -.1rem; margin-top: .3rem; }
+.fs-q { flex: 1; min-width: 0; font: inherit; font-size: 16px; color: var(--ink); padding: .55rem .8rem .55rem 2.2rem; border-radius: .75rem; border: 1px solid var(--rule); background: var(--surface-2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238e8e93' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5'/%3E%3Cpath d='M15.5 15.5L21 21'/%3E%3C/svg%3E") no-repeat .75rem 50% / 1rem; }
+.fs-q:focus-visible { outline: 3px solid color-mix(in srgb, var(--acc) 55%, transparent); outline-offset: 1px; border-color: var(--acc); }
+.fs-n { font-size: .78rem; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.fs-none { color: var(--muted); font-size: .9rem; margin: 1rem 0; }
+.fsec { margin-top: .9rem; }
+.fsec-h { display: flex; flex-wrap: wrap; align-items: baseline; gap: .2rem .6rem; margin: 0 0 .6rem; font-family: var(--font-display); font-weight: 600; font-size: 1.02rem; }
+.fsec-h span::before { content: ""; display: inline-block; width: .55rem; height: .55rem; border-radius: 50%; background: var(--acc); margin-right: .45rem; vertical-align: .08em; }
+.fsec-h small { font-family: var(--font-ui); font-weight: 500; font-size: .76rem; color: var(--muted); }
+.fgrid { columns: 18.5rem; column-gap: .75rem; }
+.fgrid.code { columns: 27rem; }
+.fl-e.fl-p { font-family: var(--font-ui); font-size: .86rem; line-height: 1.5; color: color-mix(in srgb, var(--ink) 85%, var(--muted)); }
+.fc { break-inside: avoid; display: inline-block; width: 100%; box-sizing: border-box; margin: 0 0 .75rem; padding: .7rem .85rem .75rem; border-radius: .95rem; background: var(--fc-bg); border: 1px solid color-mix(in srgb, var(--rule) 55%, transparent); }
+.fc-t { margin: 0 0 .4rem; font: 700 .78rem/1.3 var(--font-ui); letter-spacing: .01em; color: color-mix(in srgb, var(--acc) 72%, var(--ink)); }
+.fc-b { font-family: var(--font-math); font-size: 1.05rem; line-height: 1.6; color: var(--ink); }
+.fl { padding: .22rem 0; }
+.fl + .fl { border-top: 1px solid color-mix(in srgb, var(--rule) 70%, transparent); }
+.fl-l { display: block; font: 600 .72rem/1.35 var(--font-ui); color: var(--muted); margin-bottom: .08rem; }
+.fl-e { display: block; overflow-x: auto; overflow-y: hidden; }
+.fc pre.code { background: var(--surface); margin: .2rem 0; font-size: .8rem; }
+.fc code.ic { font-size: .86em; }
+.fimg .sheet { margin: 0 0 .8rem; position: relative; }
+.fimg figcaption { position: absolute; top: .5rem; left: .5rem; font: 700 .7rem var(--font-ui); color: #fff; background: rgba(0, 0, 0, .55); padding: .15rem .5rem; border-radius: 999px; }
+.dock .fc-b { font-size: 1rem; }
+.dock .fgrid { columns: 17rem; }
+.dock .fgrid.code { columns: 30rem; }
+@media (max-width: 30rem) { .modal.fs-modal { padding: 1rem; } .fsearch { top: -1rem; } .fc { padding: .65rem .75rem; } }
 </style>
 
 <div class="app" id="app"></div>
@@ -10984,20 +11015,54 @@ function showHome(c) {
   });
   window.scrollTo(0, 0);
 }
-function typedItems(items) { return items.map(function (f) { return '<h4>' + f[0] + '</h4><div>' + fmt(f[1]) + '</div>'; }).join(''); }
-function formulaBody(F) {
-  /* extra: newer units typed from the slides, shown above the sheet itself */
-  var extra = F.extra ? '<div class="fs"><h4 class="fx-h">' + (F.extraTitle || 'More equations') + '</h4>' + typedItems(F.extra) + '</div><h4 class="sheet-h">' + (F.sheetTitle || 'Data sheet') + '</h4>' : '';
-  if (F.kind === 'img') return extra + '<p class="sheet-note">Tap a page to zoom in.</p>' +
-    F.pages.map(function (p) { return '<div class="sheet"><img src="' + p.src + '" alt="' + p.alt + '" width="' + p.w + '" height="' + p.h + '" loading="lazy"></div>'; }).join('');
-  return extra + '<div class="fs">' + typedItems(F.items) + '</div>';
+/* ---------- formula sheets: each formula is a card; "Label: equation" lines get a small label over the equation ---------- */
+function fsLines(raw) {
+  var keep = [], t = String(raw).replace(/\u0001[\s\S]*?\u0002/g, function (m) { keep.push(m); return '\u0007' + (keep.length - 1) + '\u0007'; });
+  return t.split(/<br\s*\/?>/i).map(function (ln) { return ln.replace(/\u0007(\d+)\u0007/g, function (m, i) { return keep[+i]; }).trim(); }).filter(Boolean);
 }
-function bindZoom(root) { root.querySelectorAll('.sheet').forEach(function (s) { s.addEventListener('click', function () { s.classList.toggle('zoom'); }); }); }
+function fsProse(t) { return t.length > 38 && !/[=≈≡∝→⇌⇒≤≥<>#~|^]|\u0001|\u0003/.test(t.replace(/<\/?(sub|sup|i|b|em|strong)>/g, '')); }
+function fsCard(f) {
+  var rows = fsLines(f[1]).map(function (ln) {
+    var m = /^([A-Za-z0-9][^:=<>#~$\u0001\u0003\u0007]{0,30}?):\s+([\s\S]+)$/.exec(ln), body = m ? m[2] : ln;
+    return '<div class="fl">' + (m ? '<span class="fl-l">' + m[1] + '</span>' : '') + '<span class="fl-e' + (fsProse(body) ? ' fl-p' : '') + '">' + fmt(body) + '</span></div>';
+  }).join('');
+  return '<article class="fc"><h5 class="fc-t">' + f[0] + '</h5><div class="fc-b">' + rows + '</div></article>';
+}
+function fsIsCode(items) { return items.filter(function (f) { return String(f[1]).indexOf('\u0001') >= 0; }).length * 2 >= items.length; }
+function fsSection(title, items) {
+  var code = fsIsCode(items), noun = code ? 'item' : 'formula';
+  return '<section class="fsec"><h4 class="fsec-h"><span>' + title + '</span><small>' + items.length + ' ' + noun + (items.length === 1 ? '' : 's') + '</small></h4><div class="fgrid' + (code ? ' code' : '') + '">' + items.map(fsCard).join('') + '</div></section>';
+}
+function typedItems(items) { return '<div class="fgrid">' + items.map(fsCard).join('') + '</div>'; }
+function formulaBody(F) {
+  var acc = (RINGC[(CUR && CUR.hue) || 'c1'] || RINGC.c1)[0], n = (F.extra || []).length + (F.items || []).length;
+  var out = '<div class="fwrap" style="--acc:' + acc + '">';
+  if (n > 3) out += '<div class="fsearch"><input type="search" class="fs-q" placeholder="Search this sheet" aria-label="Search this sheet" autocomplete="off" spellcheck="false"><span class="fs-n" aria-live="polite"></span></div><p class="fs-none" hidden>Nothing on this sheet matches that.</p>';
+  /* extra: newer units typed from the slides, shown above the sheet itself */
+  if (F.extra) out += fsSection(F.extraTitle || 'More equations', F.extra);
+  if (F.kind === 'img') {
+    out += '<section class="fsec fimg"><h4 class="fsec-h"><span>' + (F.sheetTitle || 'Data sheet') + '</span><small>' + F.pages.length + ' page' + (F.pages.length === 1 ? '' : 's') + ' · tap to zoom</small></h4>' +
+      F.pages.map(function (p, i) { return '<figure class="sheet"><img src="' + p.src + '" alt="' + p.alt + '" width="' + p.w + '" height="' + p.h + '" loading="lazy">' + (F.pages.length > 1 ? '<figcaption>Page ' + (i + 1) + '</figcaption>' : '') + '</figure>'; }).join('') + '</section>';
+  } else if (F.items) out += fsSection(F.extra ? (F.sheetTitle || 'Data sheet') : (F.sheetTitle || 'Formula sheet'), F.items);
+  return out + '</div>';
+}
+function bindFormulaSearch(root) {
+  var q = root.querySelector('.fs-q'); if (!q) return;
+  var cards = root.querySelectorAll('.fc'), secs = root.querySelectorAll('.fsec:not(.fimg)'), cnt = root.querySelector('.fs-n'), none = root.querySelector('.fs-none');
+  q.addEventListener('input', function () {
+    var v = q.value.trim().toLowerCase(), shown = 0;
+    cards.forEach(function (c) { var ok = !v || c.textContent.toLowerCase().indexOf(v) >= 0; c.hidden = !ok; if (ok) shown++; });
+    secs.forEach(function (s) { s.hidden = !s.querySelector('.fc:not([hidden])'); });
+    cnt.textContent = v ? shown + ' of ' + cards.length : ''; none.hidden = shown > 0;
+  });
+  q.addEventListener('keydown', function (e) { if (e.key === 'Escape' && q.value) { e.stopPropagation(); e.preventDefault(); q.value = ''; q.dispatchEvent(new Event('input')); } });
+}
+function bindZoom(root) { root.querySelectorAll('.sheet').forEach(function (s) { s.addEventListener('click', function () { s.classList.toggle('zoom'); }); }); bindFormulaSearch(root); }
 /* full-screen view, used from the course page */
 function showFormula() {
   var F = CUR.formula;
   var html = '<div class="mhead"><div><h3>' + F.title + '</h3>' + (F.note ? '<p class="sheet-note">' + F.note + '</p>' : '') + '</div><button class="btn ghost" id="f-x" type="button">Close</button></div>' + formulaBody(F);
-  var m = overlay(html, 'wide');
+  var m = overlay(html, 'wide fs-modal');
   m.m.querySelector('#f-x').addEventListener('click', m.close);
   bindZoom(m.m);
   m.m.querySelector('#f-x').focus();

@@ -1248,6 +1248,37 @@ h2 { font-weight: 700; letter-spacing: -.01em; }
 .cal-x small { color: rgba(255, 255, 255, .55); font-weight: 500; }
 .cal-ok { color: #7ddc12; font-weight: 800; text-align: center; }
 @media (max-width: 30rem) { .cal-day { grid-template-columns: minmax(0, 1fr); gap: .6rem; padding: .85rem; } .cal-rings { width: 8.5rem; justify-self: center; } }
+/* ---------- Formula sheets: searchable cards ---------- */
+.modal.fs-modal { width: min(72rem, 100%); padding: 1.3rem 1.4rem 1.4rem; }
+.fwrap { --fc-bg: var(--surface-2); }
+.fsearch { position: sticky; top: -1.4rem; z-index: 3; display: flex; align-items: center; gap: .6rem; margin: .8rem -.2rem .2rem; padding: .55rem .2rem; background: var(--surface); }
+.dock .fsearch { top: -.1rem; margin-top: .3rem; }
+.fs-q { flex: 1; min-width: 0; font: inherit; font-size: 16px; color: var(--ink); padding: .55rem .8rem .55rem 2.2rem; border-radius: .75rem; border: 1px solid var(--rule); background: var(--surface-2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238e8e93' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5'/%3E%3Cpath d='M15.5 15.5L21 21'/%3E%3C/svg%3E") no-repeat .75rem 50% / 1rem; }
+.fs-q:focus-visible { outline: 3px solid color-mix(in srgb, var(--acc) 55%, transparent); outline-offset: 1px; border-color: var(--acc); }
+.fs-n { font-size: .78rem; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.fs-none { color: var(--muted); font-size: .9rem; margin: 1rem 0; }
+.fsec { margin-top: .9rem; }
+.fsec-h { display: flex; flex-wrap: wrap; align-items: baseline; gap: .2rem .6rem; margin: 0 0 .6rem; font-family: var(--font-display); font-weight: 600; font-size: 1.02rem; }
+.fsec-h span::before { content: ""; display: inline-block; width: .55rem; height: .55rem; border-radius: 50%; background: var(--acc); margin-right: .45rem; vertical-align: .08em; }
+.fsec-h small { font-family: var(--font-ui); font-weight: 500; font-size: .76rem; color: var(--muted); }
+.fgrid { columns: 18.5rem; column-gap: .75rem; }
+.fgrid.code { columns: 27rem; }
+.fl-e.fl-p { font-family: var(--font-ui); font-size: .86rem; line-height: 1.5; color: color-mix(in srgb, var(--ink) 85%, var(--muted)); }
+.fc { break-inside: avoid; display: inline-block; width: 100%; box-sizing: border-box; margin: 0 0 .75rem; padding: .7rem .85rem .75rem; border-radius: .95rem; background: var(--fc-bg); border: 1px solid color-mix(in srgb, var(--rule) 55%, transparent); }
+.fc-t { margin: 0 0 .4rem; font: 700 .78rem/1.3 var(--font-ui); letter-spacing: .01em; color: color-mix(in srgb, var(--acc) 72%, var(--ink)); }
+.fc-b { font-family: var(--font-math); font-size: 1.05rem; line-height: 1.6; color: var(--ink); }
+.fl { padding: .22rem 0; }
+.fl + .fl { border-top: 1px solid color-mix(in srgb, var(--rule) 70%, transparent); }
+.fl-l { display: block; font: 600 .72rem/1.35 var(--font-ui); color: var(--muted); margin-bottom: .08rem; }
+.fl-e { display: block; overflow-x: auto; overflow-y: hidden; }
+.fc pre.code { background: var(--surface); margin: .2rem 0; font-size: .8rem; }
+.fc code.ic { font-size: .86em; }
+.fimg .sheet { margin: 0 0 .8rem; position: relative; }
+.fimg figcaption { position: absolute; top: .5rem; left: .5rem; font: 700 .7rem var(--font-ui); color: #fff; background: rgba(0, 0, 0, .55); padding: .15rem .5rem; border-radius: 999px; }
+.dock .fc-b { font-size: 1rem; }
+.dock .fgrid { columns: 17rem; }
+.dock .fgrid.code { columns: 30rem; }
+@media (max-width: 30rem) { .modal.fs-modal { padding: 1rem; } .fsearch { top: -1rem; } .fc { padding: .65rem .75rem; } }
 </style>
 
 <div class="app" id="app"></div>
