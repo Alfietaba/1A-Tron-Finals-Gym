@@ -997,7 +997,7 @@ function showGym() {
       '<div class="wk">' + weekHTML() + '</div>' +
     '</section>' +
     '<section class="hl-tiles">' +
-      '<div class="hl-card hl-tile"><span class="hl-tag fl">' + flame() + 'Streak</span><div class="hl-n">' + G.streak + '<small> day' + (G.streak === 1 ? '' : 's') + '</small></div><p class="hl-s">Study streak. Perfect days in a row: ' + ps + '.</p></div>' +
+      '<button type="button" class="hl-card hl-tile hl-tap" id="st-open" aria-label="Streak: ' + G.streak + ' days. Open your study calendar"><span class="hl-tag fl">' + flame() + 'Streak<span class="hl-chev" aria-hidden="true">›</span></span><div class="hl-n">' + G.streak + '<small> day' + (G.streak === 1 ? '' : 's') + '</small></div><p class="hl-s">Study streak. Perfect days in a row: ' + ps + '. Tap for your calendar.</p></button>' +
       '<div class="hl-card hl-tile"><span class="hl-tag nx">' + calIcon() + 'Next exam</span>' + (next ? '<div class="hl-n">' + Math.max(0, daysTo(next)) + '<small> day' + (daysTo(next) === 1 ? '' : 's') + '</small></div><p class="hl-s">' + next.code + ' ' + (next.exam.name || 'exam').toLowerCase() + ', ' + next.exam.label + '.</p>' : '<div class="hl-n">–</div><p class="hl-s">No exams ahead.</p>') + '</div>' +
       '<div class="hl-card hl-tile"><span class="hl-tag qs">' + boltIcon() + 'Questions</span><div class="hl-n">' + tn + '<small>/' + GOAL + '</small></div><p class="hl-s">Today\'s goal across every course.</p></div>' +
       '<div class="hl-card hl-tile"><span class="hl-tag tm">' + candleIcon() + 'Focus</span><div class="hl-n" id="tmr-big">' + (cd ? fmtClock(cdLeft(cd)) : '25:00') + '</div><button class="hl-link" type="button" id="tmr-pill">' + (cd ? 'Open timer' : 'Start the study timer') + '</button></div>' +
@@ -1031,6 +1031,7 @@ function showGym() {
   document.getElementById('bk-in').addEventListener('click', function () { Snd.tap(); importProgress(); });
   ['lt-open', 'lt-foot'].forEach(function (id) { document.getElementById(id).addEventListener('click', function () { Snd.tap(); showLatent(); }); });
   songBind();
+  var sto = document.getElementById('st-open'); if (sto) sto.addEventListener('click', function () { Snd.tap(); showCalendar(); });
   latentMaybe();
   window.scrollTo(0, 0);
 }

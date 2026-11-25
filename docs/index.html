@@ -1198,6 +1198,65 @@ h2 { font-weight: 700; letter-spacing: -.01em; }
 @keyframes bd-halo { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
 @keyframes bd-flame { from { transform: scaleY(.75); opacity: .85; } to { transform: scaleY(1.1); opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .bd .bd-halo, .bd .bd-flame { animation: none; } }
+/* ---------- Streak: activity calendar ---------- */
+.hl-tap { font: inherit; color: inherit; text-align: left; cursor: pointer; width: 100%; -webkit-tap-highlight-color: transparent; transition: transform .15s, box-shadow .15s; }
+.hl-tap:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0, 0, 0, .08); }
+.hl-tap:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+.hl-chev { margin-left: auto; padding-left: .4rem; color: var(--muted); font-size: 1.1rem; line-height: 1; }
+.hl-tile .hl-tag { display: flex; align-items: center; }
+.modal.cal-modal { width: min(46rem, 100%); }
+.cal .mhead h3 { margin: .1rem 0 0; }
+.cal-k { display: inline-flex; align-items: center; gap: .3rem; color: var(--flame); background: color-mix(in srgb, var(--flame) 12%, transparent); }
+.cal-k svg { width: .9rem; height: .9rem; }
+.cal-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .5rem; margin: .8rem 0 .9rem; }
+.cal-stats > div { background: var(--surface-2); border-radius: .8rem; padding: .55rem .7rem; display: grid; gap: .1rem; }
+.cal-stats b { font-family: var(--font-display); font-size: 1.35rem; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.cal-stats span { font-size: .74rem; color: var(--muted); line-height: 1.3; }
+@media (max-width: 34rem) { .cal-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.cal { --cs: 1.05rem; --cg: 3px; --cal0: color-mix(in srgb, var(--ink) 8%, var(--surface)); }
+@media (min-width: 48rem) { .cal { --cs: 1.4rem; --cg: 4px; } }
+@media (max-width: 30rem) { .cal { --cs: .82rem; --cg: 2.5px; } }
+.cal-scroll { overflow-x: auto; padding: .1rem .1rem .4rem; scrollbar-width: thin; }
+.cal-grid-w { display: grid; grid-template-columns: 1.9rem auto; grid-template-rows: auto auto; column-gap: .3rem; row-gap: .25rem; width: max-content; margin: 0 auto; }
+.cal-mo { grid-column: 2; display: grid; grid-template-columns: repeat(var(--w), var(--cs)); column-gap: var(--cg); font-size: .7rem; color: var(--muted); height: 1em; }
+.cal-mo span { white-space: nowrap; }
+.cal-dow { grid-column: 1; grid-row: 2; position: sticky; left: 0; z-index: 2; background: var(--surface); display: grid; grid-template-rows: repeat(7, var(--cs)); row-gap: var(--cg); font-size: .66rem; color: var(--muted); align-items: center; }
+.cal-grid { grid-column: 2; grid-row: 2; display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, var(--cs)); grid-auto-columns: var(--cs); gap: var(--cg); }
+.cal-d { all: unset; box-sizing: border-box; display: block; width: var(--cs); height: var(--cs); border-radius: 22%; background: var(--cal0); cursor: pointer; position: relative; }
+.cal-d.lv1 { background: color-mix(in srgb, var(--c) 32%, var(--cal0)); }
+.cal-d.lv2 { background: color-mix(in srgb, var(--c) 52%, var(--cal0)); }
+.cal-d.lv3 { background: color-mix(in srgb, var(--c) 70%, var(--cal0)); }
+.cal-d.lv4 { background: color-mix(in srgb, var(--c) 86%, var(--cal0)); }
+.cal-d.lv5 { background: var(--c); box-shadow: 0 0 6px color-mix(in srgb, var(--c) 55%, transparent); }
+.cal-d.fut { background: transparent; box-shadow: inset 0 0 0 1px var(--rule); cursor: default; }
+.cal-d.exam { box-shadow: inset 0 0 0 2px var(--x); }
+.cal-d.exam.fut { cursor: pointer; background: color-mix(in srgb, var(--x) 12%, transparent); }
+.cal-d.now::after { content: ""; position: absolute; inset: -3px; border-radius: 30%; border: 1.5px solid var(--ink); opacity: .55; }
+.cal-d.sel::after { content: ""; position: absolute; inset: -3px; border-radius: 30%; border: 2px solid var(--brand); opacity: 1; }
+.cal-d:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+.cal-d:not(.fut):hover { transform: scale(1.18); z-index: 1; }
+.cal-leg { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: .5rem 1rem; margin-top: .35rem; font-size: .74rem; color: var(--muted); }
+.cal-key { display: flex; flex-wrap: wrap; gap: .3rem .8rem; }
+.cal-key span { display: inline-flex; align-items: center; gap: .3rem; font-weight: 600; }
+.cal-key i { width: .6rem; height: .6rem; border-radius: 50%; }
+.cal-scale { display: inline-flex; align-items: center; gap: 3px; }
+.cal-scale .cal-d { width: .75rem; height: .75rem; cursor: default; }
+.cal-less { margin: 0 .25rem; }
+.cal-note { font-size: .78rem; color: var(--muted); margin: .5rem 0 .2rem; }
+.cal-day { display: grid; grid-template-columns: 8.2rem minmax(0, 1fr); gap: 1rem; align-items: center; margin-top: .6rem; padding: .9rem; border-radius: 1rem; background: #000; color: #fff; }
+.cal-rings .rings { width: 100%; height: auto; }
+.cal-info h4 { margin: 0; font-size: 1.02rem; }
+.cal-sum { margin: .15rem 0 .45rem; font-size: .84rem; color: rgba(255, 255, 255, .7); }
+.cal-ex { display: flex; flex-wrap: wrap; gap: .3rem; margin: 0 0 .45rem; }
+.cal-ex span { font-size: .72rem; font-weight: 700; padding: .12rem .5rem; border-radius: 999px; color: var(--c); box-shadow: inset 0 0 0 1.5px var(--c); }
+.cal-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .22rem; }
+.cal-list li { display: grid; grid-template-columns: .65rem minmax(0, 1fr) auto 1.1rem; align-items: center; gap: .45rem; font-size: .84rem; }
+.cal-list i { width: .62rem; height: .62rem; border-radius: 50%; }
+.cal-c { font-weight: 700; white-space: nowrap; }
+.cal-x { font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
+.cal-x small { color: rgba(255, 255, 255, .55); font-weight: 500; }
+.cal-ok { color: #7ddc12; font-weight: 800; text-align: center; }
+@media (max-width: 30rem) { .cal-day { grid-template-columns: minmax(0, 1fr); gap: .6rem; padding: .85rem; } .cal-rings { width: 8.5rem; justify-self: center; } }
 </style>
 
 <div class="app" id="app"></div>
@@ -9722,6 +9781,108 @@ function showVideos(c, tid) {
 }
 
 /* ============================================================
+   ACTIVITY CALENDAR: tap the Streak tile for a GitHub/LeetCode-style grid of every day.
+   Each day is coloured by the course you practised most that day, stronger the more XP you earned.
+   Tap a day to see that day's rings. Exam days are outlined in the course colour.
+   ============================================================ */
+function calDate(k) { var p = k.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
+function calAdd(d, n) { var x = new Date(d.getFullYear(), d.getMonth(), d.getDate() + n); return x; }
+function calTotal(d) { var t = 0; COURSES.forEach(function (c) { t += d[c.id] || 0; }); return t; }
+function calTop(d) { var best = null, bx = 0; COURSES.forEach(function (c) { var x = d[c.id] || 0; if (x > bx) { bx = x; best = c; } }); return best; }
+function calLevel(t, g) { if (t <= 0) return 0; var r = t / g; return r <= 0.5 ? 1 : r <= 1.5 ? 2 : r <= 3 ? 3 : r <= 5 ? 4 : 5; }
+function calExams() { var m = {}; COURSES.forEach(function (c) { if (c.exam && c.exam.at) { var k = dayKey(new Date(c.exam.at)); (m[k] = m[k] || []).push(c); } }); return m; }
+function calStats() {
+  var xd = G.xd || {}, keys = Object.keys(xd).filter(function (k) { return calTotal(xd[k]) > 0; }).sort();
+  var best = null, bestX = 0, run = 0, longest = 0, prev = null;
+  keys.forEach(function (k) {
+    var t = calTotal(xd[k]); if (t > bestX) { bestX = t; best = k; }
+    run = prev && dayKey(calAdd(calDate(prev), 1)) === k ? run + 1 : 1; prev = k; if (run > longest) longest = run;
+  });
+  return { days: keys.length, first: keys[0] || null, best: best, bestX: bestX, longest: Math.max(longest, G.streak || 0) };
+}
+function calRows(k) {
+  var d = dayXP(k), g = d._g || xpGoal(), live = ringCourses();
+  return sortedCourses().filter(function (c) { return live.indexOf(c) >= 0 || (d[c.id] || 0) > 0; })
+    .map(function (c) { return { c: c, x: d[c.id] || 0, g: g, p: (d[c.id] || 0) / g, hue: c.hue }; });
+}
+function calDayHTML(k) {
+  var rows = calRows(k), d = dayXP(k), t = calTotal(d), closed = rows.filter(function (r) { return r.x >= r.g; }).length;
+  var dt = calDate(k), isToday = k === dayKey(), ex = calExams()[k] || [];
+  var when = dt.toLocaleDateString('en-CA', { weekday: 'long', month: 'long', day: 'numeric' });
+  return '<div class="cal-rings">' + ringsSVG(rows, 120, 13, 2.6, 'rings cal-rg') + '</div>' +
+    '<div class="cal-info"><h4>' + (isToday ? 'Today, ' : '') + when + '</h4>' +
+    '<p class="cal-sum">' + (t ? t.toLocaleString('en-CA') + ' XP · ' + closed + ' of ' + rows.length + ' ring' + (rows.length === 1 ? '' : 's') + ' closed' : (dt > new Date() ? 'Still to come.' : 'No practice this day.')) + '</p>' +
+    (ex.length ? '<p class="cal-ex">' + ex.map(function (c) { return '<span style="--c:' + (RINGC[c.hue] || RINGC.c1)[0] + '">' + esc(c.code) + ' ' + esc((c.exam.name || 'exam').toLowerCase()) + '</span>'; }).join('') + '</p>' : '') +
+    '<ul class="cal-list">' + rows.map(function (r) {
+      var col = (RINGC[r.hue] || RINGC.c1)[0];
+      return '<li><i style="background:' + col + '"></i><span class="cal-c">' + esc(r.c.code) + '</span><span class="cal-x">' + r.x + '<small>/' + r.g + ' XP</small></span>' + (r.x >= r.g ? '<span class="cal-ok" aria-label="closed">✓</span>' : '<span class="cal-ok"></span>') + '</li>';
+    }).join('') + '</ul></div>';
+}
+function showCalendar() {
+  var xd = G.xd || {}, st = calStats(), g = xpGoal(), today = new Date(), tk = dayKey(today), exams = calExams();
+  today = calDate(tk);
+  var lastExam = today; Object.keys(exams).forEach(function (k) { var d = calDate(k); if (d > lastExam) lastExam = d; });
+  var start = calAdd(today, -7 * 15); if (st.first && calDate(st.first) < start) start = calDate(st.first);
+  start = calAdd(start, -start.getDay());                         /* back to Sunday */
+  var end = calAdd(lastExam, 6 - lastExam.getDay());               /* forward to Saturday */
+  var weeks = (Math.round((end - start) / 864e5) + 1) / 7, cells = '', months = '', lastM = -1;
+  for (var w = 0; w < weeks; w++) {
+    var wk = calAdd(start, w * 7), wkEnd = calAdd(wk, 6);
+    var m = (w === 0 ? wk : (wkEnd.getDate() <= 7 ? wkEnd : null));
+    if (m && m.getMonth() !== lastM) { lastM = m.getMonth(); months += '<span style="grid-column:' + (w + 1) + '">' + m.toLocaleDateString('en-CA', { month: 'short' }) + '</span>'; }
+    for (var i = 0; i < 7; i++) {
+      var day = calAdd(wk, i), k = dayKey(day), d = xd[k] || {}, t = calTotal(d), top = calTop(d), fut = day > today;
+      var lv = fut ? 0 : calLevel(t, d._g || g), col = top ? (RINGC[top.hue] || RINGC.c1)[0] : '';
+      var ex = exams[k], exCol = ex ? (RINGC[ex[0].hue] || RINGC.c1)[0] : '';
+      var nice = day.toLocaleDateString('en-CA', { weekday: 'short', month: 'short', day: 'numeric' });
+      var lab = nice + ': ' + (fut ? (ex ? ex.map(function (c) { return c.code + ' ' + (c.exam.name || 'exam').toLowerCase(); }).join(', ') : 'still to come') : (t ? t + ' XP, mostly ' + top.code : 'no practice')) + (ex && !fut ? ' · ' + ex.map(function (c) { return c.code + ' ' + (c.exam.name || 'exam').toLowerCase(); }).join(', ') : '');
+      cells += '<button type="button" class="cal-d lv' + lv + (fut ? ' fut' : '') + (k === tk ? ' now' : '') + (ex ? ' exam' : '') + '" data-k="' + k + '" tabindex="' + (k === tk ? 0 : -1) + '"' +
+        ' style="' + (col ? '--c:' + col + ';' : '') + (ex ? '--x:' + exCol + ';' : '') + '" title="' + lab + '" aria-label="' + lab + '"' + (fut && !ex ? ' disabled' : '') + '></button>';
+    }
+  }
+  var legend = '<span class="cal-less">Less</span>' + [0, 1, 2, 3, 4, 5].map(function (l) { return '<i class="cal-d lv' + l + '" style="--c:var(--ios-move)"></i>'; }).join('') + '<span class="cal-less">More</span>';
+  var key = sortedCourses().map(function (c) { return '<span><i style="background:' + (RINGC[c.hue] || RINGC.c1)[0] + '"></i>' + esc(c.code) + '</span>'; }).join('');
+  var nice = function (k) { return calDate(k).toLocaleDateString('en-CA', { month: 'short', day: 'numeric' }); };
+  var m = overlay(
+    '<div class="cal">' +
+      '<div class="mhead"><div><p class="lt-k cal-k">' + flame() + 'Streak</p><h3>Your study calendar</h3></div><button class="hl-link" type="button" id="cal-x">Done</button></div>' +
+      '<div class="cal-stats">' +
+        '<div><b>' + G.streak + '</b><span>day streak now</span></div>' +
+        '<div><b>' + st.longest + '</b><span>longest streak</span></div>' +
+        '<div><b>' + st.days + '</b><span>days practised</span></div>' +
+        '<div><b>' + (st.best ? st.bestX.toLocaleString('en-CA') : '–') + '</b><span>' + (st.best ? 'XP on your best day, ' + nice(st.best) : 'best day so far') + '</span></div>' +
+      '</div>' +
+      '<div class="cal-scroll" id="cal-scroll"><div class="cal-grid-w" style="--w:' + weeks + '">' +
+        '<div class="cal-mo" aria-hidden="true">' + months + '</div>' +
+        '<div class="cal-dow" aria-hidden="true"><span></span><span>Mon</span><span></span><span>Wed</span><span></span><span>Fri</span><span></span></div>' +
+        '<div class="cal-grid" role="grid" aria-label="Days you studied">' + cells + '</div>' +
+      '</div></div>' +
+      '<div class="cal-leg"><div class="cal-key">' + key + '</div><div class="cal-scale">' + legend + '</div></div>' +
+      '<p class="cal-note">Each square is a day, coloured by the course you practised most and stronger the more XP you earned. Outlined squares are exam days. Tap a day to see its rings.</p>' +
+      '<div class="cal-day" id="cal-day" aria-live="polite"></div>' +
+    '</div>', 'cal-modal');
+  m.m.setAttribute('aria-label', 'Your study calendar');
+  var grid = m.m.querySelector('.cal-grid'), panel = m.m.querySelector('#cal-day'), sel = tk;
+  var pick = function (k, focus) {
+    var b = grid.querySelector('[data-k="' + k + '"]'); if (!b || b.disabled) return;
+    grid.querySelectorAll('.cal-d.sel').forEach(function (x) { x.classList.remove('sel'); x.tabIndex = -1; });
+    b.classList.add('sel'); b.tabIndex = 0; sel = k;
+    if (focus) b.focus();
+    panel.innerHTML = calDayHTML(k); animateRings(panel);
+  };
+  grid.addEventListener('click', function (e) { var b = e.target.closest('.cal-d'); if (b) { Snd.tap(); pick(b.getAttribute('data-k')); } });
+  grid.addEventListener('keydown', function (e) {
+    var step = { ArrowUp: -1, ArrowDown: 1, ArrowLeft: -7, ArrowRight: 7 }[e.key]; if (!step) return;
+    e.preventDefault();
+    var k = dayKey(calAdd(calDate(sel), step)); if (grid.querySelector('[data-k="' + k + '"]:not([disabled])')) pick(k, true);
+  });
+  m.m.querySelector('#cal-x').addEventListener('click', m.close);
+  pick(tk);
+  var sc = m.m.querySelector('#cal-scroll'), nb = grid.querySelector('.now');
+  if (sc && nb) sc.scrollLeft = Math.max(0, nb.offsetLeft - sc.clientWidth + 6 * nb.offsetWidth);
+}
+
+/* ============================================================
    APP
    ============================================================ */
 var PRAISE = ['Correct.', 'Nailed it.', 'Clean.', 'Exactly.', 'Yes.', 'That is it.'];
@@ -10720,7 +10881,7 @@ function showGym() {
       '<div class="wk">' + weekHTML() + '</div>' +
     '</section>' +
     '<section class="hl-tiles">' +
-      '<div class="hl-card hl-tile"><span class="hl-tag fl">' + flame() + 'Streak</span><div class="hl-n">' + G.streak + '<small> day' + (G.streak === 1 ? '' : 's') + '</small></div><p class="hl-s">Study streak. Perfect days in a row: ' + ps + '.</p></div>' +
+      '<button type="button" class="hl-card hl-tile hl-tap" id="st-open" aria-label="Streak: ' + G.streak + ' days. Open your study calendar"><span class="hl-tag fl">' + flame() + 'Streak<span class="hl-chev" aria-hidden="true">›</span></span><div class="hl-n">' + G.streak + '<small> day' + (G.streak === 1 ? '' : 's') + '</small></div><p class="hl-s">Study streak. Perfect days in a row: ' + ps + '. Tap for your calendar.</p></button>' +
       '<div class="hl-card hl-tile"><span class="hl-tag nx">' + calIcon() + 'Next exam</span>' + (next ? '<div class="hl-n">' + Math.max(0, daysTo(next)) + '<small> day' + (daysTo(next) === 1 ? '' : 's') + '</small></div><p class="hl-s">' + next.code + ' ' + (next.exam.name || 'exam').toLowerCase() + ', ' + next.exam.label + '.</p>' : '<div class="hl-n">–</div><p class="hl-s">No exams ahead.</p>') + '</div>' +
       '<div class="hl-card hl-tile"><span class="hl-tag qs">' + boltIcon() + 'Questions</span><div class="hl-n">' + tn + '<small>/' + GOAL + '</small></div><p class="hl-s">Today\'s goal across every course.</p></div>' +
       '<div class="hl-card hl-tile"><span class="hl-tag tm">' + candleIcon() + 'Focus</span><div class="hl-n" id="tmr-big">' + (cd ? fmtClock(cdLeft(cd)) : '25:00') + '</div><button class="hl-link" type="button" id="tmr-pill">' + (cd ? 'Open timer' : 'Start the study timer') + '</button></div>' +
@@ -10754,6 +10915,7 @@ function showGym() {
   document.getElementById('bk-in').addEventListener('click', function () { Snd.tap(); importProgress(); });
   ['lt-open', 'lt-foot'].forEach(function (id) { document.getElementById(id).addEventListener('click', function () { Snd.tap(); showLatent(); }); });
   songBind();
+  var sto = document.getElementById('st-open'); if (sto) sto.addEventListener('click', function () { Snd.tap(); showCalendar(); });
   latentMaybe();
   window.scrollTo(0, 0);
 }
