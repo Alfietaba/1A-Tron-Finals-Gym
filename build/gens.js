@@ -573,7 +573,7 @@ course('che102').gens = [
     return num(nid('rv'), 'h9', 'A rigid vessel holds ' + f[0] + ' at ' + pf.toFixed(2) + ' atm and O<sub>2</sub> at ' + pO.toFixed(2) + ' atm. The fuel burns completely to CO<sub>2</sub> and H<sub>2</sub>O, and the vessel is cooled back to the start temperature so all the water condenses. What is the final pressure in atm? Give 3 significant figures.', sig(tot, 3),
       'At fixed V and T, partial pressures behave like moles. Balance per mole of fuel.', 'Per mole of fuel: ' + f[2] + ' O₂ used, ' + f[3] + ' CO₂ made. CO₂: ' + sig(co2, 3) + ' atm. O₂ left: ' + pO.toFixed(2) + ' − ' + sig(pf * f[2], 3) + ' = ' + sig(o2, 3) + ' atm. Total ' + sig(tot, 3) + ' atm.', null, null, { sf: 3, unit: 'atm' });
   } },
-  /* Tutorial 4 style: density of a breathing mix, and the pressure that matches air's density */
+  /* density of a breathing mix, and the pressure that matches air's density */
   { t: 'h9', make: function (R) {
     var inert = R.p([['He', 'He'], ['Ne', 'Ne'], ['Ar', 'Ar']]), pctO = R.p([18.0, 19.5, 20.0, 21.0, 22.5, 24.0, 30.0, 32.0]), pctI = 100 - pctO;
     var M = (pctI * molar(inert[1]) + pctO * molar('O2')) / 100, AIR = 0.7808 * molar('N2') + 0.2095 * molar('O2') + 0.0093 * molar('Ar') + 0.00036 * molar('CO2');
@@ -587,7 +587,7 @@ course('che102').gens = [
     return num(nid('mixp'), 'h9', pre + 'Air is 78.08% N<sub>2</sub>, 20.95% O<sub>2</sub>, 0.93% Ar and 0.036% CO<sub>2</sub>. At what pressure does the mix have the same density as air at 1.00 atm and the same temperature, in atm? Give 3 significant figures.', sig(Pm, 3),
       'At the same T, density ∝ PM, so P(mix) M(mix) = (1.00 atm) M(air).', 'M(mix) = ' + M.toFixed(2) + ' g/mol and M(air) = ' + AIR.toFixed(2) + ' g/mol. P = ' + AIR.toFixed(2) + ' / ' + M.toFixed(2) + ' = ' + sig(Pm, 3) + ' atm.', null, null, { sf: 3, unit: 'atm' });
   } },
-  /* Tutorial 4 style: an inert gas plus a gas that decomposes into more gas molecules */
+  /* an inert gas plus a gas that decomposes into more gas molecules */
   { t: 'h9', make: function (R) {
     var rx = R.p([['acetone, CH<sub>3</sub>COCH<sub>3</sub>', 'CH<sub>3</sub>COCH<sub>3</sub> → C<sub>2</sub>H<sub>4</sub> + CO + H<sub>2</sub>', 2], ['N<sub>2</sub>O<sub>4</sub>', 'N<sub>2</sub>O<sub>4</sub> → 2 NO<sub>2</sub>', 1], ['PCl<sub>5</sub>', 'PCl<sub>5</sub> → PCl<sub>3</sub> + Cl<sub>2</sub>', 1], ['ethane', 'C<sub>2</sub>H<sub>6</sub> → C<sub>2</sub>H<sub>4</sub> + H<sub>2</sub>', 1], ['ammonia', '2 NH<sub>3</sub> → N<sub>2</sub> + 3 H<sub>2</sub>', 1], ['dimethyl ether, CH<sub>3</sub>OCH<sub>3</sub>', 'CH<sub>3</sub>OCH<sub>3</sub> → CH<sub>4</sub> + CO + H<sub>2</sub>', 2]]);
     var inert = R.p(['argon', 'helium', 'nitrogen']), P0 = m3(R, 10, 90), y = R.f(0.08, 0.45, 2), Pf = Number(sig(P0 * (1 + rx[2] * y), 3));

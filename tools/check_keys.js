@@ -17,7 +17,7 @@ COURSES.forEach(c => {
     if (!c.TBY[q.t]) { bad++; console.log('bad topic', q.id); }
     // questions are shuffled, so none may lean on another question ("the class above", "that project", "same two containers")
     { const t = String(q.q || '').replace(/<[^>]+>/g, ' ');
-      if (/\b(class|code|program|function|table|figure|diagram|hole and shaft|graph) above\b|\b(in|for|from|using) (that|the same|this same)\b|\bthat (same )?project\b|^same\b|\bsame (project|pair|two|mixture|class|circuit|drawing|schedule)\b|\bprevious (question|part)\b|\bfrom part\b/i.test(t)) { bad++; console.log('NEEDS CONTEXT', c.code, q.id, t.slice(0, 90)); } }
+      if (/\\b(class|code|program|function|table|figure|diagram|hole and shaft|graph) above\\b|\\b(in|for|from|using|with) (that|this) same\\b|^(for|in|using|with) that\\b|\\b(in|for|from|using) the same (project|schedule|class|program|circuit|mixture|sample|setup|alloy|reaction)\\b|\\bthat (same )?project\\b|^same\\b|\\bsame (project|pair|two|mixture|class|circuit|drawing|schedule)\\b|\\bprevious (question|part)\\b|\\bfrom part\\b|\\btutorial \\d|\\bproblem \\d+\\.|\\bfrom the [^.]{0,30}(quiz|practice set|tutorial|assignment)/i.test(t)) { bad++; console.log('NEEDS CONTEXT', c.code, q.id, t.slice(0, 90)); } }
     try {
       if (q.type === 'mc') { if (!(q.a >= 0 && q.a < q.opts.length)) throw 'answer index'; fmt(q.q); q.opts.forEach(fmt); fmt(q.why); }
       else if (q.type === 'txt') { const r = gradeQ(q, [].concat(q.ans)[0]); if (!r.ok) throw 'txt self-grade'; }

@@ -480,7 +480,7 @@ mc('h10-17', 'h10', 'All at 10 atm. Which is described worst by the ideal gas la
 mc('h10-18', 'h10', 'One mole of $SO2$ occupies 1.85 L at 0 °C and 10 atm. An ideal gas would occupy 2.24 L. Which statement is true?',
   ['$SO2$ behaves as an ideal gas', 'Its density is less than the ideal gas law predicts', 'The $SO2$ molecules attract each other', 'Repulsive forces dominate'], 2,
   'The real volume is smaller than the ideal one, so the gas is denser than predicted: the molecules pull each other closer. Repulsion would make the volume larger than ideal.', { k: 'c' }),
-num('h10-19', 'h10', 'For that $SO2$ (1 mol in 1.85 L at 0 °C and 10 atm), what is the compressibility factor Z = PV/(nRT)? Give 3 significant figures.', '0.825',
+num('h10-19', 'h10', 'One mole of $SO2$ occupies 1.85 L at 0 °C and 10 atm. What is its compressibility factor Z = PV/(nRT)? Give 3 significant figures.', '0.825',
   'Z = 1 for an ideal gas.',
   'Z = 10 × 1.85 / (1 × 0.082057 × 273.15) = 18.5 / 22.41 = 0.825. Z below 1 means attractions dominate.', null, null, { sf: 3 }),
 mc('h10-20', 'h10', 'Which molecule can form hydrogen bonds with itself?',

@@ -476,7 +476,7 @@ int main()
   'Update v once per pass: v = 2v + i.',
   'i = 0: v = 2 + 0 = 2. i = 1: v = 4 + 1 = 5. i = 2: v = 10 + 2 = 12.'),
 
-/* ---------- added: practice sets (if-else, decisions, loops and files, nested loops) ---------- */
+/* ---------- more practice: if-else, decisions, loops and files, nested loops ---------- */
 mc('c1-12', 'c1', 'What does this print?' + C`
 int x = 7 / 2 * 2.0;
 cout << x;`,
@@ -488,7 +488,7 @@ cout << val1 + val2 << " " << val1 - val2 << " " << val1 * val2 << " ";
 cout << val1 / val2 << " " << (double)val1 / val2;`,
   '9 5 14 3 3.5',
   'Only the last value has a double in the division.',
-  'Sum 9, difference 5, product 14. val1 / val2 is int division, 3. The cast makes the ratio 7.0 / 2 = 3.5. This is the val1/val2 question from the if-else practice set: report the ratio as a double.'),
+  'Sum 9, difference 5, product 14. val1 / val2 is int division, 3. The cast makes the ratio 7.0 / 2 = 3.5, so the ratio comes out as a double.'),
 mc('c1-14', 'c1', 'What does this print?' + C`
 char c = 'a';
 c = c + 2;
@@ -585,7 +585,7 @@ else
   'The product of 2.5 and 4 is 10',
   'cout prints a whole-number double with no decimal point.',
   'op is \'*\', so the third branch runs. b prints as 4 and 2.5 × 4 = 10.0 prints as 10.'),
-txt('c2-20', 'c2', 'Three words in ascending order, from the if-else practice set. ' + W + C`
+txt('c2-20', 'c2', 'Three words in ascending order. ' + W + C`
 string a = "tom", b = "bugs", c = "daffy", t;
 if (a > b) { t = a; a = b; b = t; }
 if (b > c) { t = b; b = c; c = t; }
@@ -649,7 +649,7 @@ while (found < 6)
 }`,
   '2 3 5 7 11 13',
   'You do not know in advance how many numbers to test, so the loop counts primes found.',
-  'The while loop runs until 6 primes are found: 2, 3, 5, 7, 11, 13. This is "first n primes" from the loops practice set, as opposed to "all primes up to max", which is a counted for loop.'),
+  'The while loop runs until 6 primes are found: 2, 3, 5, 7, 11, 13. It finds the first n primes, which needs a while loop, as opposed to all primes up to max, which is a counted for loop.'),
 txt('c3-20', 'c3', 'The chess rice problem: 1 grain on square 1, 2 on square 2, 4 on square 3, doubling each time. ' + W + C`
 int squares = 0;
 long long onSquare = 1, total = 0;
@@ -900,7 +900,7 @@ int main()
 }`,
   'bugs, daffy, daffy',
   'The parameters are references, so the swaps change a, b and c.',
-  'order2(a, b): equal, no swap. order2(b, c): "daffy" > "bugs", swap, so b = bugs, c = daffy. order2(a, b): "daffy" > "bugs", swap, so a = bugs, b = daffy. It works with repeated words too, as the practice set asks.'),
+  'order2(a, b): equal, no swap. order2(b, c): "daffy" > "bugs", swap, so b = bugs, c = daffy. order2(a, b): "daffy" > "bugs", swap, so a = bugs, b = daffy. It works with repeated words too.'),
 txt('c4-15', 'c4', P + C`
 bool isPrime(int n)
 {

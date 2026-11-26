@@ -2853,7 +2853,7 @@ int main()
   'Update v once per pass: v = 2v + i.',
   'i = 0: v = 2 + 0 = 2. i = 1: v = 4 + 1 = 5. i = 2: v = 10 + 2 = 12.'),
 
-/* ---------- added: practice sets (if-else, decisions, loops and files, nested loops) ---------- */
+/* ---------- more practice: if-else, decisions, loops and files, nested loops ---------- */
 mc('c1-12', 'c1', 'What does this print?' + C`
 int x = 7 / 2 * 2.0;
 cout << x;`,
@@ -2865,7 +2865,7 @@ cout << val1 + val2 << " " << val1 - val2 << " " << val1 * val2 << " ";
 cout << val1 / val2 << " " << (double)val1 / val2;`,
   '9 5 14 3 3.5',
   'Only the last value has a double in the division.',
-  'Sum 9, difference 5, product 14. val1 / val2 is int division, 3. The cast makes the ratio 7.0 / 2 = 3.5. This is the val1/val2 question from the if-else practice set: report the ratio as a double.'),
+  'Sum 9, difference 5, product 14. val1 / val2 is int division, 3. The cast makes the ratio 7.0 / 2 = 3.5, so the ratio comes out as a double.'),
 mc('c1-14', 'c1', 'What does this print?' + C`
 char c = 'a';
 c = c + 2;
@@ -2962,7 +2962,7 @@ else
   'The product of 2.5 and 4 is 10',
   'cout prints a whole-number double with no decimal point.',
   'op is \'*\', so the third branch runs. b prints as 4 and 2.5 × 4 = 10.0 prints as 10.'),
-txt('c2-20', 'c2', 'Three words in ascending order, from the if-else practice set. ' + W + C`
+txt('c2-20', 'c2', 'Three words in ascending order. ' + W + C`
 string a = "tom", b = "bugs", c = "daffy", t;
 if (a > b) { t = a; a = b; b = t; }
 if (b > c) { t = b; b = c; c = t; }
@@ -3026,7 +3026,7 @@ while (found < 6)
 }`,
   '2 3 5 7 11 13',
   'You do not know in advance how many numbers to test, so the loop counts primes found.',
-  'The while loop runs until 6 primes are found: 2, 3, 5, 7, 11, 13. This is "first n primes" from the loops practice set, as opposed to "all primes up to max", which is a counted for loop.'),
+  'The while loop runs until 6 primes are found: 2, 3, 5, 7, 11, 13. It finds the first n primes, which needs a while loop, as opposed to all primes up to max, which is a counted for loop.'),
 txt('c3-20', 'c3', 'The chess rice problem: 1 grain on square 1, 2 on square 2, 4 on square 3, doubling each time. ' + W + C`
 int squares = 0;
 long long onSquare = 1, total = 0;
@@ -3277,7 +3277,7 @@ int main()
 }`,
   'bugs, daffy, daffy',
   'The parameters are references, so the swaps change a, b and c.',
-  'order2(a, b): equal, no swap. order2(b, c): "daffy" > "bugs", swap, so b = bugs, c = daffy. order2(a, b): "daffy" > "bugs", swap, so a = bugs, b = daffy. It works with repeated words too, as the practice set asks.'),
+  'order2(a, b): equal, no swap. order2(b, c): "daffy" > "bugs", swap, so b = bugs, c = daffy. order2(a, b): "daffy" > "bugs", swap, so a = bugs, b = daffy. It works with repeated words too.'),
 txt('c4-15', 'c4', P + C`
 bool isPrime(int n)
 {
@@ -5486,7 +5486,7 @@ mc('h10-17', 'h10', 'All at 10 atm. Which is described worst by the ideal gas la
 mc('h10-18', 'h10', 'One mole of $SO2$ occupies 1.85 L at 0 °C and 10 atm. An ideal gas would occupy 2.24 L. Which statement is true?',
   ['$SO2$ behaves as an ideal gas', 'Its density is less than the ideal gas law predicts', 'The $SO2$ molecules attract each other', 'Repulsive forces dominate'], 2,
   'The real volume is smaller than the ideal one, so the gas is denser than predicted: the molecules pull each other closer. Repulsion would make the volume larger than ideal.', { k: 'c' }),
-num('h10-19', 'h10', 'For that $SO2$ (1 mol in 1.85 L at 0 °C and 10 atm), what is the compressibility factor Z = PV/(nRT)? Give 3 significant figures.', '0.825',
+num('h10-19', 'h10', 'One mole of $SO2$ occupies 1.85 L at 0 °C and 10 atm. What is its compressibility factor Z = PV/(nRT)? Give 3 significant figures.', '0.825',
   'Z = 1 for an ideal gas.',
   'Z = 10 × 1.85 / (1 × 0.082057 × 273.15) = 18.5 / 22.41 = 0.825. Z below 1 means attractions dominate.', null, null, { sf: 3 }),
 mc('h10-20', 'h10', 'Which molecule can form hydrogen bonds with itself?',
@@ -9964,7 +9964,7 @@ course('che102').gens = [
     return num(nid('rv'), 'h9', 'A rigid vessel holds ' + f[0] + ' at ' + pf.toFixed(2) + ' atm and O<sub>2</sub> at ' + pO.toFixed(2) + ' atm. The fuel burns completely to CO<sub>2</sub> and H<sub>2</sub>O, and the vessel is cooled back to the start temperature so all the water condenses. What is the final pressure in atm? Give 3 significant figures.', sig(tot, 3),
       'At fixed V and T, partial pressures behave like moles. Balance per mole of fuel.', 'Per mole of fuel: ' + f[2] + ' O₂ used, ' + f[3] + ' CO₂ made. CO₂: ' + sig(co2, 3) + ' atm. O₂ left: ' + pO.toFixed(2) + ' − ' + sig(pf * f[2], 3) + ' = ' + sig(o2, 3) + ' atm. Total ' + sig(tot, 3) + ' atm.', null, null, { sf: 3, unit: 'atm' });
   } },
-  /* Tutorial 4 style: density of a breathing mix, and the pressure that matches air's density */
+  /* density of a breathing mix, and the pressure that matches air's density */
   { t: 'h9', make: function (R) {
     var inert = R.p([['He', 'He'], ['Ne', 'Ne'], ['Ar', 'Ar']]), pctO = R.p([18.0, 19.5, 20.0, 21.0, 22.5, 24.0, 30.0, 32.0]), pctI = 100 - pctO;
     var M = (pctI * molar(inert[1]) + pctO * molar('O2')) / 100, AIR = 0.7808 * molar('N2') + 0.2095 * molar('O2') + 0.0093 * molar('Ar') + 0.00036 * molar('CO2');
@@ -9978,7 +9978,7 @@ course('che102').gens = [
     return num(nid('mixp'), 'h9', pre + 'Air is 78.08% N<sub>2</sub>, 20.95% O<sub>2</sub>, 0.93% Ar and 0.036% CO<sub>2</sub>. At what pressure does the mix have the same density as air at 1.00 atm and the same temperature, in atm? Give 3 significant figures.', sig(Pm, 3),
       'At the same T, density ∝ PM, so P(mix) M(mix) = (1.00 atm) M(air).', 'M(mix) = ' + M.toFixed(2) + ' g/mol and M(air) = ' + AIR.toFixed(2) + ' g/mol. P = ' + AIR.toFixed(2) + ' / ' + M.toFixed(2) + ' = ' + sig(Pm, 3) + ' atm.', null, null, { sf: 3, unit: 'atm' });
   } },
-  /* Tutorial 4 style: an inert gas plus a gas that decomposes into more gas molecules */
+  /* an inert gas plus a gas that decomposes into more gas molecules */
   { t: 'h9', make: function (R) {
     var rx = R.p([['acetone, CH<sub>3</sub>COCH<sub>3</sub>', 'CH<sub>3</sub>COCH<sub>3</sub> → C<sub>2</sub>H<sub>4</sub> + CO + H<sub>2</sub>', 2], ['N<sub>2</sub>O<sub>4</sub>', 'N<sub>2</sub>O<sub>4</sub> → 2 NO<sub>2</sub>', 1], ['PCl<sub>5</sub>', 'PCl<sub>5</sub> → PCl<sub>3</sub> + Cl<sub>2</sub>', 1], ['ethane', 'C<sub>2</sub>H<sub>6</sub> → C<sub>2</sub>H<sub>4</sub> + H<sub>2</sub>', 1], ['ammonia', '2 NH<sub>3</sub> → N<sub>2</sub> + 3 H<sub>2</sub>', 1], ['dimethyl ether, CH<sub>3</sub>OCH<sub>3</sub>', 'CH<sub>3</sub>OCH<sub>3</sub> → CH<sub>4</sub> + CO + H<sub>2</sub>', 2]]);
     var inert = R.p(['argon', 'helium', 'nitrogen']), P0 = m3(R, 10, 90), y = R.f(0.08, 0.45, 2), Pf = Number(sig(P0 * (1 + rx[2] * y), 3));
