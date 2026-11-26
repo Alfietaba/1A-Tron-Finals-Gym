@@ -1283,6 +1283,16 @@ h2 { font-weight: 700; letter-spacing: -.01em; }
 .dock .fgrid { columns: 17rem; }
 .dock .fgrid.code { columns: 30rem; }
 @media (max-width: 30rem) { .modal.fs-modal { padding: 1rem; } .fsearch { top: -1rem; } .fc { padding: .65rem .75rem; } }
+
+/* ---------- next tutorial: highlighter-yellow box on the topics it covers ---------- */
+:root { --hlt: #ffcc00; --hlt-ink: #3a2c00; --hlt-soft: #fff6cc; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --hlt: #ffd60a; --hlt-ink: #1c1600; --hlt-soft: color-mix(in srgb, #ffd60a 13%, var(--surface)); } }
+:root[data-theme="dark"] { --hlt: #ffd60a; --hlt-ink: #1c1600; --hlt-soft: color-mix(in srgb, #ffd60a 13%, var(--surface)); }
+.topic.next { border-color: var(--hlt); background: var(--hlt-soft); box-shadow: 0 0 0 2px var(--hlt), 0 10px 24px -14px var(--hlt); }
+.topic.next:hover { border-color: var(--hlt); }
+.nx-tag { justify-self: start; display: inline-flex; align-items: center; gap: .32rem; font-family: var(--font-ui); font-size: .7rem; font-weight: 700; line-height: 1.5; color: var(--hlt-ink); background: var(--hlt); border-radius: 999px; padding: .05rem .55rem .05rem .45rem; margin: -.1rem 0 -.15rem; }
+.nx-tag::before { content: ''; width: .38rem; height: .38rem; border-radius: 50%; background: currentColor; }
+#nx-note::before { content: ''; display: inline-block; width: .8rem; height: .55rem; border-radius: .15rem; background: var(--hlt); margin-right: .3rem; vertical-align: .05rem; }
 </style>
 
 <div class="app" id="app"></div>

@@ -1,24 +1,20 @@
 /* ================= MATH 115 TUTORIALS 4 TO 6 (Fall 2026) ================= */
-TUT('math115', [
-  { id: 'tu4', name: 'Tutorial 4: parameters, orthogonality and transposes', sec: 'Tutorial 4' },
-  { id: 'tu5', name: 'Tutorial 5: spanning and linear independence', sec: 'Tutorial 5' },
-  { id: 'tu6', name: 'Tutorial 6: bases, subspaces, Null and Col', sec: 'Tutorial 6' }
-], [
+TUT('math115', null, [
 
 /* ---------- Tutorial 4 ---------- */
-mc('tu4-1a', 'tu4', 'The coefficient matrix A of a <b>homogeneous</b> system has been reduced to [[1,1,-1,2a;0,a,2a,3a;0,0,0,b-2]], where <i>a</i>, <i>b</i> ∈ ℝ. Which outcome can happen for some choice of <i>a</i> and <i>b</i>?',
+mc('tu4-1a', 't7', 'The coefficient matrix A of a <b>homogeneous</b> system has been reduced to [[1,1,-1,2a;0,a,2a,3a;0,0,0,b-2]], where <i>a</i>, <i>b</i> ∈ ℝ. Which outcome can happen for some choice of <i>a</i> and <i>b</i>?',
   ['No solutions', 'A unique solution', 'A 3-parameter solution', 'A 4-parameter solution', 'None of these can happen'], 2,
   'A homogeneous system is always consistent (~x~ = ~0~ works), so "no solutions" is impossible. A is 3 × 4, so rank(A) ≤ 3 and there are at least 4 − 3 = 1 parameters: no unique solution. A reduces to a nonzero matrix, so rank(A) ≥ 1 and there are at most 4 − 1 = 3 parameters: no 4-parameter solution. With <i>a</i> = 0 and <i>b</i> = 2 the REF is [[1,1,-1,0;0,0,0,0;0,0,0,0]], rank 1, so 3 parameters.'),
-mc('tu4-1b', 'tu4', 'The coefficient matrix A of a homogeneous system has been reduced to [[1,1,-1,2a;0,a,2a,3a;0,0,0,b-2]], where <i>a</i>, <i>b</i> ∈ ℝ. For which <i>a</i>, <i>b</i> does the system have a <b>1-parameter</b> solution?',
+mc('tu4-1b', 't7', 'The coefficient matrix A of a homogeneous system has been reduced to [[1,1,-1,2a;0,a,2a,3a;0,0,0,b-2]], where <i>a</i>, <i>b</i> ∈ ℝ. For which <i>a</i>, <i>b</i> does the system have a <b>1-parameter</b> solution?',
   ['<i>a</i> = 0 and <i>b</i> ≠ 2', '<i>a</i> ≠ 0 and <i>b</i> ≠ 2', '<i>a</i> ≠ 0 or <i>b</i> ≠ 2', '<i>a</i> ≠ 0 and <i>b</i> = 2', 'It is not possible'], 1,
   'Parameters = 4 − rank(A). Rank 3 needs a leading entry in every row: <i>a</i> ≠ 0 gives a leading <i>a</i> in row 2, and <i>b</i> ≠ 2 gives a leading <i>b</i> − 2 in row 3. Then 4 − 3 = 1 parameter. If either fails, the rank drops to 2 or 1.'),
-mc('tu4-1c', 'tu4', 'The coefficient matrix A of a homogeneous system has been reduced to [[1,1,-1,2a;0,a,2a,3a;0,0,0,b-2]], where <i>a</i>, <i>b</i> ∈ ℝ. For which <i>a</i>, <i>b</i> does the system have a <b>2-parameter</b> solution?',
+mc('tu4-1c', 't7', 'The coefficient matrix A of a homogeneous system has been reduced to [[1,1,-1,2a;0,a,2a,3a;0,0,0,b-2]], where <i>a</i>, <i>b</i> ∈ ℝ. For which <i>a</i>, <i>b</i> does the system have a <b>2-parameter</b> solution?',
   ['<i>a</i> = 0 and <i>b</i> = 2, or <i>a</i> ≠ 0 and <i>b</i> ≠ 2', '<i>a</i> ≠ 0 and <i>b</i> = 2 only', '<i>a</i> = 0 and <i>b</i> ≠ 2, or <i>a</i> ≠ 0 and <i>b</i> = 2', '<i>a</i> = 0 and <i>b</i> ≠ 2 only', 'It is not possible'], 2,
   'Need rank(A) = 2. If <i>a</i> ≠ 0 and <i>b</i> = 2, row 3 is zero and rows 1, 2 have leading entries: rank 2. If <i>a</i> = 0 and <i>b</i> ≠ 2, row 2 becomes zero; swapping R₂ ↔ R₃ gives [[1,1,-1,0;0,0,0,b-2;0,0,0,0]], again rank 2. Either way 4 − 2 = 2 parameters.'),
-mc('tu4-1d', 'tu4', 'The coefficient matrix A of a homogeneous system has been reduced to [[1,1,-1,2a;0,a,2a,3a;0,0,0,b-2]], where <i>a</i>, <i>b</i> ∈ ℝ. For which <i>a</i>, <i>b</i> does the system have a <b>3-parameter</b> solution?',
+mc('tu4-1d', 't7', 'The coefficient matrix A of a homogeneous system has been reduced to [[1,1,-1,2a;0,a,2a,3a;0,0,0,b-2]], where <i>a</i>, <i>b</i> ∈ ℝ. For which <i>a</i>, <i>b</i> does the system have a <b>3-parameter</b> solution?',
   ['<i>a</i> = 0 and <i>b</i> = 2', '<i>a</i> ≠ 0 and <i>b</i> = 2', '<i>a</i> = 0 and <i>b</i> ≠ 2', '<i>a</i> = 0 or <i>b</i> = 2', 'It is not possible'], 0,
   'Need rank(A) = 1. With <i>a</i> = 0 and <i>b</i> = 2 the matrix is [[1,1,-1,0;0,0,0,0;0,0,0,0]], rank 1, so 4 − 1 = 3 parameters. If only one of the two holds, the rank is 2.'),
-multi('tu4-2', 'tu4', 'Let ~y~ = {{1,2,-12,7}}, ~z~ = {{1,-6,4,-1}} and ~w~ = {{19,3,3,2}} in ℝ⁴.', [
+multi('tu4-2', 't7', 'Let ~y~ = {{1,2,-12,7}}, ~z~ = {{1,-6,4,-1}} and ~w~ = {{19,3,3,2}} in ℝ⁴.', [
   { ask: 'The vectors ~x~ orthogonal to both ~y~ and ~z~ are ~x~ = s~a~ + t~b~ (s, t ∈ ℝ), with x₃ = s and x₄ = t. Find ~a~.', ans: '(8,2,1,0)',
     hint: 'Write ~y~·~x~ = 0 and ~z~·~x~ = 0 as a homogeneous system and row reduce [[1,2,-12,7;1,-6,4,-1]].',
     why: 'R₂ − R₁ gives (0, −8, 16, −8); −⅛R₂ gives (0, 1, −2, 1); R₁ − 2R₂ gives (1, 0, −8, 5). So x₁ = 8s − 5t, x₂ = 2s − t, x₃ = s, x₄ = t, and ~a~ = {{8,2,1,0}}.' },
@@ -30,42 +26,42 @@ multi('tu4-2', 'tu4', 'Let ~y~ = {{1,2,-12,7}}, ~z~ = {{1,-6,4,-1}} and ~w~ = {{
     hint: '~w~ is a particular solution. Pick s and t to cancel its third and fourth entries.',
     why: 'The general solution is particular (~w~) plus homogeneous: ~x~ = {{19,3,3,2}} + s{{8,2,1,0}} + t{{-5,-1,0,1}}. x₃ = 3 + s = 0 gives s = −3 and x₄ = 2 + t = 0 gives t = −2, so ~x~ = (19 − 24 + 10, 3 − 6 + 2, 0, 0) = (5, −1, 0, 0). Check: 5 − 2 = 3 and 5 + 6 = 11.' }
 ], 'sys'),
-multi('tu4-3', 'tu4', 'Find the matrices A and B given that 4A + (2B)<sup>T</sup> = [[8,-2,12;14,6,22]] and A<sup>T</sup> − 3B = [[-5,0;-4,-2;-4,-5]].', [
+multi('tu4-3', 't8', 'Find the matrices A and B given that 4A + (2B)<sup>T</sup> = [[8,-2,12;14,6,22]] and A<sup>T</sup> − 3B = [[-5,0;-4,-2;-4,-5]].', [
   { ask: 'Find B.', ans: '2,1;1,1;2,3', hint: 'Transpose the second equation and multiply it by 4, then subtract it from the first so A cancels.',
     why: 'Transposing: A − 3B<sup>T</sup> = [[-5,-4,-4;0,-2,-5]], so 4A − 12B<sup>T</sup> = [[-20,-16,-16;0,-8,-20]]. Subtracting from 4A + 2B<sup>T</sup> gives 14B<sup>T</sup> = [[28,14,28;14,14,42]], so B<sup>T</sup> = [[2,1,2;1,1,3]] and B = [[2,1;1,1;2,3]].' },
   { ask: 'Find A.', ans: '1,-1,2;3,1,4', hint: 'Once B is known, A<sup>T</sup> = [[-5,0;-4,-2;-4,-5]] + 3B.',
     why: 'B = [[2,1;1,1;2,3]], so A<sup>T</sup> = [[-5,0;-4,-2;-4,-5]] + [[6,3;3,3;6,9]] = [[1,3;-1,1;2,4]], and A = [[1,-1,2;3,1,4]]. Check: 4A + 2B<sup>T</sup> = [[4,-4,8;12,4,16]] + [[4,2,4;2,2,6]] = [[8,-2,12;14,6,22]].' }
 ], 'mat'),
-mc('tu4-4a', 'tu4', 'Consider a system A~x~ = ~b~ with A ∈ M<sub>m×n</sub>(ℝ) and ~b~ ∈ ℝ<sup>m</sup>. How many equations and how many variables does it have?',
+mc('tu4-4a', 't8', 'Consider a system A~x~ = ~b~ with A ∈ M<sub>m×n</sub>(ℝ) and ~b~ ∈ ℝ<sup>m</sup>. How many equations and how many variables does it have?',
   ['n equations and m variables', 'm equations and m variables', 'm equations and n variables', 'mn equations and n variables'], 2,
   'Each of the m rows of A gives one equation, and each of the n columns belongs to one variable (~x~ ∈ ℝ<sup>n</sup>).'),
-mc('tu4-4c', 'tu4', 'A~x~ = ~b~ is consistent, with A ∈ M<sub>m×n</sub>(ℝ). An REF R of A has exactly r rows of zeros (r ≤ m). How many parameters does the solution contain?',
+mc('tu4-4c', 't7', 'A~x~ = ~b~ is consistent, with A ∈ M<sub>m×n</sub>(ℝ). An REF R of A has exactly r rows of zeros (r ≤ m). How many parameters does the solution contain?',
   ['n − r', 'm − r', 'n − m − r', 'n − m + r', 'r'], 3,
   'The other m − r rows of R are nonzero, so each has a leading entry: rank(A) = m − r. By the System Rank Theorem the number of parameters is n − rank(A) = n − (m − r) = n − m + r.'),
-mc('tu4-4d', 'tu4', 'A~x~ = ~b~ is consistent with ~b~ ≠ ~0~, and ~x~<sub>1</sub>, …, ~x~<sub>k</sub> are solutions. When is ~x~ = c<sub>1</sub>~x~<sub>1</sub> + ⋯ + c<sub>k</sub>~x~<sub>k</sub> also a solution?',
+mc('tu4-4d', 't7', 'A~x~ = ~b~ is consistent with ~b~ ≠ ~0~, and ~x~<sub>1</sub>, …, ~x~<sub>k</sub> are solutions. When is ~x~ = c<sub>1</sub>~x~<sub>1</sub> + ⋯ + c<sub>k</sub>~x~<sub>k</sub> also a solution?',
   ['Always, for any c<sub>1</sub>, …, c<sub>k</sub>', 'Exactly when c<sub>1</sub> + ⋯ + c<sub>k</sub> = 1', 'Exactly when c<sub>1</sub> + ⋯ + c<sub>k</sub> = 0', 'Exactly when c<sub>1</sub> = ⋯ = c<sub>k</sub> = 1'], 1,
   'A(c<sub>1</sub>~x~<sub>1</sub> + ⋯ + c<sub>k</sub>~x~<sub>k</sub>) = c<sub>1</sub>A~x~<sub>1</sub> + ⋯ + c<sub>k</sub>A~x~<sub>k</sub> = (c<sub>1</sub> + ⋯ + c<sub>k</sub>)~b~. This equals ~b~ exactly when (c<sub>1</sub> + ⋯ + c<sub>k</sub> − 1)~b~ = ~0~, and since ~b~ ≠ ~0~ that means c<sub>1</sub> + ⋯ + c<sub>k</sub> = 1.'),
 
 /* ---------- Tutorial 5 ---------- */
-mc('tu5-1a', 'tu5', 'Is S<sub>1</sub> = { {{1,4,-1}}, {{2,3,-1}} } linearly independent, and does it span ℝ³?',
+mc('tu5-1a', 't11', 'Is S<sub>1</sub> = { {{1,4,-1}}, {{2,3,-1}} } linearly independent, and does it span ℝ³?',
   ['Independent, and spans ℝ³', 'Independent, but does not span ℝ³', 'Dependent, but spans ℝ³', 'Dependent, and does not span ℝ³'], 1,
   'Two vectors, neither a scalar multiple of the other, so S<sub>1</sub> is linearly independent. Fewer than 3 vectors can never span ℝ³.'),
-mc('tu5-1b', 'tu5', 'Is S<sub>2</sub> = { {{1,2,-1}}, {{2,1,-2}}, {{-2,-6,2}} } linearly independent, and does it span ℝ³?',
+mc('tu5-1b', 't11', 'Is S<sub>2</sub> = { {{1,2,-1}}, {{2,1,-2}}, {{-2,-6,2}} } linearly independent, and does it span ℝ³?',
   ['Independent, and spans ℝ³', 'Independent, but does not span ℝ³', 'Dependent, but spans ℝ³', 'Dependent, and does not span ℝ³'], 3,
   'Put the vectors in the columns of A<sub>2</sub> and reduce: R₂ − 2R₁ and R₃ + R₁ give [[1,2,-2;0,-3,-2;0,0,0]]. rank(A<sub>2</sub>) = 2 &lt; 3, so the set is dependent (a free variable) and does not span (a zero row).'),
-mc('tu5-1c', 'tu5', 'Is S<sub>3</sub> = { {{1,4,7}}, {{2,6,8}}, {{3,2,1}} } linearly independent, and does it span ℝ³?',
+mc('tu5-1c', 't11', 'Is S<sub>3</sub> = { {{1,4,7}}, {{2,6,8}}, {{3,2,1}} } linearly independent, and does it span ℝ³?',
   ['Independent, and spans ℝ³', 'Independent, but does not span ℝ³', 'Dependent, but spans ℝ³', 'Dependent, and does not span ℝ³'], 0,
   'Columns into A<sub>3</sub>: R₂ − 4R₁, R₃ − 7R₁ give [[1,2,3;0,-2,-10;0,-6,-20]], then R₃ − 3R₂ gives [[1,2,3;0,-2,-10;0,0,10]]. rank(A<sub>3</sub>) = 3, so S<sub>3</sub> is independent and spans ℝ³.'),
-mc('tu5-1d', 'tu5', 'Is S<sub>4</sub> = { {{1,0,3}}, {{2,1,3}}, {{-2,3,-4}}, {{1,3,2}} } linearly independent, and does it span ℝ³?',
+mc('tu5-1d', 't11', 'Is S<sub>4</sub> = { {{1,0,3}}, {{2,1,3}}, {{-2,3,-4}}, {{1,3,2}} } linearly independent, and does it span ℝ³?',
   ['Independent, and spans ℝ³', 'Independent, but does not span ℝ³', 'Dependent, but spans ℝ³', 'Dependent, and does not span ℝ³'], 2,
   'More than 3 vectors in ℝ³ are always dependent. Columns into A<sub>4</sub>: R₃ − 3R₁ then R₃ + 3R₂ give [[1,2,-2,1;0,1,3,3;0,0,11,8]]. rank(A<sub>4</sub>) = 3 (a leading entry in every row), so S<sub>4</sub> spans ℝ³.'),
-mc('tu5-2a', 'tu5', 'Let ~v~<sub>1</sub> = {{1,0,2,0}}, ~v~<sub>2</sub> = {{2,1,6,-5}}, ~v~<sub>3</sub> = {{1,1,4,-5}}, ~v~<sub>4</sub> = {{3,1,5,-8}}, ~v~<sub>5</sub> = {{2,0,4,0}} and S = {~v~<sub>1</sub>, …, ~v~<sub>5</sub>}. Row reducing A = [~v~<sub>1</sub> ⋯ ~v~<sub>5</sub>] and using the Extraction Theorem, which linearly independent subset S′ has Span S′ = Span S?',
+mc('tu5-2a', 't11', 'Let ~v~<sub>1</sub> = {{1,0,2,0}}, ~v~<sub>2</sub> = {{2,1,6,-5}}, ~v~<sub>3</sub> = {{1,1,4,-5}}, ~v~<sub>4</sub> = {{3,1,5,-8}}, ~v~<sub>5</sub> = {{2,0,4,0}} and S = {~v~<sub>1</sub>, …, ~v~<sub>5</sub>}. Row reducing A = [~v~<sub>1</sub> ⋯ ~v~<sub>5</sub>] and using the Extraction Theorem, which linearly independent subset S′ has Span S′ = Span S?',
   ['{~v~<sub>1</sub>, ~v~<sub>2</sub>, ~v~<sub>3</sub>}', '{~v~<sub>1</sub>, ~v~<sub>2</sub>, ~v~<sub>4</sub>}', '{~v~<sub>1</sub>, ~v~<sub>4</sub>, ~v~<sub>5</sub>}', '{~v~<sub>1</sub>, ~v~<sub>2</sub>, ~v~<sub>4</sub>, ~v~<sub>5</sub>}'], 1,
   'R₃ − 2R₁ gives (0, 2, 2, −1, 0); then R₃ − 2R₂ and R₄ + 5R₂ give rows (0, 0, 0, −3, 0) twice; R₄ − R₃ leaves [[1,2,1,3,2;0,1,1,1,0;0,0,0,-3,0;0,0,0,0,0]]. Leading entries sit in columns 1, 2 and 4, so S′ = {~v~<sub>1</sub>, ~v~<sub>2</sub>, ~v~<sub>4</sub>}. (Indeed ~v~<sub>3</sub> = ~v~<sub>2</sub> − ~v~<sub>1</sub> and ~v~<sub>5</sub> = 2~v~<sub>1</sub>.)'),
-mc('tu5-2b', 'tu5', 'Let ~v~<sub>1</sub> = {{1,0,2,0}}, ~v~<sub>2</sub> = {{2,1,6,-5}}, ~v~<sub>3</sub> = {{1,1,4,-5}}, ~v~<sub>4</sub> = {{3,1,5,-8}}, ~v~<sub>5</sub> = {{2,0,4,0}} and S = {~v~<sub>1</sub>, …, ~v~<sub>5</sub>}. One of these vectors must belong to every subset T of S with Span T = Span S. Which one?',
+mc('tu5-2b', 't11', 'Let ~v~<sub>1</sub> = {{1,0,2,0}}, ~v~<sub>2</sub> = {{2,1,6,-5}}, ~v~<sub>3</sub> = {{1,1,4,-5}}, ~v~<sub>4</sub> = {{3,1,5,-8}}, ~v~<sub>5</sub> = {{2,0,4,0}} and S = {~v~<sub>1</sub>, …, ~v~<sub>5</sub>}. One of these vectors must belong to every subset T of S with Span T = Span S. Which one?',
   ['~v~<sub>1</sub>', '~v~<sub>2</sub>', '~v~<sub>3</sub>', '~v~<sub>4</sub>', '~v~<sub>5</sub>'], 3,
   'Consider c<sub>1</sub>~v~<sub>1</sub> + ⋯ + c<sub>5</sub>~v~<sub>5</sub> = ~0~. Its coefficient matrix [~v~<sub>1</sub> ⋯ ~v~<sub>5</sub>] reduces to [[1,2,1,3,2;0,1,1,1,0;0,0,0,-3,0;0,0,0,0,0]], whose third row says −3c<sub>4</sub> = 0, so c<sub>4</sub> = 0 in every dependence. So ~v~<sub>4</sub> is not a combination of the others, and by the Reduction Theorem it cannot be removed without shrinking the span.'),
-proof('tu5-3a', 'tu5', 'Let ~v~<sub>1</sub>, ~v~<sub>2</sub> ∈ ℝ<sup>n</sup>. Prove that Span{~v~<sub>1</sub>, ~v~<sub>2</sub>} = Span{~v~<sub>1</sub> + ~v~<sub>2</sub>, ~v~<sub>1</sub> − ~v~<sub>2</sub>} using the Reduction Theorem. Build the chain of equalities in order. Some tiles are wrong.',
+proof('tu5-3a', 't11', 'Let ~v~<sub>1</sub>, ~v~<sub>2</sub> ∈ ℝ<sup>n</sup>. Prove that Span{~v~<sub>1</sub>, ~v~<sub>2</sub>} = Span{~v~<sub>1</sub> + ~v~<sub>2</sub>, ~v~<sub>1</sub> − ~v~<sub>2</sub>} using the Reduction Theorem. Build the chain of equalities in order. Some tiles are wrong.',
   ['Span{~v~<sub>1</sub>, ~v~<sub>2</sub>} = Span{~v~<sub>1</sub>, ~v~<sub>2</sub>, ~v~<sub>1</sub> + ~v~<sub>2</sub>}, since ~v~<sub>1</sub> + ~v~<sub>2</sub> = 1~v~<sub>1</sub> + 1~v~<sub>2</sub>',
    '= Span{~v~<sub>1</sub>, ~v~<sub>2</sub>, ~v~<sub>1</sub> + ~v~<sub>2</sub>, ~v~<sub>1</sub> − ~v~<sub>2</sub>}, since ~v~<sub>1</sub> − ~v~<sub>2</sub> = 1~v~<sub>1</sub> − 1~v~<sub>2</sub> + 0(~v~<sub>1</sub> + ~v~<sub>2</sub>)',
    '= Span{~v~<sub>2</sub>, ~v~<sub>1</sub> + ~v~<sub>2</sub>, ~v~<sub>1</sub> − ~v~<sub>2</sub>}, since ~v~<sub>1</sub> = −1~v~<sub>2</sub> + 1(~v~<sub>1</sub> + ~v~<sub>2</sub>) + 0(~v~<sub>1</sub> − ~v~<sub>2</sub>)',
@@ -73,24 +69,24 @@ proof('tu5-3a', 'tu5', 'Let ~v~<sub>1</sub>, ~v~<sub>2</sub> ∈ ℝ<sup>n</sup>
   ['= Span{~v~<sub>1</sub> + ~v~<sub>2</sub>, ~v~<sub>1</sub> − ~v~<sub>2</sub>}, since {~v~<sub>1</sub>, ~v~<sub>2</sub>} is linearly independent',
    '= Span{~v~<sub>2</sub>, ~v~<sub>1</sub> + ~v~<sub>2</sub>}, since ~v~<sub>1</sub> − ~v~<sub>2</sub> = ~0~'],
   'Add the new vectors one at a time (each is a combination of what is already there, so the span does not change), then remove the old ones one at a time (each is a combination of what remains). No independence assumption is needed.'),
-mc('tu5-3b', 'tu5', 'Let ~w~<sub>1</sub>, ~w~<sub>2</sub> ∈ ℝ<sup>n</sup> with {~w~<sub>1</sub>, ~w~<sub>2</sub>} linearly independent. Is S = {2~w~<sub>1</sub> − 3~w~<sub>2</sub>, 4~w~<sub>1</sub> − ~w~<sub>2</sub>} linearly independent?',
+mc('tu5-3b', 't11', 'Let ~w~<sub>1</sub>, ~w~<sub>2</sub> ∈ ℝ<sup>n</sup> with {~w~<sub>1</sub>, ~w~<sub>2</sub>} linearly independent. Is S = {2~w~<sub>1</sub> − 3~w~<sub>2</sub>, 4~w~<sub>1</sub> − ~w~<sub>2</sub>} linearly independent?',
   ['No: 4~w~<sub>1</sub> − ~w~<sub>2</sub> is a scalar multiple of 2~w~<sub>1</sub> − 3~w~<sub>2</sub>', 'Yes, S is linearly independent', 'It depends on n', 'No: any two vectors built from ~w~<sub>1</sub> and ~w~<sub>2</sub> are dependent'], 1,
   'Rearrange: (2c<sub>1</sub> + 4c<sub>2</sub>)~w~<sub>1</sub> + (−3c<sub>1</sub> − c<sub>2</sub>)~w~<sub>2</sub> = ~0~. Since {~w~<sub>1</sub>, ~w~<sub>2</sub>} is independent, 2c<sub>1</sub> + 4c<sub>2</sub> = 0 and −3c<sub>1</sub> − c<sub>2</sub> = 0. ½R₁ then R₂ + 3R₁ gives [[1,2;0,5]]: no free variables, so only c<sub>1</sub> = c<sub>2</sub> = 0. S is independent.'),
 
 /* ---------- Tutorial 6 ---------- */
-mc('tu6-1a', 'tu6', 'Is B<sub>1</sub> = { {{1,1,2}}, {{2,-1,3}} } a basis for ℝ³?',
+mc('tu6-1a', 't13', 'Is B<sub>1</sub> = { {{1,1,2}}, {{2,-1,3}} } a basis for ℝ³?',
   ['Yes', 'No: it has too few vectors', 'No: it has too many vectors', 'No: its vectors are linearly dependent'], 1,
   'A basis for ℝ³ has exactly 3 vectors. Two vectors cannot span ℝ³.'),
-mc('tu6-1b', 'tu6', 'Is B<sub>2</sub> = { {{1,2,3}}, {{4,5,6}}, {{7,8,9}} } a basis for ℝ³?',
+mc('tu6-1b', 't13', 'Is B<sub>2</sub> = { {{1,2,3}}, {{4,5,6}}, {{7,8,9}} } a basis for ℝ³?',
   ['Yes', 'No: it has too few vectors', 'No: it has too many vectors', 'No: its vectors are linearly dependent'], 3,
   'Columns into A<sub>2</sub>: R₂ − 2R₁, R₃ − 3R₁ give [[1,4,7;0,-3,-6;0,-6,-12]], then R₃ − 2R₂ gives [[1,4,7;0,-3,-6;0,0,0]]. rank(A<sub>2</sub>) = 2 &lt; 3, so the set is dependent and not a basis.'),
-mc('tu6-1c', 'tu6', 'Is B<sub>3</sub> = { {{1,0,1}}, {{1,-3,2}}, {{1,1,1}} } a basis for ℝ³?',
+mc('tu6-1c', 't13', 'Is B<sub>3</sub> = { {{1,0,1}}, {{1,-3,2}}, {{1,1,1}} } a basis for ℝ³?',
   ['Yes', 'No: it has too few vectors', 'No: it has too many vectors', 'No: its vectors are linearly dependent'], 0,
   'Columns into A<sub>3</sub>: R₃ − R₁ gives [[1,1,1;0,-3,1;0,1,0]], then R₃ + ⅓R₂ gives [[1,1,1;0,-3,1;0,0,1/3]]. rank(A<sub>3</sub>) = 3, so the 3 vectors are independent and span ℝ³: a basis.'),
-mc('tu6-1d', 'tu6', 'Is B<sub>4</sub> = { {{1,2,1}}, {{4,1,-3}}, {{-1,-2,1}}, {{1,3,2}} } a basis for ℝ³?',
+mc('tu6-1d', 't13', 'Is B<sub>4</sub> = { {{1,2,1}}, {{4,1,-3}}, {{-1,-2,1}}, {{1,3,2}} } a basis for ℝ³?',
   ['Yes', 'No: it has too few vectors', 'No: it has too many vectors', 'No: it does not span ℝ³'], 2,
   'A basis for ℝ³ has exactly 3 vectors. Four vectors in ℝ³ are always linearly dependent.'),
-proof('tu6-2a', 'tu6', 'Let A ∈ M<sub>3×3</sub>(ℝ) and U = {~x~ ∈ ℝ³ | A~x~ = 2~x~}. Prove that U is a subspace of ℝ³. Build the proof in order. Some tiles are wrong.',
+proof('tu6-2a', 't12', 'Let A ∈ M<sub>3×3</sub>(ℝ) and U = {~x~ ∈ ℝ³ | A~x~ = 2~x~}. Prove that U is a subspace of ℝ³. Build the proof in order. Some tiles are wrong.',
   ['A~0~ = ~0~ = 2~0~, so ~0~ ∈ U',
    'Let ~x~, ~y~ ∈ U, so A~x~ = 2~x~ and A~y~ = 2~y~',
    'A(~x~ + ~y~) = A~x~ + A~y~ = 2~x~ + 2~y~ = 2(~x~ + ~y~), so ~x~ + ~y~ ∈ U',
@@ -98,14 +94,14 @@ proof('tu6-2a', 'tu6', 'Let A ∈ M<sub>3×3</sub>(ℝ) and U = {~x~ ∈ ℝ³ |
    'U contains ~0~ and is closed under addition and scalar multiplication, so U is a subspace of ℝ³'],
   ['A(~x~ + ~y~) = 2~x~ · 2~y~, so ~x~ + ~y~ ∈ U', 'Since A is square, A is invertible, so U = ℝ³'],
   'Subspace Test: show ~0~ ∈ U, then closure under addition and scalar multiplication, each by using linearity of matrix–vector multiplication.'),
-multi('tu6-2b', 'tu6', 'Let A = [[4,2,0;2,4,0;-1,2,5]] and U = {~x~ ∈ ℝ³ | A~x~ = 2~x~}.', [
+multi('tu6-2b', 't12', 'Let A = [[4,2,0;2,4,0;-1,2,5]] and U = {~x~ ∈ ℝ³ | A~x~ = 2~x~}.', [
   { ask: 'U is spanned by a single vector of the form {{1,p,q}}. Enter (p, q).', ans: '(-1,1)',
     hint: 'A~x~ = 2~x~ is the same as (A − 2I)~x~ = ~0~.',
     why: 'Equating entries gives 2x₁ + 2x₂ = 0 (twice) and −x₁ + 2x₂ + 3x₃ = 0. The RREF of the coefficient matrix is [[1,0,-1;0,1,1;0,0,0]], so ~x~ = t{{1,-1,1}}. Check: A{{1,-1,1}} = {{2,-2,2}}.' },
   { ask: 'What is dim(U)?', ans: '1', hint: 'Count the vectors in a basis.',
     why: '{ {{1,-1,1}} } is one nonzero vector, so it is linearly independent and a basis. dim(U) = 1.' }
 ], 'sub'),
-multi('tu6-3a', 'tu6', 'Let A = [[1,2,1,3,4;1,2,2,5,5;2,4,1,4,7]], whose RREF is [[1,2,0,1,3;0,0,1,2,1;0,0,0,0,0]]. The general solution of A~x~ = ~0~ is ~x~ = r~u~ + s~v~ + t~w~, with free variables x₂ = r, x₄ = s, x₅ = t.', [
+multi('tu6-3a', 't14', 'Let A = [[1,2,1,3,4;1,2,2,5,5;2,4,1,4,7]], whose RREF is [[1,2,0,1,3;0,0,1,2,1;0,0,0,0,0]]. The general solution of A~x~ = ~0~ is ~x~ = r~u~ + s~v~ + t~w~, with free variables x₂ = r, x₄ = s, x₅ = t.', [
   { ask: 'Find ~u~ (the vector multiplying r).', ans: '(-2,1,0,0,0)', hint: 'Read x₁ and x₃ off the RREF in terms of r, s, t.',
     why: 'x₁ = −2r − s − 3t and x₃ = −2s − t. The r-parts give ~u~ = {{-2,1,0,0,0}}.' },
   { ask: 'Find ~v~ (the vector multiplying s).', ans: '(-1,0,-2,1,0)', hint: 'x₁ = −2r − s − 3t and x₃ = −2s − t.',
@@ -115,10 +111,10 @@ multi('tu6-3a', 'tu6', 'Let A = [[1,2,1,3,4;1,2,2,5,5;2,4,1,4,7]], whose RREF is
   { ask: 'What is dim(Null(A))?', ans: '3', hint: 'One basis vector per free variable.',
     why: '{~u~, ~v~, ~w~} is a basis for Null(A), so dim(Null(A)) = 3 (= 5 columns − rank 2).' }
 ], 'sub'),
-mc('tu6-3b', 'tu6', 'Let A = [[1,2,1,3,4;1,2,2,5,5;2,4,1,4,7]], whose RREF is [[1,2,0,1,3;0,0,1,2,1;0,0,0,0,0]]. Which is a basis for Col(A), and what is dim(Col(A))?',
+mc('tu6-3b', 't14', 'Let A = [[1,2,1,3,4;1,2,2,5,5;2,4,1,4,7]], whose RREF is [[1,2,0,1,3;0,0,1,2,1;0,0,0,0,0]]. Which is a basis for Col(A), and what is dim(Col(A))?',
   ['{ {{1,0,0}}, {{0,1,0}} }, dimension 2', '{ {{1,1,2}}, {{1,2,1}} }, dimension 2', '{ {{1,1,2}}, {{2,2,4}}, {{1,2,1}} }, dimension 3', '{ {{1,2,0,1,3}}, {{0,0,1,2,1}} }, dimension 2'], 1,
   'The RREF has leading entries in columns 1 and 3, so columns 1 and 3 <b>of A itself</b> form a basis: { {{1,1,2}}, {{1,2,1}} }. dim(Col(A)) = 2. Columns of the RREF span a different space, and the RREF rows are a basis for Row(A), not Col(A).'),
-mc('tu6-4', 'tu6', 'B = { {{1,2,3}}, {{2,1,2}}, {{1,4,2}} } is a basis for ℝ³. Extend the linearly independent set T = { {{1,-4,-5}}, {{3,0,1}} } to a basis for ℝ³ by adding vectors from B. Which works?',
+mc('tu6-4', 't13', 'B = { {{1,2,3}}, {{2,1,2}}, {{1,4,2}} } is a basis for ℝ³. Extend the linearly independent set T = { {{1,-4,-5}}, {{3,0,1}} } to a basis for ℝ³ by adding vectors from B. Which works?',
   ['T ∪ { {{1,2,3}} }', 'T ∪ { {{2,1,2}} }', 'T ∪ { {{1,4,2}} }', 'T ∪ { {{1,2,3}}, {{2,1,2}} }'], 2,
   'Put T first, then B: [[1,3,1,2,1;-4,0,2,1,4;-5,1,3,2,2]]. R₂ + 4R₁, R₃ + 5R₁ give [[1,3,1,2,1;0,12,6,9,8;0,16,8,12,7]], then R₃ − (4/3)R₂ gives last row (0, 0, 0, 0, −11/3). Leading entries in columns 1, 2 and 5, so add {{1,4,2}}. Both {{1,2,3}} and {{2,1,2}} already lie in Span T, and a basis for ℝ³ has exactly 3 vectors.')
 

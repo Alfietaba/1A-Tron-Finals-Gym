@@ -1,41 +1,37 @@
 /* ================= MATH 115 TUTORIALS 1 TO 3 (Fall 2026) ================= */
-TUT('math115', [
-  { id: 'tu1', name: 'Tutorial 1: vectors, dot product, Cauchy-Schwarz', sec: 'Tutorial 1' },
-  { id: 'tu2', name: 'Tutorial 2: lines, planes, cross product', sec: 'Tutorial 2' },
-  { id: 'tu3', name: 'Tutorial 3: distances, systems, proj and perp', sec: 'Tutorial 3' }
-], [
+TUT('math115', null, [
 /* ---------- Tutorial 1 ---------- */
-num('tu1-1a', 'tu1', 'Let ~u~ = {{3,-1,4}}, ~v~ = {{2,0,1}} and ~w~ = {{6,-1,-3}}. Evaluate 2~u~ + 3~v~ − ~w~.', '(6,-1,14)',
+num('tu1-1a', 't1', 'Let ~u~ = {{3,-1,4}}, ~v~ = {{2,0,1}} and ~w~ = {{6,-1,-3}}. Evaluate 2~u~ + 3~v~ − ~w~.', '(6,-1,14)',
   'Scale ~u~ and ~v~ first, then add and subtract entry by entry.',
   '2~u~ = {{6,-2,8}} and 3~v~ = {{6,0,3}}. So 2~u~ + 3~v~ − ~w~ = {{6 + 6 − 6, −2 + 0 + 1, 8 + 3 + 3}} = {{6,-1,14}}.'),
-num('tu1-1b', 'tu1', 'Let ~u~ = {{3,-1,4}} and ~w~ = {{6,-1,-3}}. Compute ~u~ · ~w~.', '7',
+num('tu1-1b', 't2', 'Let ~u~ = {{3,-1,4}} and ~w~ = {{6,-1,-3}}. Compute ~u~ · ~w~.', '7',
   'Multiply matching entries and add.',
   '~u~ · ~w~ = 3(6) + (−1)(−1) + 4(−3) = 18 + 1 − 12 = 7. Since 7 &gt; 0, the angle between ~u~ and ~w~ is acute.'),
-mc('tu1-1b2', 'tu1', 'Let ~u~ = {{3,-1,4}} and ~w~ = {{6,-1,-3}}. Is the angle determined by ~u~ and ~w~ acute, orthogonal or obtuse?',
+mc('tu1-1b2', 't2', 'Let ~u~ = {{3,-1,4}} and ~w~ = {{6,-1,-3}}. Is the angle determined by ~u~ and ~w~ acute, orthogonal or obtuse?',
   ['Obtuse, because ~w~ has negative entries', 'Orthogonal', 'Acute, because ~u~ · ~w~ &gt; 0', 'It cannot be decided without the norms'], 2,
   '~u~ · ~w~ = 18 + 1 − 12 = 7 &gt; 0. The sign of the dot product alone decides it (cos θ has the same sign as ~u~ · ~w~), so the angle is acute.'),
-num('tu1-1c', 'tu1', 'Let ~v~ = {{2,0,1}} and ~w~ = {{6,-1,-3}}. Compute cos θ, where θ is the angle determined by ~v~ and ~w~. Give an exact value.', '9/sqrt(230)',
+num('tu1-1c', 't2', 'Let ~v~ = {{2,0,1}} and ~w~ = {{6,-1,-3}}. Compute cos θ, where θ is the angle determined by ~v~ and ~w~. Give an exact value.', '9/sqrt(230)',
   'cos θ = (~v~ · ~w~) / (‖~v~‖ ‖~w~‖).',
   '~v~ · ~w~ = 12 + 0 − 3 = 9, ‖~v~‖ = √5 and ‖~w~‖ = √(36 + 1 + 9) = √46. So cos θ = 9/(√5 √46) = 9/√230.'),
-num('tu1-1d', 'tu1', 'Let ~u~ = {{3,-1,4}} and ~w~ = {{6,-1,-3}}. Find the vector ~x~ of length ‖2~u~‖ that points in the opposite direction of ~w~. Exact forms like 2sqrt(13/23) are fine.', '(-12sqrt(13/23),2sqrt(13/23),6sqrt(13/23))',
+num('tu1-1d', 't2', 'Let ~u~ = {{3,-1,4}} and ~w~ = {{6,-1,-3}}. Find the vector ~x~ of length ‖2~u~‖ that points in the opposite direction of ~w~. Exact forms like 2sqrt(13/23) are fine.', '(-12sqrt(13/23),2sqrt(13/23),6sqrt(13/23))',
   'Normalize ~w~, then multiply by −‖2~u~‖ = −2‖~u~‖.',
   '‖~u~‖ = √(9 + 1 + 16) = √26 and ‖~w~‖ = √46. So ~x~ = −2√26 · (1/√46)~w~ = −2√(26/46){{6,-1,-3}} = −2√(13/23){{6,-1,-3}} = {{−12√(13/23), 2√(13/23), 6√(13/23)}} ≈ (−9.022, 1.504, 4.511).'),
-num('tu1-1e', 'tu1', 'Let ~w~ = {{6,-1,-3}} and take the points A(1, −3, −2) and B(−11, −1, 4). Find the scalar <i>k</i> with ~AB~ = <i>k</i>~w~.', '-2',
+num('tu1-1e', 't1', 'Let ~w~ = {{6,-1,-3}} and take the points A(1, −3, −2) and B(−11, −1, 4). Find the scalar <i>k</i> with ~AB~ = <i>k</i>~w~.', '-2',
   'Compute ~AB~ = ~OB~ − ~OA~ and compare it with ~w~ entry by entry.',
   '~AB~ = {{-11,-1,4}} − {{1,-3,-2}} = {{-12,2,6}} = −2{{6,-1,-3}}. So ~AB~ = −2~w~.'),
-num('tu1-2a', 'tu1', 'Let ~v~<sub>1</sub> = {{1,2}} and ~v~<sub>2</sub> = {{3,-1}}. Express ~e~<sub>1</sub> = {{1,0}} as c<sub>1</sub>~v~<sub>1</sub> + c<sub>2</sub>~v~<sub>2</sub>.', '(1/7,2/7)',
+num('tu1-2a', 't1', 'Let ~v~<sub>1</sub> = {{1,2}} and ~v~<sub>2</sub> = {{3,-1}}. Express ~e~<sub>1</sub> = {{1,0}} as c<sub>1</sub>~v~<sub>1</sub> + c<sub>2</sub>~v~<sub>2</sub>.', '(1/7,2/7)',
   'Write the system c<sub>1</sub> + 3c<sub>2</sub> = 1, 2c<sub>1</sub> − c<sub>2</sub> = 0.',
   'The second equation gives c<sub>2</sub> = 2c<sub>1</sub>. Then 1 = c<sub>1</sub> + 3(2c<sub>1</sub>) = 7c<sub>1</sub>, so c<sub>1</sub> = 1/7 and c<sub>2</sub> = 2/7. Check: (1/7){{1,2}} + (2/7){{3,-1}} = {{1,0}}.', ['c₁', 'c₂']),
-num('tu1-2b', 'tu1', 'Let ~v~<sub>1</sub> = {{1,2}} and ~v~<sub>2</sub> = {{3,-1}}. Express ~e~<sub>2</sub> = {{0,1}} as c<sub>1</sub>~v~<sub>1</sub> + c<sub>2</sub>~v~<sub>2</sub>.', '(3/7,-1/7)',
+num('tu1-2b', 't1', 'Let ~v~<sub>1</sub> = {{1,2}} and ~v~<sub>2</sub> = {{3,-1}}. Express ~e~<sub>2</sub> = {{0,1}} as c<sub>1</sub>~v~<sub>1</sub> + c<sub>2</sub>~v~<sub>2</sub>.', '(3/7,-1/7)',
   'Write the system c<sub>1</sub> + 3c<sub>2</sub> = 0, 2c<sub>1</sub> − c<sub>2</sub> = 1.',
   'The first equation gives c<sub>1</sub> = −3c<sub>2</sub>. Then 1 = 2(−3c<sub>2</sub>) − c<sub>2</sub> = −7c<sub>2</sub>, so c<sub>2</sub> = −1/7 and c<sub>1</sub> = 3/7. Check: (3/7){{1,2}} − (1/7){{3,-1}} = {{0,1}}.', ['c₁', 'c₂']),
-mc('tu1-2c', 'tu1', 'Which expresses ~x~ = {{x₁,x₂}} as a linear combination of ~e~<sub>1</sub> = {{1,0}} and ~e~<sub>2</sub> = {{0,1}}?',
+mc('tu1-2c', 't1', 'Which expresses ~x~ = {{x₁,x₂}} as a linear combination of ~e~<sub>1</sub> = {{1,0}} and ~e~<sub>2</sub> = {{0,1}}?',
   ['~x~ = x<sub>2</sub>~e~<sub>1</sub> + x<sub>1</sub>~e~<sub>2</sub>', '~x~ = x<sub>1</sub>~e~<sub>1</sub> + x<sub>2</sub>~e~<sub>2</sub>', '~x~ = (x<sub>1</sub> + x<sub>2</sub>)(~e~<sub>1</sub> + ~e~<sub>2</sub>)', '~x~ = x<sub>1</sub>x<sub>2</sub>(~e~<sub>1</sub> + ~e~<sub>2</sub>)'], 1,
   'By inspection, {{x₁,x₂}} = {{x₁,0}} + {{0,x₂}} = x<sub>1</sub>{{1,0}} + x<sub>2</sub>{{0,1}} = x<sub>1</sub>~e~<sub>1</sub> + x<sub>2</sub>~e~<sub>2</sub>.'),
-num('tu1-2d', 'tu1', 'Let ~v~<sub>1</sub> = {{1,2}} and ~v~<sub>2</sub> = {{3,-1}}. Any ~x~ = {{x₁,x₂}} can be written as ~x~ = c<sub>1</sub>~v~<sub>1</sub> + c<sub>2</sub>~v~<sub>2</sub> with c<sub>1</sub> = <i>a</i>x<sub>1</sub> + <i>b</i>x<sub>2</sub> and c<sub>2</sub> = <i>c</i>x<sub>1</sub> + <i>d</i>x<sub>2</sub>. Find <i>a</i>, <i>b</i>, <i>c</i>, <i>d</i>.', '(1/7,3/7,2/7,-1/7)',
+num('tu1-2d', 't1', 'Let ~v~<sub>1</sub> = {{1,2}} and ~v~<sub>2</sub> = {{3,-1}}. Any ~x~ = {{x₁,x₂}} can be written as ~x~ = c<sub>1</sub>~v~<sub>1</sub> + c<sub>2</sub>~v~<sub>2</sub> with c<sub>1</sub> = <i>a</i>x<sub>1</sub> + <i>b</i>x<sub>2</sub> and c<sub>2</sub> = <i>c</i>x<sub>1</sub> + <i>d</i>x<sub>2</sub>. Find <i>a</i>, <i>b</i>, <i>c</i>, <i>d</i>.', '(1/7,3/7,2/7,-1/7)',
   'Solve c<sub>1</sub> + 3c<sub>2</sub> = x<sub>1</sub>, 2c<sub>1</sub> − c<sub>2</sub> = x<sub>2</sub>. Or write ~x~ = x<sub>1</sub>~e~<sub>1</sub> + x<sub>2</sub>~e~<sub>2</sub> and use ~e~<sub>1</sub>, ~e~<sub>2</sub> in terms of ~v~<sub>1</sub>, ~v~<sub>2</sub>.',
   'From the first equation c<sub>1</sub> = x<sub>1</sub> − 3c<sub>2</sub>. Substituting, x<sub>2</sub> = 2x<sub>1</sub> − 7c<sub>2</sub>, so c<sub>2</sub> = (2x<sub>1</sub> − x<sub>2</sub>)/7. Then c<sub>1</sub> = x<sub>1</sub> − 3(2x<sub>1</sub> − x<sub>2</sub>)/7 = x<sub>1</sub>/7 + 3x<sub>2</sub>/7. Equivalently, ~e~<sub>1</sub> = (1/7)~v~<sub>1</sub> + (2/7)~v~<sub>2</sub> and ~e~<sub>2</sub> = (3/7)~v~<sub>1</sub> − (1/7)~v~<sub>2</sub>, so ~x~ = x<sub>1</sub>~e~<sub>1</sub> + x<sub>2</sub>~e~<sub>2</sub> = (x<sub>1</sub>/7 + 3x<sub>2</sub>/7)~v~<sub>1</sub> + (2x<sub>1</sub>/7 − x<sub>2</sub>/7)~v~<sub>2</sub>.', ['a', 'b', 'c', 'd']),
-multi('tu1-3', 'tu1', 'Let t ∈ ℝ and consider the points A(t, t, t), B(t, 0, 0) and C(0, 1, t). There are exactly two values of t for which A, B and C are the vertices of a right triangle.', [
+multi('tu1-3', 't2', 'Let t ∈ ℝ and consider the points A(t, t, t), B(t, 0, 0) and C(0, 1, t). There are exactly two values of t for which A, B and C are the vertices of a right triangle.', [
   { ask: 'Find the value of t that gives a right angle at A.', ans: '1', hint: 'Set ~AB~ · ~AC~ = 0, and throw out any t that makes two of the points equal.',
     why: '~AB~ = {{0,-t,-t}} and ~AC~ = {{-t,1-t,0}}. ~AB~ · ~AC~ = −t(1 − t) = t(t − 1) = 0 gives t = 0 or t = 1. At t = 0, A = B, so there is no triangle. So t = 1.' },
   { ask: 'Find the value of t that gives a right angle at B.', ans: '-1', hint: 'Set ~BA~ · ~BC~ = 0.',
@@ -45,21 +41,21 @@ multi('tu1-3', 'tu1', 'Let t ∈ ℝ and consider the points A(t, t, t), B(t, 0,
   { ask: 'Find the area of the right triangle when t = −1.', ans: 'sqrt(6)/2', hint: 'The right angle is at B, so area = (1/2)‖~BA~‖ ‖~BC~‖.',
     why: 'At t = −1, ~BA~ = {{0,-1,-1}} and ~BC~ = {{1,1,-1}}. Area = (1/2)(√2)(√3) = √6/2.' }
 ], 'geo'),
-num('tu1-4a', 'tu1', 'Let ~x~, ~y~ ∈ ℝ<sup>n</sup> where ‖~x~‖ = √31 and ~y~ is a unit vector. Use the Cauchy-Schwarz Inequality |~x~ · ~y~| ≤ ‖~x~‖ ‖~y~‖ to find the smallest and largest possible values of ~x~ · ~y~.', '(-sqrt(31),sqrt(31))',
+num('tu1-4a', 't2', 'Let ~x~, ~y~ ∈ ℝ<sup>n</sup> where ‖~x~‖ = √31 and ~y~ is a unit vector. Use the Cauchy-Schwarz Inequality |~x~ · ~y~| ≤ ‖~x~‖ ‖~y~‖ to find the smallest and largest possible values of ~x~ · ~y~.', '(-sqrt(31),sqrt(31))',
   'A unit vector has norm 1.',
   '‖~y~‖ = 1, so |~x~ · ~y~| ≤ √31 · 1 = √31. That is, −√31 ≤ ~x~ · ~y~ ≤ √31.', ['smallest', 'largest']),
-num('tu1-4b', 'tu1', 'Let ~x~, ~y~ ∈ ℝ<sup>n</sup> where ‖~x~‖ = √31 and ~y~ is a unit vector. Given that |~x~ · ~y~| = ‖~x~ + 5~y~‖, find ~x~ · ~y~.', '-4',
+num('tu1-4b', 't2', 'Let ~x~, ~y~ ∈ ℝ<sup>n</sup> where ‖~x~‖ = √31 and ~y~ is a unit vector. Given that |~x~ · ~y~| = ‖~x~ + 5~y~‖, find ~x~ · ~y~.', '-4',
   'Square both sides and expand ‖~x~ + 5~y~‖² = (~x~ + 5~y~) · (~x~ + 5~y~). Then remember Cauchy-Schwarz bounds the answer.',
   '(~x~ · ~y~)² = ‖~x~‖² + 10(~x~ · ~y~) + 25‖~y~‖² = 31 + 10(~x~ · ~y~) + 25 = 56 + 10(~x~ · ~y~). So (~x~ · ~y~)² − 10(~x~ · ~y~) − 56 = 0, which factors as (~x~ · ~y~ − 14)(~x~ · ~y~ + 4) = 0. Cauchy-Schwarz gives |~x~ · ~y~| ≤ √31 ≈ 5.57, so 14 is impossible and ~x~ · ~y~ = −4.'),
 
 /* ---------- Tutorial 2 ---------- */
-multi('tu2-1', 'tu2', 'L<sub>1</sub>: ~x~ = {{3,-1,2}} + t{{1,-2,2}} and L<sub>2</sub>: ~x~ = {{-5,7,1}} + s{{2,0,-3}}. Find a scalar equation for the plane that contains L<sub>1</sub> and does not intersect any point of L<sub>2</sub>. Write it as 6x<sub>1</sub> + <i>b</i>x<sub>2</sub> + <i>c</i>x<sub>3</sub> = <i>D</i>.', [
+multi('tu2-1', 't4', 'L<sub>1</sub>: ~x~ = {{3,-1,2}} + t{{1,-2,2}} and L<sub>2</sub>: ~x~ = {{-5,7,1}} + s{{2,0,-3}}. Find a scalar equation for the plane that contains L<sub>1</sub> and does not intersect any point of L<sub>2</sub>. Write it as 6x<sub>1</sub> + <i>b</i>x<sub>2</sub> + <i>c</i>x<sub>3</sub> = <i>D</i>.', [
   { ask: 'Find the normal vector (6, <i>b</i>, <i>c</i>).', ans: '(6,7,4)', hint: 'The plane must be parallel to both lines, so the normal is orthogonal to both direction vectors.',
     why: '~n~ = {{1,-2,2}} × {{2,0,-3}} = {{(−2)(−3) − 2·0, 2·2 − 1·(−3), 1·0 − (−2)·2}} = {{6,7,4}}.' },
   { ask: 'Find <i>D</i>.', ans: '19', hint: 'The plane contains L<sub>1</sub>, so it contains the point (3, −1, 2).',
     why: 'D = 6(3) + 7(−1) + 4(2) = 18 − 7 + 8 = 19. Check L<sub>2</sub> misses it: the plane is parallel to L<sub>2</sub>, and (−5, 7, 1) gives −30 + 49 + 4 = 23 ≠ 19, so L<sub>2</sub> never meets the plane.' }
 ], 'geo'),
-multi('tu2-2', 'tu2', 'Find the line that passes through A(1, 0, 5) and meets the line L: ~x~ = {{2,1,1}} + t{{1,-1,2}} at a right angle.', [
+multi('tu2-2', 't5', 'Find the line that passes through A(1, 0, 5) and meets the line L: ~x~ = {{2,1,1}} + t{{1,-1,2}} at a right angle.', [
   { ask: 'Find the value of t at the point B where the two lines meet.', ans: '4/3', hint: 'B = (2 + t, 1 − t, 1 + 2t). Require ~AB~ · {{1,-1,2}} = 0.',
     why: '~AB~ = {{1+t,1-t,-4+2t}}. ~AB~ · {{1,-1,2}} = (1 + t) − (1 − t) + 2(−4 + 2t) = 6t − 8 = 0, so t = 4/3.' },
   { ask: 'Find B.', ans: '(10/3,-1/3,11/3)', hint: 'Substitute t into the parametric equations of L.',
@@ -67,7 +63,7 @@ multi('tu2-2', 'tu2', 'Find the line that passes through A(1, 0, 5) and meets th
   { ask: 'Find a direction vector of the required line, scaled so its first entry is 7.', ans: '(7,-1,-4)', hint: 'Use ~AB~, then clear the fractions.',
     why: '~AB~ = {{7/3,-1/3,-4/3}}, and 3~AB~ = {{7,-1,-4}}. The line is ~x~ = {{1,0,5}} + s{{7,-1,-4}}, s ∈ ℝ.' }
 ], 'geo'),
-multi('tu2-3', 'tu2', 'Let P = (1, 1, 1) and let L be the line ~x~ = {{1,0,-1}} + t{{3,2,1}}. Find the points on L at distance √11 from P.', [
+multi('tu2-3', 't3', 'Let P = (1, 1, 1) and let L be the line ~x~ = {{1,0,-1}} + t{{3,2,1}}. Find the points on L at distance √11 from P.', [
   { ask: 'Find the two values of t (smaller first).', ans: '(-3/7,1)', hint: 'A point on L is Q(1 + 3t, 2t, −1 + t). Solve ‖~PQ~‖² = 11.',
     why: '~PQ~ = {{3t,2t-1,t-2}}, so ‖~PQ~‖² = 9t² + (2t − 1)² + (t − 2)² = 14t² − 8t + 5. Setting it to 11 gives 7t² − 4t − 3 = 0, that is (7t + 3)(t − 1) = 0, so t = −3/7 or t = 1.' },
   { ask: 'Find the point for the larger t.', ans: '(4,2,0)', hint: 'Substitute into ~x~ = {{1,0,-1}} + t{{3,2,1}}.',
@@ -77,7 +73,7 @@ multi('tu2-3', 'tu2', 'Let P = (1, 1, 1) and let L be the line ~x~ = {{1,0,-1}} 
   { ask: 'The closest point on L to P lies exactly midway between the two points. Find it.', ans: '(13/7,4/7,-5/7)', hint: 'Average the two points, or use perp of ~P<sub>0</sub>P~ onto the direction.',
     why: 'Midpoint = ((4 − 2/7)/2, (2 − 6/7)/2, (0 − 10/7)/2) = (13/7, 4/7, −5/7). Using projections: with P<sub>0</sub>(1, 0, −1), ~P<sub>0</sub>P~ = {{0,1,2}}, proj = (4/14){{3,2,1}}, perp = (3/7){{-2,1,4}}, and Q = P − perp = (13/7, 4/7, −5/7). The shortest distance is (3/7)√21, which is less than √11, so there are two points.' }
 ], 'geo'),
-proof('tu2-4a', 'tu2', 'Let ~x~, ~y~, ~z~ ∈ ℝ³. You may assume (~x~ × ~y~) × ~z~ = (~x~ · ~z~)~y~ − (~y~ · ~z~)~x~ and ~x~ × (~y~ × ~z~) = (~x~ · ~z~)~y~ − (~x~ · ~y~)~z~. Prove that if (~x~ × ~y~) × ~z~ = ~x~ × (~y~ × ~z~), then (~y~ · ~z~)~x~ = (~x~ · ~y~)~z~. Build the proof in order. Some tiles are wrong.',
+proof('tu2-4a', 't4', 'Let ~x~, ~y~, ~z~ ∈ ℝ³. You may assume (~x~ × ~y~) × ~z~ = (~x~ · ~z~)~y~ − (~y~ · ~z~)~x~ and ~x~ × (~y~ × ~z~) = (~x~ · ~z~)~y~ − (~x~ · ~y~)~z~. Prove that if (~x~ × ~y~) × ~z~ = ~x~ × (~y~ × ~z~), then (~y~ · ~z~)~x~ = (~x~ · ~y~)~z~. Build the proof in order. Some tiles are wrong.',
   ['Assume (~x~ × ~y~) × ~z~ = ~x~ × (~y~ × ~z~)',
    'By the two identities, (~x~ · ~z~)~y~ − (~y~ · ~z~)~x~ = (~x~ · ~z~)~y~ − (~x~ · ~y~)~z~',
    'Subtract (~x~ · ~z~)~y~ from both sides: −(~y~ · ~z~)~x~ = −(~x~ · ~y~)~z~',
@@ -86,27 +82,27 @@ proof('tu2-4a', 'tu2', 'Let ~x~, ~y~, ~z~ ∈ ℝ³. You may assume (~x~ × ~y~)
    'Divide both sides by ~x~ · ~z~ to cancel ~y~',
    'By the two identities, (~x~ · ~z~)~y~ − (~y~ · ~z~)~x~ = (~x~ · ~y~)~z~ − (~x~ · ~z~)~y~'],
   'Rewrite both sides of the assumed equation with the identities. The (~x~ · ~z~)~y~ terms match and cancel, and a sign flip gives the result. The cross product is not associative in general, which is why the hypothesis matters, and you cannot divide by a dot product to cancel a vector.'),
-num('tu2-4b', 'tu2', 'Let ~x~ = {{1,0,t}}, ~y~ = {{1,2,1}} and ~z~ = {{s,1,0}}. Find all s, t ∈ ℝ so that (~x~ × ~y~) × ~z~ = ~x~ × (~y~ × ~z~).', '(-2,-1)',
+num('tu2-4b', 't4', 'Let ~x~ = {{1,0,t}}, ~y~ = {{1,2,1}} and ~z~ = {{s,1,0}}. Find all s, t ∈ ℝ so that (~x~ × ~y~) × ~z~ = ~x~ × (~y~ × ~z~).', '(-2,-1)',
   'Equivalently (~y~ · ~z~)~x~ = (~x~ · ~y~)~z~ (this follows from the triple product identities). Compare entries.',
   '(~y~ · ~z~)~x~ = (s + 2){{1,0,t}} = {{s+2,0,(s+2)t}} and (~x~ · ~y~)~z~ = (1 + t){{s,1,0}} = {{(1+t)s,1+t,0}}. Entry 2: 0 = 1 + t, so t = −1. Entry 3: (s + 2)t = 0 with t ≠ 0, so s = −2. Entry 1 checks: s + 2 = 0 = (1 + t)s. So s = −2 and t = −1.', ['s', 't']),
 
 /* ---------- Tutorial 3 ---------- */
-num('tu3-1a', 'tu3', 'Let R = (4, 1, −3) and let P<sub>1</sub> be the plane 2x<sub>1</sub> − x<sub>2</sub> + 2x<sub>3</sub> = 9. Find the shortest distance from R to P<sub>1</sub>.', '8/3',
+num('tu3-1a', 't5', 'Let R = (4, 1, −3) and let P<sub>1</sub> be the plane 2x<sub>1</sub> − x<sub>2</sub> + 2x<sub>3</sub> = 9. Find the shortest distance from R to P<sub>1</sub>.', '8/3',
   'Pick a point A on the plane and project ~AR~ onto the normal {{2,-1,2}}.',
   'A = (5, 1, 0) is on P<sub>1</sub> (10 − 1 + 0 = 9). ~AR~ = {{-1,0,-3}}. ~AR~ · ~n~ = −2 + 0 − 6 = −8 and ‖~n~‖² = 9, so proj<sub>~n~</sub>~AR~ = −(8/9){{2,-1,2}}, with norm (8/9)(3) = 8/3.'),
-num('tu3-1b', 'tu3', 'Let R = (4, 1, −3) and let P<sub>1</sub> be the plane 2x<sub>1</sub> − x<sub>2</sub> + 2x<sub>3</sub> = 9. Find the point Q on P<sub>1</sub> closest to R.', '(52/9,1/9,-11/9)',
+num('tu3-1b', 't5', 'Let R = (4, 1, −3) and let P<sub>1</sub> be the plane 2x<sub>1</sub> − x<sub>2</sub> + 2x<sub>3</sub> = 9. Find the point Q on P<sub>1</sub> closest to R.', '(52/9,1/9,-11/9)',
   'Move from R along the normal: substitute (4 + 2t, 1 − t, −3 + 2t) into the plane equation.',
   '2(4 + 2t) − (1 − t) + 2(−3 + 2t) = 1 + 9t = 9 gives t = 8/9. So Q = (4 + 16/9, 1 − 8/9, −3 + 16/9) = (52/9, 1/9, −11/9). Equivalently, ~OQ~ = ~OR~ − proj<sub>~n~</sub>~AR~ = {{4,1,-3}} + (8/9){{2,-1,2}}.'),
-mc('tu3-1c', 'tu3', 'The plane P<sub>2</sub> is parallel to 2x<sub>1</sub> − x<sub>2</sub> + 2x<sub>3</sub> = 9 and passes through (1, 0, 0). Is R = (4, 1, −3) on P<sub>2</sub>?',
+mc('tu3-1c', 't4', 'The plane P<sub>2</sub> is parallel to 2x<sub>1</sub> − x<sub>2</sub> + 2x<sub>3</sub> = 9 and passes through (1, 0, 0). Is R = (4, 1, −3) on P<sub>2</sub>?',
   ['Yes: P<sub>2</sub> is 2x<sub>1</sub> − x<sub>2</sub> + 2x<sub>3</sub> = 1, and R gives 1', 'No: P<sub>2</sub> is 2x<sub>1</sub> − x<sub>2</sub> + 2x<sub>3</sub> = 2, and R gives 1', 'Yes: P<sub>2</sub> is 2x<sub>1</sub> − x<sub>2</sub> + 2x<sub>3</sub> = 2, and R gives 2', 'No: R is not on P<sub>2</sub> because P<sub>2</sub> passes through the origin'], 1,
   'Parallel planes share the normal {{2,-1,2}}, so P<sub>2</sub> is 2x<sub>1</sub> − x<sub>2</sub> + 2x<sub>3</sub> = k. The point (1, 0, 0) gives k = 2. For R: 2(4) − 1 + 2(−3) = 1 ≠ 2, so R is not on P<sub>2</sub>.'),
-mc('tu3-2a1', 'tu3', 'Solve by row reducing the augmented matrix: x<sub>1</sub> + x<sub>2</sub> + 2x<sub>3</sub> = 3, 3x<sub>1</sub> − 2x<sub>2</sub> + 3x<sub>3</sub> = 6, 2x<sub>1</sub> − 8x<sub>2</sub> − 2x<sub>3</sub> = −3.',
+mc('tu3-2a1', 't6', 'Solve by row reducing the augmented matrix: x<sub>1</sub> + x<sub>2</sub> + 2x<sub>3</sub> = 3, 3x<sub>1</sub> − 2x<sub>2</sub> + 3x<sub>3</sub> = 6, 2x<sub>1</sub> − 8x<sub>2</sub> − 2x<sub>3</sub> = −3.',
   ['Unique solution (1, 0, 1)', 'Infinitely many solutions with one free variable', 'Unique solution (3, 0, 0)', 'No solution: the system is inconsistent'], 3,
   'R<sub>2</sub> − 3R<sub>1</sub> and R<sub>3</sub> − 2R<sub>1</sub> give rows (0, −5, −3 | −3) and (0, −10, −6 | −9). Then R<sub>3</sub> − 2R<sub>2</sub> gives (0, 0, 0 | −3). A row 0 = c with c ≠ 0 means there is no solution.'),
-num('tu3-2a2', 'tu3', 'Solve by row reducing the augmented matrix: x<sub>1</sub> + x<sub>2</sub> + x<sub>3</sub> = 6, x<sub>1</sub> − x<sub>2</sub> + x<sub>3</sub> = 2, x<sub>1</sub> + x<sub>2</sub> − x<sub>3</sub> = 0, x<sub>1</sub> + 2x<sub>2</sub> + 3x<sub>3</sub> = 14.', '(1,2,3)',
+num('tu3-2a2', 't6', 'Solve by row reducing the augmented matrix: x<sub>1</sub> + x<sub>2</sub> + x<sub>3</sub> = 6, x<sub>1</sub> − x<sub>2</sub> + x<sub>3</sub> = 2, x<sub>1</sub> + x<sub>2</sub> − x<sub>3</sub> = 0, x<sub>1</sub> + 2x<sub>2</sub> + 3x<sub>3</sub> = 14.', '(1,2,3)',
   'Subtract R<sub>1</sub> from every other row first.',
   'R<sub>2</sub> − R<sub>1</sub>, R<sub>3</sub> − R<sub>1</sub>, R<sub>4</sub> − R<sub>1</sub> give (0, −2, 0 | −4), (0, 0, −2 | −6), (0, 1, 2 | 8). Scaling gives x<sub>2</sub> = 2 and x<sub>3</sub> = 3, and R<sub>4</sub> becomes a zero row (2 + 2(3) = 8 checks). Back-substituting, x<sub>1</sub> = 6 − 2 − 3 = 1. All variables are leading, so the solution is unique: ~x~ = {{1,2,3}}.'),
-multi('tu3-2b', 'tu3', 'The RREF of the augmented matrix of a system of 2 equations in x<sub>1</sub>, …, x<sub>5</sub> is [[|1,0,0,3,0,3;0,0,1,-4,1,-3]]. Write the solution as ~x~ = ~p~ + r~u~ + s~v~ + t~w~ with x<sub>2</sub> = r, x<sub>4</sub> = s and x<sub>5</sub> = t.', [
+multi('tu3-2b', 't6', 'The RREF of the augmented matrix of a system of 2 equations in x<sub>1</sub>, …, x<sub>5</sub> is [[|1,0,0,3,0,3;0,0,1,-4,1,-3]]. Write the solution as ~x~ = ~p~ + r~u~ + s~v~ + t~w~ with x<sub>2</sub> = r, x<sub>4</sub> = s and x<sub>5</sub> = t.', [
   { ask: 'Find ~p~.', ans: '(3,0,-3,0,0)', hint: 'Set all free variables to 0.',
     why: 'x<sub>1</sub> and x<sub>3</sub> are leading. x<sub>1</sub> = 3 − 3s and x<sub>3</sub> = −3 + 4s − t. With r = s = t = 0, ~p~ = {{3,0,-3,0,0}}.' },
   { ask: 'Find ~u~ (the coefficient of r).', ans: '(0,1,0,0,0)', hint: 'x<sub>2</sub> appears in no equation.',
@@ -116,7 +112,7 @@ multi('tu3-2b', 'tu3', 'The RREF of the augmented matrix of a system of 2 equati
   { ask: 'Find ~w~ (the coefficient of t).', ans: '(0,0,-1,0,1)', hint: 'Read the coefficient of t in each of x<sub>1</sub>, …, x<sub>5</sub>.',
     why: 'x<sub>3</sub> = −3 + 4s − t and x<sub>5</sub> = t, so ~w~ = {{0,0,-1,0,1}}.' }
 ], 'sys'),
-proof('tu3-3a', 'tu3', 'Let ~x~, ~y~ be non-zero vectors in ℝ<sup>n</sup> and let ~p~ = proj<sub>~y~</sub>~x~ = ((~x~ · ~y~)/‖~y~‖²)~y~. Prove that ‖proj<sub>~y~</sub>~x~‖² + ‖perp<sub>~y~</sub>~x~‖² = ‖~x~‖² using only the definitions and dot product properties (you may not use that proj and perp are orthogonal). Build the proof in order. Some tiles are wrong.',
+proof('tu3-3a', 't5', 'Let ~x~, ~y~ be non-zero vectors in ℝ<sup>n</sup> and let ~p~ = proj<sub>~y~</sub>~x~ = ((~x~ · ~y~)/‖~y~‖²)~y~. Prove that ‖proj<sub>~y~</sub>~x~‖² + ‖perp<sub>~y~</sub>~x~‖² = ‖~x~‖² using only the definitions and dot product properties (you may not use that proj and perp are orthogonal). Build the proof in order. Some tiles are wrong.',
   ['perp<sub>~y~</sub>~x~ = ~x~ − ~p~, so we must evaluate ‖~p~‖² + ‖~x~ − ~p~‖²',
    '‖~x~ − ~p~‖² = (~x~ − ~p~) · (~x~ − ~p~) = ‖~x~‖² − 2(~x~ · ~p~) + ‖~p~‖²',
    '‖~p~‖² = ((~x~ · ~y~)/‖~y~‖²)² ‖~y~‖² = (~x~ · ~y~)²/‖~y~‖²',
@@ -127,7 +123,7 @@ proof('tu3-3a', 'tu3', 'Let ~x~, ~y~ be non-zero vectors in ℝ<sup>n</sup> and 
    '‖~x~ − ~p~‖² = ‖~x~‖² − ‖~p~‖²  because the norm is linear',
    '~x~ · ~p~ = 0 since ~p~ is a multiple of ~y~'],
   'Expand ‖~x~ − ~p~‖² with the dot product. The key fact is ~x~ · ~p~ = ‖~p~‖², both equal to (~x~ · ~y~)²/‖~y~‖², which turns the middle term into −2‖~p~‖². The geometric (orthogonality) argument is not allowed here, and the norm is not linear.'),
-multi('tu3-3b', 'tu3', 'Let ~a~ = {{2,2,1}} and ~b~ = {{0,3,-4}}. Check that ‖proj<sub>~b~</sub>~a~‖² + ‖perp<sub>~b~</sub>~a~‖² = ‖~a~‖² by computing each squared norm.', [
+multi('tu3-3b', 't5', 'Let ~a~ = {{2,2,1}} and ~b~ = {{0,3,-4}}. Check that ‖proj<sub>~b~</sub>~a~‖² + ‖perp<sub>~b~</sub>~a~‖² = ‖~a~‖² by computing each squared norm.', [
   { ask: 'Compute ‖~a~‖².', ans: '9', hint: 'Sum of squares of the entries.',
     why: '4 + 4 + 1 = 9.' },
   { ask: 'Compute ‖proj<sub>~b~</sub>~a~‖².', ans: '4/25', hint: 'proj<sub>~b~</sub>~a~ = ((~a~ · ~b~)/‖~b~‖²)~b~.',
