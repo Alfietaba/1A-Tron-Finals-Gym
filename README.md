@@ -110,8 +110,6 @@ python3 tools/screenshots.py                   # regenerates docs/screenshots
 
 [`skill/SKILL.md`](skill/SKILL.md) turns the approach behind this app into instructions an AI assistant can follow: practice before answers, spaced mastery, exam-shaped mocks, verified answers, and reference sheets that teach. Point Claude, or any assistant that reads skills or long instructions, at that file along with your own course outline and notes.
 
-## About the content
-
-The practice questions are written in the style of each course; they aren't copied from it. This public version leaves out anything taken from course assessments (tutorial problems and course quiz questions), and it replaces the official exam data sheets with typed reference sheets. It isn't affiliated with or endorsed by the University of Waterloo.
+ It isn't affiliated with or endorsed by the University of Waterloo.
 
 MIT licensed.
