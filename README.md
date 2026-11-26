@@ -33,6 +33,7 @@ Put Alfie on a good song for a treat: in Settings, write a song rec in the envel
 - **Misses come back in the same session,** a few questions later, then again on the schedule.
 - **You can't game the multiple choice.** I noticed the right answer was often just the longest option, so every option set was rewritten and checked by a script. Across the 574 multiple-choice questions with three or more options, the right answer is the longest one 16% of the time, no better than guessing.
 - **It only covers what's on the exam.** Anything that didn't fit a category on the course outline was removed.
+- **The real tutorial problems, while they're allowed.** Every MATH 115, MATH 116 and CHE 102 tutorial (and the MATH 116 practice sets) is a topic of its own, with the official working in the explanation. They turn off automatically after each final.
 - **A pre-exam warm-up in every course.** Easy questions on the basics that you can do in your head, to settle your nerves right before an exam. They don't count toward mastery or mock exams.
 - **Mock exams have the same shape as the real ones:** the same sections, point weights and time limit. There's no feedback until you submit, then you get a breakdown by section and a "Fix my mistakes" run.
 - **Fresh questions on demand.** 118 generators write new versions with new numbers for infinite mode (endless, or three lives). By default they only kick in for topics you've fully mastered, so you work through the written questions first. A setting lets them mix in from the start.

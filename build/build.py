@@ -16,7 +16,9 @@ def read(rel):
 
 
 def main():
-    data = '\n'.join(read(f'data/{c}.js') for c in COURSES) + '\n' + read('build/gens.js')
+    # tutorial and practice-set problems: data/tut/_tut.js defines TUT(), the other files call it
+    tut = ['data/tut/_tut.js'] + sorted(str(f.relative_to(ROOT)) for f in (ROOT / 'data/tut').glob('*.js') if f.name != '_tut.js')
+    data = '\n'.join(read(f'data/{c}.js') for c in COURSES) + '\n' + '\n'.join(read(f) for f in tut) + '\n' + read('build/gens.js')
     page = (read('build/template.html')
             .replace('/*@HELPERS@*/', read('build/helpers.js'))
             .replace('/*@DATA@*/', data)

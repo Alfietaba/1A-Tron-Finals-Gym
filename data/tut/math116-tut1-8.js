@@ -1,0 +1,366 @@
+/* ================= MATH 116 TUTORIALS 1 TO 8 (Fall 2026, used with permission) ================= */
+(function () {
+var L = 'Number, fraction, or an exact form like sqrt(2), pi/3, ln(2), e^3. Use inf, -inf or DNE when the limit is not a number.';
+
+/* Tutorial 1, Q4: increasing curve through (-4,0), (-2,1), (0,2), (2,7) */
+var T1G = plot([{ pts: [[-4.00,0.00],[-3.67,0.31],[-3.33,0.57],[-3.00,0.75],[-2.67,0.85],[-2.33,0.93],[-2.00,1.00],[-1.67,1.07],[-1.33,1.15],[-1.00,1.25],[-0.67,1.42],[-0.33,1.68],[0.00,2.00],[0.33,2.45],[0.67,3.07],[1.00,3.80],[1.33,4.68],[1.67,5.76],[2.00,7.00]] }],
+  { xr: [-5, 5], yr: [-1, 8], label: 'Graph of y = f(x): an increasing curve from (−4, 0) through (−2, 1) and (0, 2) up to (2, 7).', dots: [[-4, 0], [-2, 1], [0, 2], [2, 7]] });
+
+/* Tutorial 2, Q2: f(x) = 8x^3/(x^2+1)^2 for x >= 0 */
+function t2f(x) { return 8 * x * x * x / Math.pow(x * x + 1, 2); }
+var T2G = plot([{ a: 0, b: 8, f: t2f }], { xr: [-8, 8], yr: [-3, 3], label: 'Graph of f(x) for x ≥ 0: starts at the origin, rises to a peak of about 2.6 near x = 1.7, then decays toward 0.' });
+
+/* Tutorial 7, Q3: graph of f'(x) */
+var T7G = plot([{ pts: [[-3.60,-2.30],[-3.40,-1.40],[-3.20,-0.58],[-3.00,0.00],[-2.80,0.41],[-2.60,0.79],[-2.40,1.15],[-2.20,1.48],[-2.00,1.77],[-1.80,2.02],[-1.60,2.22],[-1.40,2.37],[-1.20,2.47],[-1.00,2.50],[-0.80,2.47],[-0.60,2.39],[-0.40,2.27],[-0.20,2.13],[0.00,2.00],[0.20,1.85],[0.40,1.68],[0.60,1.48],[0.80,1.26],[1.00,1.04],[1.20,0.81],[1.40,0.58],[1.60,0.37],[1.80,0.17],[2.00,0.00],[2.20,-0.17],[2.40,-0.35],[2.60,-0.52],[2.80,-0.69],[3.00,-0.83],[3.20,-0.93],[3.40,-0.99],[3.50,-1.00],[3.60,-0.99],[3.80,-0.96],[4.00,-0.88],[4.20,-0.77],[4.40,-0.62],[4.60,-0.44],[4.80,-0.23],[5.00,0.00],[5.20,0.46],[5.40,1.24],[5.60,2.23],[5.80,3.30]] }],
+  { xr: [-5, 7], yr: [-3, 4], label: 'Graph of y = f′(x): rises through (−3, 0) to a peak at (−1, 5/2), falls through (0, 2) and (2, 0) to a low point at (7/2, −1), then rises through (5, 0).', dots: [[-3, 0], [-1, 2.5], [0, 2], [2, 0], [3.5, -1], [5, 0]] });
+var T7P = 'The graph of y = f′(x) is shown. It crosses the x-axis at x = −3, 2 and 5, has a peak at (−1, 5/2), passes through (0, 2), and has a low point at (7/2, −1). It goes to −∞ as x → −∞ and to ∞ as x → ∞.' + T7G;
+
+/* Tutorial 7, Q4 sketch options */
+function sm(f, lab) { return plot([{ a: -5, b: 5, f: f }], { xr: [-5, 5], yr: [-3, 3], small: true, label: lab }); }
+var T7S = [
+  sm(function (x) { return -4 * x / (x * x + 1); }, 'Curve with a high point at (−1, 2) and a low point at (1, −2), flattening toward y = 0'),
+  sm(function (x) { return 4 / (x * x + 1) - 2; }, 'Even bump with a peak at (0, 2), flattening toward y = −2'),
+  sm(function (x) { return 4 * x / (x * x + 1); }, 'Curve through the origin with a low point at (−1, −2) and a high point at (1, 2), flattening toward y = 0'),
+  sm(function (x) { return 8 * x / (x * x + 4); }, 'Curve through the origin with a low point at (−2, −2) and a high point at (2, 2), flattening toward y = 0')
+];
+
+var T = [
+  { id: 'tu1', name: 'Tutorial 1: composition and inverses', sec: 'Tutorial 1' },
+  { id: 'tu2', name: 'Tutorial 2: transformations, even and odd, inequalities', sec: 'Tutorial 2' },
+  { id: 'tu3', name: 'Tutorial 3: Heaviside, inverse trig, sinusoids', sec: 'Tutorial 3' },
+  { id: 'tu4', name: 'Tutorial 4: logs, cosh and sinh, limits, continuity', sec: 'Tutorial 4' },
+  { id: 'tu5', name: 'Tutorial 5: derivatives', sec: 'Tutorial 5' },
+  { id: 'tu6', name: 'Tutorial 6: log differentiation, IVT, Newton\'s method', sec: 'Tutorial 6' },
+  { id: 'tu7', name: 'Tutorial 7: MVT, critical points, curve sketching', sec: 'Tutorial 7' },
+  { id: 'tu8', name: 'Tutorial 8: optimization, related rates, L\'Hôpital', sec: 'Tutorial 8' }
+];
+
+var Q = [
+/* ---------- Tutorial 1 ---------- */
+multi('tu1-1', 'tu1', 'Let f(x) = 1 − 2x and g(x) = x². Evaluate each composition.', [
+  { ask: 'f(f(−1))', ans: '-5', hint: 'Work from the inside out: find f(−1) first.',
+    why: 'f(−1) = 1 − 2(−1) = 3, then f(3) = 1 − 6 = −5.' },
+  { ask: 'f(g(√2))', ans: '-3', hint: 'g(√2) = (√2)².',
+    why: 'g(√2) = 2, then f(2) = 1 − 4 = −3.' },
+  { ask: 'f(g(f(1)))', ans: '-1', hint: 'Three steps: f(1), then g of that, then f of that.',
+    why: 'f(1) = −1, g(−1) = 1, f(1) = −1.' }
+], 'comp'),
+num('tu1-2a', 'tu1', 'Let f(x) = #frac{6x + 1}{x − 2}. Find a formula for f<sup>−1</sup>(x).', '(2x+1)/(x-6)',
+  'Write y = (6x + 1)/(x − 2), multiply out, and collect the x terms on one side.',
+  'y(x − 2) = 6x + 1 gives xy − 2y = 6x + 1, so xy − 6x = 2y + 1, x(y − 6) = 2y + 1 and x = (2y + 1)/(y − 6). Swapping names: f<sup>−1</sup>(x) = (2x + 1)/(x − 6).', null, null, { kind: 'expr', pts: [0, 1, 2, -1, 3, 7, 10] }),
+mc('tu1-2b', 'tu1', 'What is the domain of f(x) = #frac{6x + 1}{x − 2}?',
+  ['(−∞, 6) ∪ (6, ∞)', '(−∞, −1/6) ∪ (−1/6, ∞)', '(−∞, 2) ∪ (2, ∞)', 'All real numbers'], 2,
+  'The only problem is division by 0, which happens at x = 2. So the domain is {x ∈ ℝ : x ≠ 2} = (−∞, 2) ∪ (2, ∞).'),
+mc('tu1-2c', 'tu1', 'What is the range of f(x) = #frac{6x + 1}{x − 2}?',
+  ['(−∞, 2) ∪ (2, ∞)', '(−∞, 6) ∪ (6, ∞)', '(−∞, −1/2) ∪ (−1/2, ∞)', 'All real numbers'], 1,
+  'The range of f is the domain of f<sup>−1</sup>(x) = (2x + 1)/(x − 6). That formula fails only at x = 6, so the range of f is (−∞, 6) ∪ (6, ∞).'),
+num('tu1-3a', 'tu1', 'Let f(x) = #frac{6x²}{x² + 1} and g(x) = #sqrt{#frac{x}{3 − x}}. Find a simplified expression for (f∘g)(x).', '2x',
+  'g(x)² = x/(3 − x). Substitute and clear the fraction by multiplying top and bottom by 3 − x.',
+  'f(g(x)) = 6·(x/(3 − x)) / (x/(3 − x) + 1). The bottom is (x + 3 − x)/(3 − x) = 3/(3 − x). So f(g(x)) = (6x/(3 − x))·((3 − x)/3) = 2x.', null, null, { kind: 'expr', pts: [0.5, 1, 2, 2.5] }),
+mc('tu1-3b', 'tu1', 'Let f(x) = #frac{6x²}{x² + 1} and g(x) = #sqrt{#frac{x}{3 − x}}. What is the domain of f∘g?',
+  ['[0, 3)', 'All real numbers', '[0, 3]', '(−∞, 0] ∪ (3, ∞)'], 0,
+  'f∘g simplifies to 2x, but the inputs must still work in g. Need x ≠ 3 and x/(3 − x) ≥ 0. A sign chart on x and 3 − x shows the quotient is ≥ 0 exactly on [0, 3). So the domain is [0, 3).'),
+mc('tu1-3c', 'tu1', 'Let f(x) = #frac{6x²}{x² + 1} and g(x) = #sqrt{#frac{x}{3 − x}}. What is the range of f∘g?',
+  ['[0, 3)', '[0, 6]', '[0, ∞)', '[0, 6)'], 3,
+  '(f∘g)(x) = 2x on the domain [0, 3). Doubling every input in [0, 3) gives outputs in [0, 6).'),
+multi('tu1-4ab', 'tu1', 'The graph of an increasing function f is shown. It passes through (−4, 0), (−2, 1), (0, 2) and (2, 7).' + T1G, [
+  { ask: 'f<sup>−1</sup>(1)', ans: '-2', hint: 'f<sup>−1</sup>(1) is the x with f(x) = 1.',
+    why: 'From the graph f(−2) = 1, so f<sup>−1</sup>(1) = −2.' },
+  { ask: 'f<sup>−1</sup>(f<sup>−1</sup>(2))', ans: '-4', hint: 'Inside first: which x gives f(x) = 2?',
+    why: 'f(0) = 2, so f<sup>−1</sup>(2) = 0. Then f(−4) = 0, so f<sup>−1</sup>(0) = −4.' }
+], 'comp'),
+mc('tu1-4c', 'tu1', 'The graph of an increasing function f is shown. It passes through (−4, 0), (−2, 1), (0, 2) and (2, 7).' + T1G + 'Which describes the graph of y = f<sup>−1</sup>(x)?',
+  ['It starts at (0, −4), passes through (1, −2) and (2, 0), and ends at (7, 2)',
+   'It starts at (−4, 0), passes through (−2, −1) and (0, −2), and ends at (2, −7)',
+   'It starts at (4, 0), passes through (2, 1) and (0, 2), and ends at (−2, 7)',
+   'It starts at (0, 4), passes through (1, 2) and (2, 0), and ends at (7, −2)'], 0,
+  'The graph of f<sup>−1</sup> is the reflection of the graph of f over the line y = x: every point (a, b) becomes (b, a). So (−4, 0), (−2, 1), (0, 2), (2, 7) become (0, −4), (1, −2), (2, 0), (7, 2). Its domain is [0, 7] and its range is [−4, 2].'),
+
+/* ---------- Tutorial 2 ---------- */
+order('tu2-1', 'tu2', 'Starting from y = |x|, build g(x) = 4 − |2x + 4| with transformations. Put the steps in order. Some tiles are wrong.',
+  ['Shift left 4 units: y = |x + 4|',
+   'Compress horizontally by a factor of 2: y = |2x + 4|',
+   'Reflect over the x-axis: y = −|2x + 4|',
+   'Shift up 4 units: y = 4 − |2x + 4|'],
+  ['Shift right 4 units: y = |x − 4|', 'Stretch horizontally by a factor of 2: y = |x/2 + 4|', 'Reflect over the y-axis: y = |−2x + 4|'],
+  'Replacing x by x + 4 shifts left 4. Replacing x by 2x compresses horizontally by 2 (|x + 4| becomes |2x + 4|). The minus sign outside reflects over the x-axis, and adding 4 shifts up. Another valid order: compress to |2x|, shift left 2 to |2(x + 2)|, reflect, shift up.'),
+multi('tu2-1b', 'tu2', 'Sketch g(x) = 4 − |2x + 4|. Find the key features of the graph.', [
+  { ask: 'The x-coordinate of the vertex', ans: '-2', hint: 'The vertex is where 2x + 4 = 0.',
+    why: '2x + 4 = 0 at x = −2.' },
+  { ask: 'The maximum value of g', ans: '4', hint: 'The absolute value part is never negative.',
+    why: '|2x + 4| ≥ 0, so g(x) ≤ 4, with equality at x = −2. The vertex is (−2, 4).' },
+  { ask: 'The smaller x-intercept', ans: '-4', hint: 'Solve |2x + 4| = 4.',
+    why: '2x + 4 = ±4 gives x = 0 or x = −4.' },
+  { ask: 'The larger x-intercept', ans: '0', hint: 'Solve |2x + 4| = 4.',
+    why: '2x + 4 = 4 gives x = 0, and g(0) = 4 − 4 = 0, so the graph passes through the origin.' }
+], 'graph'),
+mc('tu2-2a', 'tu2', 'Is f(x) = #frac{8x³}{(x² + 1)²} even, odd, or neither?',
+  ['Even', 'Neither', 'Odd', 'Both even and odd'], 2,
+  'f(−x) = 8(−x)³/((−x)² + 1)² = −8x³/(x² + 1)² = −f(x). So f is odd.'),
+mc('tu2-2b', 'tu2', 'The graph of f(x) = #frac{8x³}{(x² + 1)²} is shown for x ≥ 0.' + T2G + 'What does the graph look like for x &lt; 0?',
+  ['A peak of about 2.6 near x = −1.7, decaying toward 0 from above as x → −∞',
+   'A low point of about −2.6 near x = −1.7, rising toward 0 from below as x → −∞',
+   'A low point of about −2.6 near x = 1.7 mirrored to the left, rising toward −2 as x → −∞',
+   'It is the x ≥ 0 part shifted 8 units to the left'], 1,
+  'f is odd (f(−x) = −f(x)), so its graph is symmetric about the origin: rotate the x ≥ 0 part by 180°. The peak near (1.7, 2.6) becomes a low point near (−1.7, −2.6), and the tail approaches 0 from below.'),
+proof('tu2-3a', 'tu2', 'Let f be odd, and let f<sub>e</sub>(x) = #frac{f(x) + f(−x)}{2} and f<sub>o</sub>(x) = #frac{f(x) − f(−x)}{2}. Prove that f<sub>e</sub>(x) = 0 and f<sub>o</sub>(x) = f(x). Build the steps in order. Some tiles are wrong.',
+  ['Since f is odd, f(−x) = −f(x) for all x in the domain.',
+   'f<sub>e</sub>(x) = #frac{f(x) + f(−x)}{2} = #frac{f(x) − f(x)}{2} = 0.',
+   'f<sub>o</sub>(x) = #frac{f(x) − f(−x)}{2} = #frac{f(x) + f(x)}{2}',
+   '= #frac{2f(x)}{2} = f(x).'],
+  ['Since f is odd, f(−x) = f(x) for all x in the domain.', 'f<sub>e</sub>(x) = #frac{f(x) + f(−x)}{2} = #frac{2f(x)}{2} = f(x).'],
+  'Substitute f(−x) = −f(x) into each definition. In f<sub>e</sub> the terms cancel to 0; in f<sub>o</sub> the minus sign flips and you get 2f(x)/2 = f(x). (Or: f = f<sub>e</sub> + f<sub>o</sub>, so f<sub>o</sub> = f − 0.)'),
+mc('tu2-3b', 'tu2', 'Let f be an odd function and g(x) = f(2x + f(x)). Is g even, odd, or neither?',
+  ['Even', 'Odd', 'Neither', 'It depends on f'], 1,
+  'g(−x) = f(−2x + f(−x)) = f(−2x − f(x)) (f odd) = f(−(2x + f(x))) = −f(2x + f(x)) (f odd again) = −g(x). So g is odd.'),
+mc('tu2-4a', 'tu2', 'Solve |x − 2| &lt; 5.',
+  ['(−3, 7)', '(−7, 3)', '(−∞, −3) ∪ (7, ∞)', '[−3, 7]'], 0,
+  'We want all x less than 5 units from 2 on the number line: −3 &lt; x &lt; 7, so x ∈ (−3, 7).'),
+mc('tu2-4b', 'tu2', 'Solve |3x − 5| ≥ 3.',
+  ['[2/3, 8/3]', '(−∞, 2/3] ∪ [8/3, ∞)', '(−∞, 3/8] ∪ [8/3, ∞)', '(−∞, −2/3] ∪ [8/3, ∞)'], 1,
+  '3x must be at least 3 units from 5: 3x ≤ 2 or 3x ≥ 8. Dividing by 3: x ≤ 2/3 or x ≥ 8/3. (The official solution\'s set notation has a typo, 3/8 instead of 8/3.)'),
+mc('tu2-4c', 'tu2', 'Solve #frac{|x|}{|x + 4|} &gt; 1, that is |x/(x + 4)| &gt; 1.',
+  ['(−2, ∞)', '(−∞, −2)', '(−∞, −4) ∪ (−4, −2)', '(−∞, −4] ∪ (−4, −2]'], 2,
+  'Multiply by |x + 4| &gt; 0: |x| &gt; |x + 4|. So x is farther from 0 than from −4, i.e. closer to −4. The midpoint of 0 and −4 is −2, so x &lt; −2. Remove x = −4, where the original is undefined: (−∞, −4) ∪ (−4, −2).'),
+
+/* ---------- Tutorial 3 ---------- */
+mc('tu3-1', 'tu3', 'h is the Heaviside function (0 for x &lt; 0, 1 for x &gt; 0). Write f in terms of h:<br>f(x) = #cases{−x | x &lt; −1;; 2x | −1 &lt; x &lt; 4;; sin(x) | x &gt; 4}',
+  ['f(x) = −x + 2x h(x + 1) + sin(x) h(x − 4)',
+   'f(x) = −x + 3x h(x + 1) + (sin(x) − 2x) h(x − 4)',
+   'f(x) = −x + 3x h(x − 1) + (sin(x) − 2x) h(x + 4)',
+   'f(x) = −x + 3x h(x + 1) + (sin(x) + 2x) h(x − 4)'], 1,
+  'Start with the first piece, −x. At x = −1 switch on (new − old) = 2x − (−x) = 3x with h(x + 1). At x = 4 switch on sin(x) − 2x with h(x − 4). So f(x) = −x + 3x h(x + 1) + (sin(x) − 2x) h(x − 4).'),
+mc('tu3-2a', 'tu3', 'h is the Heaviside function. Write g(x) = 2 + (x − 1)h(x + 2) − (x + x²)h(x) + (x² − 2)h(x − 1) as a simplified piecewise function.',
+  ['2 for x &lt; −2; x + 1 for −2 &lt; x &lt; 0; 1 − x² for 0 &lt; x &lt; 1; −1 for x &gt; 1',
+   '2 for x &lt; −2; x − 1 for −2 &lt; x &lt; 0; −x² − 1 for 0 &lt; x &lt; 1; x² − 3 for x &gt; 1',
+   '2 for x &lt; −2; x + 1 for −2 &lt; x &lt; 0; 1 − 2x − x² for 0 &lt; x &lt; 1; −1 for x &gt; 1',
+   '0 for x &lt; −2; x − 1 for −2 &lt; x &lt; 0; 1 − x² for 0 &lt; x &lt; 1; x² − 2 for x &gt; 1'], 0,
+  'Add the terms that are switched on in each interval. x &lt; −2: 2. −2 &lt; x &lt; 0: 2 + (x − 1) = x + 1. 0 &lt; x &lt; 1: x + 1 − x − x² = 1 − x². x &gt; 1: 1 − x² + x² − 2 = −1.'),
+multi('tu3-2a-v', 'tu3', 'h is the Heaviside function. Let g(x) = 2 + (x − 1)h(x + 2) − (x + x²)h(x) + (x² − 2)h(x − 1). Evaluate:', [
+  { ask: 'g(−3)', ans: '2', hint: 'Which Heaviside terms are on when x = −3?',
+    why: 'All three h terms are 0, so g(−3) = 2.' },
+  { ask: 'g(−1)', ans: '0', hint: 'Only h(x + 2) is on.',
+    why: 'g(x) = x + 1 on (−2, 0), so g(−1) = 0.' },
+  { ask: 'g(1/2)', ans: '3/4', hint: 'h(x + 2) and h(x) are on.',
+    why: 'g(x) = 1 − x² on (0, 1), so g(1/2) = 3/4.' },
+  { ask: 'g(3)', ans: '-1', hint: 'All terms are on.',
+    why: 'g(x) = −1 for x &gt; 1.' }
+], 'graph'),
+mc('tu3-2b', 'tu3', 'h is the Heaviside function. Let g(x) = 2 + (x − 1)h(x + 2) − (x + x²)h(x) + (x² − 2)h(x − 1), which is 2 for x &lt; −2, x + 1 on (−2, 0), 1 − x² on (0, 1), and −1 for x &gt; 1. On which set is h(g(x)) = 1?',
+  ['(−∞, −2) ∪ (−1, 1) ∪ (1, ∞)', '(−2, −1) ∪ (1, ∞)', '(−∞, −2) ∪ (−1, 0) ∪ (0, 1)', '(−∞, −2] ∪ [−1, 0) ∪ (0, 1]'], 2,
+  'h(g(x)) = 1 where g(x) &gt; 0, 0 where g(x) &lt; 0, and undefined where g(x) = 0 or g is undefined. g = 2 &gt; 0 for x &lt; −2; x + 1 &gt; 0 on (−1, 0); 1 − x² &gt; 0 on (0, 1); −1 &lt; 0 for x &gt; 1. g is undefined at −2, 0, 1 and g(−1) = 0, so those points are excluded.'),
+num('tu3-3', 'tu3', 'Find the exact value of cos(sin<sup>−1</sup>(3/5) − cos<sup>−1</sup>(5/13)) as a fraction.', '56/65',
+  'Let α = sin<sup>−1</sup>(3/5) and β = cos<sup>−1</sup>(5/13). Use cos(α − β) = cos α cos β + sin α sin β and right triangles.',
+  'sin α = 3/5 gives cos α = 4/5 (3-4-5 triangle). cos β = 5/13 gives sin β = 12/13 (5-12-13 triangle). cos(α − β) = (4/5)(5/13) + (3/5)(12/13) = 20/65 + 36/65 = 56/65.'),
+multi('tu3-4', 'tu3', 'Let f(x) = 5 sin(x) − 5#sqrt{3} cos(x). Write f(x) = A sin(x + φ) with A &gt; 0 and −π &lt; φ ≤ π, then solve f(x) = 10 on [0, 2π].', [
+  { ask: 'A', ans: '10', hint: 'A cos φ = 5 and A sin φ = −5√3.',
+    why: 'A = √(5² + (5√3)²) = √(25 + 75) = 10.' },
+  { ask: 'φ', ans: '-pi/3', hint: 'cos φ = 1/2 and sin φ = −√3/2. Which quadrant?',
+    why: 'cos φ = 5/10 = 1/2 and sin φ = −√3/2, so φ is in quadrant IV: φ = −π/3. So f(x) = 10 sin(x − π/3). (5π/3 also works if you allow [0, 2π).)' },
+  { ask: 'The only x in [0, 2π] with f(x) = 10', ans: '5pi/6', hint: 'sin(t) = 1 exactly when t = π/2 + 2kπ.',
+    why: '10 sin(x − π/3) = 10 means sin(x − π/3) = 1, so x − π/3 = π/2 + 2kπ and x = 5π/6 + 2kπ. Only x = 5π/6 lies in [0, 2π].' }
+], 'trig'),
+
+/* ---------- Tutorial 4 ---------- */
+num('tu4-1a', 'tu4', 'Let f(x) = ln(x/2). Find all x with f(x) = 2 ln(6) − ln(4).', '18',
+  'Combine the right side into one log first.',
+  '2 ln 6 − ln 4 = ln(36/4) = ln 9. So ln(x/2) = ln 9, x/2 = 9 and x = 18.'),
+num('tu4-1b', 'tu4', 'Let f(x) = ln(x/2) and g(x) = e<sup>4x</sup>. Fully simplify (g∘f)(x).', 'x^4/16',
+  'Move the 4 inside the log as an exponent, then use e<sup>ln u</sup> = u.',
+  'g(f(x)) = e<sup>4 ln(x/2)</sup> = e<sup>ln((x/2)⁴)</sup> = (x/2)⁴ = x⁴/16.', null, null, { kind: 'expr', pts: [0.5, 1, 2, 3, 5] }),
+mc('tu4-1c', 'tu4', 'Let f(x) = ln(x/2) and g(x) = e<sup>4x</sup>. Then (g∘f)(x) simplifies to x⁴/16. What is the domain of g∘f?',
+  ['All real numbers', '(0, ∞)', '(2, ∞)', '[0, ∞)'], 1,
+  'x⁴/16 is defined everywhere, but the inner function ln(x/2) needs x/2 &gt; 0, so x &gt; 0. Domain (0, ∞).'),
+proof('tu4-2', 'tu4', 'Using sinh x = #frac{e<sup>x</sup> − e<sup>−x</sup>}{2} and cosh x = #frac{e<sup>x</sup> + e<sup>−x</sup>}{2}, prove cosh(2x) = 1 + 2 sinh²(x). Build the steps in order. Some tiles are wrong.',
+  ['1 + 2 sinh²(x) = 1 + 2 (#frac{e<sup>x</sup> − e<sup>−x</sup>}{2})²',
+   '= 1 + 2 · #frac{e<sup>2x</sup> − 2 + e<sup>−2x</sup>}{4}',
+   '= #frac{2}{2} + #frac{e<sup>2x</sup> − 2 + e<sup>−2x</sup>}{2}',
+   '= #frac{e<sup>2x</sup> + e<sup>−2x</sup>}{2}',
+   '= cosh(2x)'],
+  ['= 1 + 2 · #frac{e<sup>2x</sup> + e<sup>−2x</sup>}{4}', '= #frac{e<sup>2x</sup> − e<sup>−2x</sup>}{2}'],
+  'Start from the right side. (e<sup>x</sup> − e<sup>−x</sup>)² = e<sup>2x</sup> − 2 + e<sup>−2x</sup> since e<sup>x</sup>e<sup>−x</sup> = 1. Over the common denominator 2 the −2 cancels the 2, leaving (e<sup>2x</sup> + e<sup>−2x</sup>)/2 = cosh(2x).'),
+num('tu4-3a', 'tu4', 'Evaluate #lim{x → 2} #frac{x³ − 2x²}{x² − x − 2} without L\'Hôpital\'s rule.', '4/3',
+  'It is 0/0. Factor the top and bottom.',
+  'x²(x − 2) / ((x − 2)(x + 1)) = x²/(x + 1) → 4/3.', L, null),
+num('tu4-3b', 'tu4', 'Evaluate #lim{x → ∞} #frac{e<sup>2x</sup> + e<sup>x</sup>}{4e<sup>2x</sup> + 1} without L\'Hôpital\'s rule.', '1/4',
+  'Factor e<sup>2x</sup> out of the top and bottom.',
+  '(1 + e<sup>−x</sup>)/(4 + e<sup>−2x</sup>) → (1 + 0)/(4 + 0) = 1/4.', L, null),
+num('tu4-3c', 'tu4', 'Evaluate #lim{x → 0} #frac{|x|}{|x − 1| − 1}. Enter DNE if it does not exist.', 'DNE',
+  'Near x = 0, x − 1 is negative. Then look at each side separately.',
+  'Near 0, |x − 1| = −(x − 1), so the bottom is −x. From the left, |x| = −x and the quotient is −x/−x = 1. From the right, |x| = x and it is x/(−x) = −1. The one-sided limits differ, so the limit does not exist.', L, null),
+num('tu4-3d', 'tu4', 'Evaluate #lim{x → ∞} #frac{2}{#sqrt{x² − 3} − x}. If it is infinite, say whether it is ∞ or −∞.', '-inf',
+  'The bottom is ∞ − ∞. Multiply top and bottom by the conjugate √(x² − 3) + x.',
+  'The bottom becomes (x² − 3) − x² = −3, so the expression is −(2/3)(√(x² − 3) + x), which goes to −∞.', L, null),
+multi('tu4-4', 'tu4', 'Find a and b so that f is continuous at x = 0:<br>f(x) = #cases{x⁴ cos(#frac{1}{2x}) | x &lt; 0;; a + b | x = 0;; #frac{b + 1}{1 + bx} | x &gt; 0}', [
+  { ask: 'b', ans: '-1', hint: 'Find both one-sided limits. Use the Squeeze Theorem on the left: −1 ≤ cos(·) ≤ 1.',
+    why: 'Left: −x⁴ ≤ x⁴cos(1/(2x)) ≤ x⁴ and both bounds → 0, so the left limit is 0. Right: plug in, (b + 1)/1 = b + 1. Setting b + 1 = 0 gives b = −1.' },
+  { ask: 'a', ans: '1', hint: 'f(0) = a + b must equal the common limit.',
+    why: 'a + b = 0 with b = −1 gives a = 1.' }
+], 'cont'),
+
+/* ---------- Tutorial 5 ---------- */
+proof('tu5-1a', 'tu5', 'Find f′(x) for f(x) = #frac{1}{x + 1} using the definition of the derivative. Build the steps in order. Some tiles are wrong.',
+  ['f′(x) = #lim{h → 0} #frac{1}{h} (#frac{1}{x + h + 1} − #frac{1}{x + 1})',
+   '= #lim{h → 0} #frac{1}{h} · #frac{(x + 1) − (x + h + 1)}{(x + h + 1)(x + 1)}',
+   '= #lim{h → 0} #frac{−h}{h(x + h + 1)(x + 1)}',
+   '= #lim{h → 0} #frac{−1}{(x + h + 1)(x + 1)}',
+   '= #frac{−1}{(x + 1)²}'],
+  ['= #lim{h → 0} #frac{1}{h} (#frac{1}{x + h} − #frac{1}{x + 1})', '= #lim{h → 0} #frac{h}{h(x + h + 1)(x + 1)}'],
+  'Combine the fractions over (x + h + 1)(x + 1). The numerator is −h, which cancels the h in front. Then set h = 0 to get −1/(x + 1)².'),
+num('tu5-1b', 'tu5', 'Let f(x) = #frac{1}{x + 1}. Find the tangent line to y = f(x) at x = 1. Enter y as an expression in x.', '-x/4+3/4',
+  'f′(x) = −1/(x + 1)². Use y = f(1) + f′(1)(x − 1).',
+  'f(1) = 1/2 and f′(1) = −1/4. So y = 1/2 − (1/4)(x − 1) = −x/4 + 3/4.', null, null, { kind: 'expr', pts: [0, 1, 2, -1, 5] }),
+num('tu5-2a', 'tu5', 'Differentiate f(x) = 1 + x + (x² + 1)<sup>7</sup>(x³ + x)<sup>11</sup>.', '1+14x(x^2+1)^6(x^3+x)^11+11(x^3+x)^10(3x^2+1)(x^2+1)^7',
+  'Product rule on the last term, with the chain rule on each factor.',
+  'f′(x) = 1 + 7(x² + 1)<sup>6</sup>(2x)(x³ + x)<sup>11</sup> + 11(x³ + x)<sup>10</sup>(3x² + 1)(x² + 1)<sup>7</sup> = 1 + 14x(x² + 1)<sup>6</sup>(x³ + x)<sup>11</sup> + 11(x³ + x)<sup>10</sup>(3x² + 1)(x² + 1)<sup>7</sup>.', null, null, { kind: 'expr', pts: [0.1, 0.3, 0.5, -0.4, 0.8, 1] }),
+num('tu5-2b', 'tu5', 'Differentiate g(x) = #frac{sin²(x)}{3x + 1}.', '(2(3x+1)sin(x)cos(x)-3sin(x)^2)/(3x+1)^2',
+  'Quotient rule; the chain rule gives (sin² x)′ = 2 sin x cos x.',
+  'g′(x) = [(3x + 1)·2 sin x cos x − sin²x · 3] / (3x + 1)².', null, null, { kind: 'expr', pts: [0.5, 1, 2, 3, -1] }),
+num('tu5-2c', 'tu5', 'Differentiate h(x) = #sqrt{x⁴ + 4<sup>x</sup> + e⁴ + log<sub>4</sub>(x)}. (Type log<sub>4</sub>(x) as ln(x)/ln(4).)', '(4x^3+4^x ln(4)+1/(x ln(4)))/(2sqrt(x^4+4^x+e^4+ln(x)/ln(4)))',
+  'Chain rule on the square root. e⁴ is a constant; (4<sup>x</sup>)′ = 4<sup>x</sup> ln 4 and (log<sub>4</sub> x)′ = 1/(x ln 4).',
+  'h′(x) = (4x³ + 4<sup>x</sup> ln 4 + 1/(x ln 4)) / (2√(x⁴ + 4<sup>x</sup> + e⁴ + log<sub>4</sub>(x))).', null, null, { kind: 'expr', pts: [0.5, 1, 2, 3] }),
+multi('tu5-3', 'tu5', 'Let f(x) = xe<sup>−x</sup>. Find its derivatives and spot the pattern. Enter each as an expression in x.', [
+  { ask: 'f′(x)', ans: '(1-x)e^(-x)', kind: 'expr', pts: [0, 1, 2, -1], hint: 'Product rule; (e<sup>−x</sup>)′ = −e<sup>−x</sup>.',
+    why: 'f′ = e<sup>−x</sup> − xe<sup>−x</sup>.' },
+  { ask: 'f″(x)', ans: '(x-2)e^(-x)', kind: 'expr', pts: [0, 1, 2, -1], hint: 'Differentiate e<sup>−x</sup> − xe<sup>−x</sup>.',
+    why: 'f″ = −e<sup>−x</sup> − (e<sup>−x</sup> − xe<sup>−x</sup>) = −2e<sup>−x</sup> + xe<sup>−x</sup>.' },
+  { ask: 'f‴(x)', ans: '(3-x)e^(-x)', kind: 'expr', pts: [0, 1, 2, -1], hint: 'Each step adds one more e<sup>−x</sup> and flips the sign.',
+    why: 'f‴ = 3e<sup>−x</sup> − xe<sup>−x</sup>.' },
+  { ask: 'f<sup>(4)</sup>(x)', ans: '(x-4)e^(-x)', kind: 'expr', pts: [0, 1, 2, -1], hint: 'Continue the pattern.',
+    why: 'f<sup>(4)</sup> = −4e<sup>−x</sup> + xe<sup>−x</sup>.' },
+  { ask: 'f<sup>(1000)</sup>(x)', ans: '(x-1000)e^(-x)', kind: 'expr', pts: [0, 1, 2, -1], hint: 'For even n the pattern is −ne<sup>−x</sup> + xe<sup>−x</sup>.',
+    why: 'f<sup>(n)</sup> = −ne<sup>−x</sup> + xe<sup>−x</sup> for even n and ne<sup>−x</sup> − xe<sup>−x</sup> for odd n. 1000 is even, so f<sup>(1000)</sup> = −1000e<sup>−x</sup> + xe<sup>−x</sup>.' }
+], 'deriv'),
+mc('tu5-4', 'tu5', 'Use implicit differentiation to find y′ if sin(x + y) = y² cos(x).',
+  ['y′ = #frac{cos(x + y) + y² sin x}{2y cos x − cos(x + y)}',
+   'y′ = #frac{y² sin x − cos(x + y)}{cos(x + y) − 2y cos x}',
+   'y′ = #frac{2y cos x − y² sin x}{cos(x + y)}',
+   'y′ = #frac{−cos(x + y) − y² sin x}{cos(x + y) + 2y cos x}'], 0,
+  'Differentiate: cos(x + y)(1 + y′) = 2yy′cos x − y² sin x. Collect y′: y′(cos(x + y) − 2y cos x) = −cos(x + y) − y² sin x, so y′ = (−cos(x + y) − y² sin x)/(cos(x + y) − 2y cos x). Multiplying top and bottom by −1 gives the form shown.'),
+num('tu5-5', 'tu5', 'Evaluate #lim{x → 2} #frac{ln(x³) − ln(8)}{x − 2} without L\'Hôpital\'s rule.', '3/2',
+  'This is (f(x) − f(a))/(x − a) for some f and a. What does that limit represent?',
+  'With f(x) = ln(x³) and a = 2 (f(2) = ln 8), the limit is f′(2). f′(x) = 3x²/x³ = 3/x, so f′(2) = 3/2.', L, null),
+
+/* ---------- Tutorial 6 ---------- */
+num('tu6-1', 'tu6', 'Use logarithmic differentiation to find y′ for y = #frac{2<sup>3x</sup> ∛(x² + 1)}{x⁴ + 2}. (Type the cube root as (x^2+1)^(1/3).)', '2^(3x)(x^2+1)^(1/3)/(x^4+2)*(3ln(2)+2x/(3(x^2+1))-4x^3/(x^4+2))',
+  'ln y = 3x ln 2 + (1/3) ln(x² + 1) − ln(x⁴ + 2). Differentiate, then multiply by y.',
+  'ln y = 3x ln 2 + (1/3)ln(x² + 1) − ln(x⁴ + 2). So y′/y = 3 ln 2 + 2x/(3(x² + 1)) − 4x³/(x⁴ + 2), and y′ = [2<sup>3x</sup>∛(x² + 1)/(x⁴ + 2)]·(3 ln 2 + 2x/(3(x² + 1)) − 4x³/(x⁴ + 2)).', null, null, { kind: 'expr', pts: [0, 0.5, 1, -1, 2] }),
+proof('tu6-2', 'tu6', 'Use logarithmic differentiation to prove the quotient rule for y = f(x)/g(x), where f and g are positive. Build the steps in order. Some tiles are wrong.',
+  ['ln y = ln(f(x)/g(x)) = ln f(x) − ln g(x)',
+   '#frac{y′}{y} = #frac{f′(x)}{f(x)} − #frac{g′(x)}{g(x)}',
+   'y′ = #frac{f(x)}{g(x)} (#frac{f′(x)}{f(x)} − #frac{g′(x)}{g(x)})',
+   '= #frac{f′(x)}{g(x)} − #frac{f(x)g′(x)}{g(x)²}',
+   '= #frac{f′(x)g(x) − f(x)g′(x)}{g(x)²}'],
+  ['ln y = #frac{ln f(x)}{ln g(x)}', '#frac{y′}{y} = #frac{f′(x)}{g′(x)}'],
+  'Take ln to turn the quotient into a difference, differentiate (the chain rule gives f′/f and g′/g), multiply by y = f/g, and combine over g(x)².'),
+mc('tu6-3a', 'tu6', 'Let g(x) = x³ + x − 6. Which argument proves g(x) = 0 has a solution?',
+  ['g′(x) = 3x² + 1 &gt; 0 for every x, so g is strictly increasing and therefore must cross the x-axis somewhere',
+   'g(0) = −6 and g(1) = −4, so by the MVT there is a root between them',
+   'g is continuous, g(0) = −6 &lt; 0 and g(2) = 4 &gt; 0, so the IVT gives a root',
+   'g is a cubic with a positive constant term, so it has a positive root'], 2,
+  'The IVT needs continuity on an interval and a sign change. g is a polynomial, so it is continuous, and g(0) = −6 &lt; 0 &lt; 4 = g(2). So some x in (0, 2) has g(x) = 0. Being increasing alone does not force a crossing.'),
+multi('tu6-3b', 'tu6', 'Use Newton\'s method with x<sub>0</sub> = 2 on g(x) = x³ + x − 6.', [
+  { ask: 'x<sub>1</sub> (exact fraction or decimal)', ans: '22/13', hint: 'x<sub>n+1</sub> = x<sub>n</sub> − g(x<sub>n</sub>)/g′(x<sub>n</sub>), with g′(x) = 3x² + 1.',
+    why: 'g(2) = 4 and g′(2) = 13, so x<sub>1</sub> = 2 − 4/13 = 22/13 ≈ 1.692308.' },
+  { ask: 'The root, correct to 3 decimal places', ans: '1.634', hint: 'Keep iterating until the first three decimals stop changing.',
+    why: 'x<sub>2</sub> ≈ 1.636122, x<sub>3</sub> ≈ 1.634367, x<sub>4</sub> ≈ 1.634365. The first three decimals have settled, so x ≈ 1.634.' }
+], 'newton'),
+mc('tu6-4a', 'tu6', 'Why does f(x) = #frac{x² + 2x + 7}{x³ + 1} = 0 have no real solutions?',
+  ['The denominator x³ + 1 is never 0, so the fraction can never equal 0', 'Its numerator has discriminant −24 &lt; 0', 'f is positive for every real x, since its numerator and denominator are positive', 'f is not continuous at x = −1, so its graph cannot cross the x-axis'], 1,
+  'A fraction is 0 only when its numerator is 0. x² + 2x + 7 = 0 has discriminant 4 − 28 = −24 &lt; 0, so no real roots. (The denominator is 0 at x = −1, and f takes negative values, so the other options are false or irrelevant.)'),
+multi('tu6-4b', 'tu6', 'Let f(x) = #frac{x² + 2x + 7}{x³ + 1}. Evaluate:', [
+  { ask: 'f(−2)', ans: '-1', hint: 'Plug in carefully: (−2)³ = −8.',
+    why: '(4 − 4 + 7)/(−8 + 1) = 7/(−7) = −1.' },
+  { ask: 'f(1)', ans: '5', hint: 'Plug in x = 1.',
+    why: '(1 + 2 + 7)/(1 + 1) = 10/2 = 5.' }
+], 'ivt'),
+mc('tu6-4c', 'tu6', 'f(x) = #frac{x² + 2x + 7}{x³ + 1} has no real zeros, yet f(−2) = −1 &lt; 0 and f(1) = 5 &gt; 0. Does this contradict the Intermediate Value Theorem?',
+  ['Yes, so f must have a real zero in (−2, 1) that the algebra missed', 'No, because the IVT only applies to polynomials of even degree', 'Yes, the IVT says every sign change of any function gives a zero', 'No: f is not continuous on [−2, 1], as f(−1) is undefined'], 3,
+  'The IVT requires f to be continuous on the whole closed interval. f is undefined at x = −1 (x³ + 1 = 0), which is in [−2, 1], so the IVT does not apply and there is no contradiction. The sign change happens across the vertical asymptote.'),
+
+/* ---------- Tutorial 7 ---------- */
+proof('tu7-1', 'tu7', 'Use the Mean Value Theorem to show that f(x) = x³ + x − 6 = 0 has at most one solution. Build the argument in order. Some tiles are wrong.',
+  ['Suppose a &lt; b are two different solutions, so f(a) = 0 and f(b) = 0.',
+   'f is a polynomial, so it is continuous on [a, b] and differentiable on (a, b).',
+   'By the MVT there is c in (a, b) with f′(c) = #frac{f(b) − f(a)}{b − a} = #frac{0 − 0}{b − a} = 0.',
+   'But f′(x) = 3x² + 1 ≥ 1 &gt; 0 for every x, so f′(c) = 0 is impossible.',
+   'This contradiction shows f(x) = 0 has at most one solution.'],
+  ['By the IVT there is c in (a, b) with f(c) = 0.', 'But f′(x) = 3x² + 1 = 0 at x = ±1/√3.'],
+  'Assume two roots and apply the MVT between them: some c has f′(c) = 0. Since 3x² + 1 is never 0 (x² = −1/3 is impossible), this is a contradiction. Combined with the IVT from Tutorial 6, the equation has exactly one solution.'),
+num('tu7-2a', 'tu7', 'Find the critical point of f(x) = (x + 1)<sup>2/3</sup>.', '-1',
+  'Find f′ and look for where it is 0 or does not exist (inside the domain).',
+  'f′(x) = (2/3)(x + 1)<sup>−1/3</sup> = 2/(3(x + 1)<sup>1/3</sup>). It is never 0, and it does not exist at x = −1, which is in the domain. So x = −1 is the only critical point.'),
+mc('tu7-2b', 'tu7', 'What are the critical points of g(x) = #frac{x² + x + 2}{x}?',
+  ['x = −√2, x = 0 and x = √2', 'x = 0 only', 'x = −√2 and x = √2', 'x = √2 only'], 2,
+  'g′(x) = (x(2x + 1) − (x² + x + 2))/x² = (x² − 2)/x². g′ = 0 at x = ±√2. g′ is undefined at x = 0, but 0 is not in the domain of g, so it is not a critical point.'),
+mc('tu7-3a', 'tu7', T7P + 'Where is f increasing and where is it decreasing?',
+  ['Increasing on [−3, 2] and [5, ∞); decreasing on (−∞, −3] and [2, 5]',
+   'Increasing on (−∞, −1] and [7/2, ∞); decreasing on [−1, 7/2]',
+   'Increasing on (−∞, −3] and [2, 5]; decreasing on [−3, 2] and [5, ∞)',
+   'Increasing on [−3, 5]; decreasing on (−∞, −3] and [5, ∞)'], 0,
+  'f increases where f′ &gt; 0: on (−3, 2) and (5, ∞). It decreases where f′ &lt; 0: on (−∞, −3) and (2, 5). f is continuous, so the endpoints can be included. (The official solution has a typo, (−∞, 3) for (−∞, −3).)'),
+mc('tu7-3b', 'tu7', T7P + 'Where is f concave up and where is it concave down?',
+  ['Concave up on [−3, 2] and [5, ∞); concave down on (−∞, −3] and [2, 5]',
+   'Concave up on [−1, 7/2]; concave down on (−∞, −1] and [7/2, ∞)',
+   'Concave up on (−∞, −1] and [7/2, ∞); concave down on [−1, 7/2]',
+   'Concave up on (−∞, 0] and [5, ∞); concave down on the interval [0, 5]'], 2,
+  'f is concave up where f′ is increasing and concave down where f′ is decreasing. f′ rises until its peak at x = −1, falls until its low point at x = 7/2, then rises again. So concave up on (−∞, −1] and [7/2, ∞), concave down on [−1, 7/2].'),
+mc('tu7-4a', 'tu7', 'What are the asymptotes of f(x) = #frac{4x}{x² + 1}?',
+  ['Vertical asymptote x = 0 and horizontal asymptote y = 0', 'No vertical asymptote; horizontal asymptote y = 4', 'No vertical asymptote; y = 0 both ways', 'Vertical asymptotes x = ±1 and horizontal asymptote y = 0'], 2,
+  'x² + 1 is never 0, so f is continuous everywhere and has no vertical asymptote. 4x/(x² + 1) = (1/x)·4/(1 + 1/x²) → 0·4 = 0 as x → ±∞, so y = 0 is a horizontal asymptote both ways.'),
+mc('tu7-4b', 'tu7', 'Let f(x) = #frac{4x}{x² + 1}, so f′(x) = #frac{4 − 4x²}{(x² + 1)²}. Where is f increasing and decreasing?',
+  ['Increasing on [−1, 1]; decreasing on (−∞, −1] and [1, ∞)', 'Increasing on (−∞, −1] and [1, ∞); decreasing on [−1, 1]', 'Increasing on [0, ∞); decreasing on (−∞, 0]', 'Increasing everywhere'], 0,
+  'f′ = 0 at x = ±1, and its sign is the sign of 4 − 4x²: negative for x &lt; −1, positive on (−1, 1), negative for x &gt; 1. So f decreases, increases, decreases.'),
+multi('tu7-4b2', 'tu7', 'Let f(x) = #frac{4x}{x² + 1}, so f′(x) = #frac{4 − 4x²}{(x² + 1)²}. Find the local extrema.', [
+  { ask: 'x-coordinate of the local minimum', ans: '-1', hint: 'Where does f′ change from − to +?',
+    why: 'f′ goes from negative to positive at x = −1, so it is a local min by the First Derivative Test.' },
+  { ask: 'y-coordinate of the local minimum', ans: '-2', hint: 'Evaluate f there.',
+    why: 'f(−1) = −4/2 = −2. Local min (−1, −2).' },
+  { ask: 'x-coordinate of the local maximum', ans: '1', hint: 'Where does f′ change from + to −?',
+    why: 'f′ goes from positive to negative at x = 1.' },
+  { ask: 'y-coordinate of the local maximum', ans: '2', hint: 'Evaluate f there.',
+    why: 'f(1) = 4/2 = 2. Local max (1, 2).' }
+], 'curve'),
+mc('tu7-4c', 'tu7', 'Let f(x) = #frac{4x}{x² + 1}, so f″(x) = #frac{8x(x² − 3)}{(x² + 1)³}. Where is f concave up?',
+  ['(−∞, −√3] and [0, √3]', '[−√3, 0] and [√3, ∞)', '[−√3, √3]', '[0, ∞)'], 1,
+  'f″ = 0 at x = 0 and x = ±√3. Sign of 8x(x² − 3): negative for x &lt; −√3, positive on (−√3, 0), negative on (0, √3), positive for x &gt; √3. So concave up on [−√3, 0] and [√3, ∞), concave down on (−∞, −√3] and [0, √3].'),
+multi('tu7-4c2', 'tu7', 'Let f(x) = #frac{4x}{x² + 1}, so f″(x) = #frac{8x(x² − 3)}{(x² + 1)³}. f has three inflection points. Give the one with the largest x.', [
+  { ask: 'x-coordinate', ans: 'sqrt(3)', hint: 'Where does f″ change sign?',
+    why: 'f″ changes sign at x = −√3, 0 and √3. The largest is √3.' },
+  { ask: 'y-coordinate', ans: 'sqrt(3)', hint: 'Evaluate 4x/(x² + 1) there.',
+    why: 'f(√3) = 4√3/4 = √3. The three inflection points are (−√3, −√3), (0, 0) and (√3, √3).' }
+], 'curve'),
+mc('tu7-4d', 'tu7', 'Which graph is y = #frac{4x}{x² + 1}? (It has a local min at (−1, −2), a local max at (1, 2), inflection points at (−√3, −√3), (0, 0), (√3, √3), and y = 0 as a horizontal asymptote.)',
+  T7S, 2,
+  'The graph passes through the origin, rises from a low point (−1, −2) to a high point (1, 2), and flattens toward y = 0 on both sides. It is odd, so it is symmetric about the origin.'),
+
+/* ---------- Tutorial 8 ---------- */
+multi('tu8-1', 'tu8', 'Find the absolute maximum and minimum of f(x) = sin(2x) − 12 sin(x) + 2x on [0, π].', [
+  { ask: 'x where the absolute max occurs', ans: 'pi', hint: 'f′(x) = 2cos(2x) − 12cos(x) + 2. Use cos(2x) = 2cos²x − 1, then compare endpoints and critical points.',
+    why: 'f′ = 0 becomes 4cos²x − 12cos x = 0, so cos x = 0 or 3. Only x = π/2 is in [0, π]. f(0) = 0, f(π/2) = π − 12, f(π) = 2π. The largest is at x = π.' },
+  { ask: 'The absolute max value', ans: '2pi', hint: 'Evaluate f at that x.',
+    why: 'f(π) = 0 − 0 + 2π = 2π. Absolute max (π, 2π).' },
+  { ask: 'x where the absolute min occurs', ans: 'pi/2', hint: 'Compare f(0), f(π/2), f(π).',
+    why: 'π − 12 ≈ −8.86 is the smallest of 0, π − 12, 2π.' },
+  { ask: 'The absolute min value', ans: 'pi-12', hint: 'sin(π) = 0 and sin(π/2) = 1.',
+    why: 'f(π/2) = sin π − 12 sin(π/2) + π = π − 12. Absolute min (π/2, π − 12).' }
+], 'opt'),
+multi('tu8-2', 'tu8', 'An open-top box is made by cutting a square of side x from each corner of a 9 m by 24 m sheet of cardboard and folding up the sides. Maximize the volume.', [
+  { ask: 'The best cut size x (m)', ans: '2', hint: 'V(x) = x(9 − 2x)(24 − 2x) on [0, 9/2].',
+    why: 'V(x) = 4x³ − 66x² + 216x, V′(x) = 12x² − 132x + 216 = 12(x − 2)(x − 9). Only x = 2 is in [0, 9/2]. V(0) = 0, V(2) = 200, V(9/2) = 0.' },
+  { ask: 'The largest volume (m³)', ans: '200', hint: 'Evaluate V at the critical point and the endpoints.',
+    why: 'V(2) = 2 · 5 · 20 = 200 m³.' }
+], 'opt'),
+num('tu8-3', 'tu8', 'A dog walks due north at 1 m/s. At the same moment, a cat 6 m directly west of the dog runs due south at 3 m/s. How fast is the distance between them changing 2 seconds later (m/s)?', '3.2',
+  'Let y be the north-south gap and z the distance: z² = 6² + y². Differentiate with respect to t.',
+  'dy/dt = 1 + 3 = 4 m/s. At t = 2, y = 2 + 6 = 8 and z = √(36 + 64) = 10. From 2z z′ = 2y y′: z′ = (y/z)(dy/dt) = (8/10)(4) = 3.2 m/s, increasing.', null, null, { unit: 'm/s' }),
+num('tu8-4a', 'tu8', 'Use L\'Hôpital\'s rule to evaluate #lim{x → 0} #frac{arctan(x)}{arctan(2x)}.', '1/2',
+  'It is 0/0. (arctan u)′ = u′/(1 + u²).',
+  'Differentiate top and bottom: [1/(1 + x²)] / [2/(1 + 4x²)] = (1/2)(1 + 4x²)/(1 + x²) → 1/2.', L, null),
+num('tu8-4b', 'tu8', 'Evaluate #lim{x → ∞} (1 + e<sup>x</sup>)<sup>1/x</sup>.', 'e',
+  'It is ∞⁰. Take ln of the limit to get ln(1 + e<sup>x</sup>)/x, then use L\'Hôpital.',
+  'ln L = lim ln(1 + e<sup>x</sup>)/x (∞/∞) = lim (e<sup>x</sup>/(1 + e<sup>x</sup>))/1 = lim e<sup>x</sup>/(1 + e<sup>x</sup>) (∞/∞) = lim e<sup>x</sup>/e<sup>x</sup> = 1. So L = e.', L, null)
+];
+
+TUT('math116', T, Q);
+})();
