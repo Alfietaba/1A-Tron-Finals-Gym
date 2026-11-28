@@ -144,10 +144,6 @@ multi('ps3-4', 'k6', 'Find the exact value of each expression.', [
   { ask: 'tan(sec<sup>−1</sup> 4)', ans: 'sqrt(15)', hint: 'Draw a right triangle with hypotenuse 4 and adjacent side 1.', why: 'Opposite side = √(16 − 1) = √15, so tan θ = √15/1 = √15.' },
   { ask: 'sin(2 sin<sup>−1</sup>(3/5))', ans: '24/25', hint: 'Let θ = sin<sup>−1</sup>(3/5) and use the double-angle formula.', why: 'sin θ = 3/5, cos θ = 4/5 (3-4-5 triangle). sin 2θ = 2(3/5)(4/5) = 24/25.' }
 ]),
-multi('ps3-5a', 'k6', 'Write 2 sin θ + 2√3 cos θ as A sin(θ + φ) with A &gt; 0 and −π &lt; φ ≤ π.', [
-  { ask: 'A', ans: '4', hint: 'A = √(B² + C²) where B and C are the sine and cosine coefficients.', why: 'A = √(4 + 12) = 4.' },
-  { ask: 'φ', ans: 'pi/3', hint: 'cos φ = B/A and sin φ = C/A.', why: 'cos φ = 2/4 = 1/2 and sin φ = 2√3/4 = √3/2, so φ = π/3. Result: 4 sin(θ + π/3).' }
-], 'trig'),
 multi('ps3-5b', 'k6', 'Write 4cos(2θ) − 4sin(2θ) as A sin(ωθ + φ) with A &gt; 0, ω &gt; 0 and −π &lt; φ ≤ π.', [
   { ask: 'A', ans: '4sqrt(2)', hint: 'The sine coefficient is B = −4 and the cosine coefficient is C = 4.', why: 'A = √(16 + 16) = 4√2.' },
   { ask: 'ω', ans: '2', hint: 'Look at the argument.', why: 'Both terms have 2θ, so ω = 2.' },

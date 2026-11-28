@@ -34,6 +34,15 @@ COURSES.forEach(c => {
       }
     } catch (e) { bad++; console.log('FAIL', c.code, q.id, e); }
   });
+  // no duplicate questions: the same stem with the same answer, or nearly the same stem (4-character shingles, Jaccard >= 0.8) with the same answer
+  { const raw = s => String(s || '').replace(/<[^>]+>/g, ' ').replace(/[\\s.,;:?!]+/g, ' ').trim().toLowerCase();
+    const ans = q => q.type === 'mc' ? raw(q.opts[q.a]) : q.parts ? q.parts.map(p => String(p.ans)).join('|') : q.steps ? q.steps.map(raw).join('|') : String(q.ans || '');
+    const L = c.Q.map(q => { const k = raw(q.q) + ' ' + (q.parts ? q.parts.map(p => raw(p.ask)).join(' ') : '') + ' ' + raw(q.code); const t = k.split(' ').join(''), g = new Set(); for (let i = 0; i + 4 <= t.length; i++) g.add(t.slice(i, i + 4)); return { q, k, g, a: ans(q) }; });
+    for (let i = 0; i < L.length; i++) for (let j = i + 1; j < L.length; j++) {
+      const A = L[i], B = L[j]; if (A.a !== B.a) continue;
+      let inter = 0; for (const x of A.g) if (B.g.has(x)) inter++;
+      if (A.k === B.k || inter / (A.g.size + B.g.size - inter || 1) >= 0.8) { bad++; console.log('DUPLICATE', c.code, A.q.id, B.q.id, A.k.slice(0, 70)); }
+    } }
   if (c.id === 'che102') c.Q.forEach(q => { const all = [q.q, q.why, q.hint].concat(q.opts || [], ...(q.parts || []).map(p => [p.ask, p.why, p.hint])).join(' '); if (all.indexOf('$') >= 0) { bad++; console.log('stray $', q.id); } });
   console.log(c.code, c.Q.length, 'questions;', c.topics.map(t => t.id + ':' + c.Q.filter(q => q.t === t.id).length).join(' '));
   // mock feasibility
