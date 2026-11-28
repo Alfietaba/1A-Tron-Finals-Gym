@@ -38,7 +38,7 @@ Put Alfie on a good song for a treat: in Settings, write a song rec in the envel
 - **Past exams, one tap away.** Each course page lists the past and sample exams that course has posted on LEARN, with their solutions. The links open on LEARN after you sign in, so the exams themselves aren't copied into the gym.
 - **A pre-exam warm-up in every course.** Easy questions on the basics that you can do in your head, to settle your nerves right before an exam. They don't count toward mastery or mock exams.
 - **Mock exams have the same shape as the real ones:** the same sections, point weights and time limit. There's no feedback until you submit, then you get a breakdown by section and a "Fix my mistakes" run.
-- **Fresh questions on demand.** 121 generators write new versions with new numbers for infinite mode (endless, or three lives). By default they only kick in for topics you've fully mastered, so you work through the written questions first. A setting lets them mix in from the start.
+- **Fresh questions on demand.** 121 generators write new versions with new numbers for infinite mode (endless, or three lives, where 5 right in a row wins back a lost heart). By default they only kick in for topics you've fully mastered, so you work through the written questions first. A setting lets them mix in from the start.
 - **Stuck on a whole unit?** Every topic has an "I don't understand this unit" button with a few YouTube videos that explain it (280 in total, each one found by search), then a one-tap drill to practise while it's fresh.
 - **The formula sheet sits beside the question,** like it does on the exam.
 - **Real working, not just bubbles:**

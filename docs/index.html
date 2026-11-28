@@ -659,6 +659,9 @@ svg.dg { display: block; max-width: 100%; height: auto; margin: .7rem auto; colo
 .heart.on { color: var(--bad); }
 .heart.off { color: var(--rule); }
 .heart.lose { animation: lose .6s ease-out; }
+.heart .hf { fill: var(--bad); opacity: .55; }
+.heart.gain { animation: hgain .7s cubic-bezier(.3, 1.6, .5, 1); }
+@keyframes hgain { 0% { transform: scale(.4); } 55% { transform: scale(1.45); filter: drop-shadow(0 0 6px var(--bad)); } 100% { transform: scale(1); } }
 @keyframes lose { 0% { transform: scale(1); color: var(--bad); } 35% { transform: scale(1.5); color: var(--bad); } 100% { transform: scale(1); } }
 .prog.streak i { background: linear-gradient(90deg, var(--gold), var(--flame)); }
 .toast { position: fixed; left: 50%; top: calc(env(safe-area-inset-top, 0px) + 3.7rem); z-index: 65; transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: .5rem 1.1rem; border-radius: 999px; font-family: var(--font-display); font-weight: 500; font-size: .92rem; white-space: nowrap; box-shadow: 0 8px 24px rgba(8, 16, 30, .28); pointer-events: none; animation: toast 1.75s ease forwards; }
@@ -694,7 +697,7 @@ details.more .brk, details.more .rlist { margin-top: .45rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .qcard, .fb, .modal, .overlay { animation: none; }
-  .cd-fire, .cd-out .cd-smoke path, .shake, .pop, .floater, .chip.hot svg, .heart.lose, .toast, .dock, .sd-card, .pip.bump, .sd-dots i.new, .fl-swap, .n-up, .n-down { animation: none; }
+  .cd-fire, .cd-out .cd-smoke path, .shake, .pop, .floater, .chip.hot svg, .heart.lose, .heart.gain, .toast, .dock, .sd-card, .pip.bump, .sd-dots i.new, .fl-swap, .n-up, .n-down { animation: none; }
   .sd-ring .fg, .sd-bar i, .cd-wax, .cd-top, .candle { transition: none; }
   .xpbar i, .ring .fg, .prog i { transition: none; }
 }
@@ -12874,7 +12877,12 @@ function nextToast() {
   setTimeout(function () { el.remove(); nextToast(); }, 1750);
 }
 function infIcon() { return '<svg class="inf-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 8.2a3.8 3.8 0 1 0 0 7.6c2.4 0 3.4-1.9 5-3.8s2.6-3.8 5-3.8a3.8 3.8 0 1 1 0 7.6c-2.4 0-3.4-1.9-5-3.8S9.4 8.2 7 8.2z"/></svg>'; }
-function heartSVG(on, cls) { return '<svg class="heart ' + (on ? 'on' : 'off') + (cls ? ' ' + cls : '') + '" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.3-9.2C1.4 7.9 3.6 4.5 7 4.5c2 0 3.4 1.1 5 3 1.6-1.9 3-3 5-3 3.4 0 5.6 3.4 4.3 6.8-1.8 4.6-9.3 9.2-9.3 9.2z"/></svg>'; }
+var HEART_D = 'M12 20.5s-7.5-4.6-9.3-9.2C1.4 7.9 3.6 4.5 7 4.5c2 0 3.4 1.1 5 3 1.6-1.9 3-3 5-3 3.4 0 5.6 3.4 4.3 6.8-1.8 4.6-9.3 9.2-9.3 9.2z';
+function heartSVG(on, cls, fill) {
+  /* fill (0 to 1): how far an empty heart has filled back up from the bottom */
+  var part = !on && fill > 0 ? '<clipPath id="hfill"><rect x="0" y="' + (20.5 - 16 * fill).toFixed(2) + '" width="24" height="24"/></clipPath><path class="hf" clip-path="url(#hfill)" d="' + HEART_D + '"/>' : '';
+  return '<svg class="heart ' + (on ? 'on' : 'off') + (cls ? ' ' + cls : '') + '" viewBox="0 0 24 24" aria-hidden="true"><path d="' + HEART_D + '"/>' + part + '</svg>';
+}
 function togglesHTML() {
   var cd = G.candle && !G.candle.done ? G.candle : null;
   return '<div class="toggles"><button class="tgl" type="button" data-tgl="snd" aria-pressed="' + G.snd + '"><i></i>Sound</button><button class="tgl" type="button" data-tgl="hap" aria-pressed="' + G.hap + '"><i></i>Haptics</button>' +
@@ -13967,7 +13975,7 @@ function showInfIntro(mix) {
     '<p class="sub">Questions never run out. ' + (G.infGen ? 'The ' + nBank + ' written questions mix with ' + nGen + ' generators that make new versions with fresh numbers every time.' : 'You get the ' + nBank + ' written questions. Once you have mastered every question in a topic, ' + nGen + ' generators start making new versions with fresh numbers. To mix them in from the start, turn on <b>Let Infinite mode create new questions</b> in Settings on the Summary page.') + ' Misses come back a few questions later.</p>' +
     '<section class="block"><h2>Mode</h2><div class="seg" role="group" aria-label="Mode">' +
       '<button type="button" data-mode="0" aria-pressed="' + !lives + '"><b>Endless</b><span>Go as long as you like and chase your best streak. End whenever you want.</span></button>' +
-      '<button type="button" data-mode="1" aria-pressed="' + lives + '"><b>' + heartSVG(true) + heartSVG(true) + heartSVG(true) + ' 3 lives</b><span>Three misses and it is over. Every 10 in a row wins a life back.</span></button>' +
+      '<button type="button" data-mode="1" aria-pressed="' + lives + '"><b>' + heartSVG(true) + heartSVG(true) + heartSVG(true) + ' 3 lives</b><span>Three misses and it is over. Get 5 right in a row to win back a lost heart.</span></button>' +
     '</div></section>' +
     '<section class="block"><div class="hrow"><h2>' + (mix ? 'Courses' : 'Topics') + '</h2><button class="link" type="button" id="all">Select all</button></div><div class="chips">' + chips + '</div>' +
       '<p class="due-note" style="margin-top:.6rem">' + (mix ? 'Courses with sooner exams come up more often. Finished exams are off by default.' : 'Weak topics come up more often.' + (items.some(function (it) { return it.extra; }) ? ' Bonus topics are not on the midterm, so they are off by default.' : '')) + '</p></section>' +
@@ -14051,10 +14059,11 @@ function infPick() {
   var any = c.Q.filter(function (q) { return P.tops.indexOf(q.t) >= 0; });
   return any.length ? { c: c, q: any[Math.floor(Math.random() * any.length)] } : null;
 }
-function heartsHTML(lose) {
-  var s = '';
-  for (var i = 0; i < 3; i++) s += heartSVG(i < run.hearts, lose && i === run.hearts ? 'lose' : '');
-  return '<span class="hearts" id="hearts" aria-label="' + run.hearts + ' lives left">' + s + '</span>';
+var HEART_BACK = 5; /* in 3-lives mode, this many right in a row wins back a lost heart */
+function heartsHTML(lose, gain) {
+  var s = '', k = run.hearts < 3 && !run.over ? run.combo % HEART_BACK : 0;
+  for (var i = 0; i < 3; i++) s += heartSVG(i < run.hearts, lose && i === run.hearts ? 'lose' : gain && i === run.hearts - 1 ? 'gain' : '', i === run.hearts ? k / HEART_BACK : 0);
+  return '<span class="hearts" id="hearts" aria-label="' + run.hearts + (run.hearts === 1 ? ' life' : ' lives') + ' left' + (k ? ', ' + k + ' of ' + HEART_BACK + ' right in a row toward the next' : '') + '">' + s + '</span>';
 }
 function infHud() {
   var mb = mileBounds(run.combo), pct = Math.round(100 * (run.combo - mb[0]) / (mb[1] - mb[0]));
@@ -14123,7 +14132,7 @@ function infNext() {
     var lost = false, gained = false;
     if (run.cfg.lives) {
       if (!res.ok) { run.hearts--; lost = true; if (run.hearts <= 0) run.over = true; }
-      else if (run.combo % 10 === 0 && run.hearts < 3) { run.hearts++; gained = true; }
+      else if (run.hearts < 3 && run.combo > 0 && run.combo % HEART_BACK === 0) { run.hearts++; gained = true; }
     }
     /* records */
     if (run.combo > R.st) { R.st = run.combo; if (!run.flags.st && run.rec0.st >= 3) { run.flags.st = true; toast('New best streak'); } }
@@ -14135,21 +14144,21 @@ function infNext() {
       Snd.good(run.combo - 1); buzz(run.combo % 5 === 0 ? [20, 40, 20, 40, 30] : 18);
       if (!reduced) card.el.classList.add('pop');
       if (gain) floatXP(card.el, '+' + gain + ' XP');
-      if (isMile(run.combo)) { toast(run.combo + ' in a row'); FX.burst(Math.min(160, 50 + run.combo * 2), 0.5, 0.35); if (run.combo >= 10) Snd.done(); }
+      if (isMile(run.combo)) { toast(run.combo + ' in a row' + (gained ? ' · heart back' : '')); FX.burst(Math.min(160, 50 + run.combo * 2), 0.5, 0.35); if (run.combo >= 10) Snd.done(); }
       else if (res.frac === 1 && Math.random() < 0.2) FX.burst(16, 0.5, 0.55);
     } else {
       if (res.frac > 0) { Snd.half(); buzz([30, 40, 30]); } else { Snd.bad(); buzz([60, 40, 60]); if (!reduced) card.el.classList.add('shake'); }
       if (gain) floatXP(card.el, '+' + gain + ' XP');
     }
     if (run.n % 25 === 0) toast(run.n + ' questions');
-    if (gained) toast('+1 life');
+    if (gained && !isMile(run.combo)) toast('Heart back');
     /* HUD */
     var cb = document.getElementById('combo');
     if (cb) { cb.className = 'chip' + (run.combo >= 3 ? ' hot' : ''); cb.innerHTML = flame() + '<span>' + run.combo + '</span>'; }
     var cn = document.getElementById('cnt'); if (cn) cn.textContent = '✓ ' + run.ok;
     var mb = mileBounds(run.combo), pf = document.getElementById('progfill');
     if (pf) pf.style.width = Math.round(100 * (run.combo - mb[0]) / (mb[1] - mb[0])) + '%';
-    var hs = document.getElementById('hearts'); if (hs && (lost || gained)) hs.outerHTML = heartsHTML(lost);
+    var hs = document.getElementById('hearts'); if (hs) hs.outerHTML = heartsHTML(lost, gained);
     main.disabled = false; main.textContent = run.over ? 'See results' : 'Next'; main.classList.toggle('good', res.ok);
     stuck.hidden = true; main.focus();
     var fbEl = card.el.querySelector('.fb'); if (fbEl && fbEl.scrollIntoView) setTimeout(function () { fbEl.scrollIntoView({ block: 'nearest', behavior: reduced ? 'auto' : 'smooth' }); }, 60);

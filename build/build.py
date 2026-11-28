@@ -36,7 +36,7 @@ def main():
 
     # test build: exposes a few internals on window.__gym so the browser tests can drive the app
     hook = ("window.__gym = { COURSES: COURSES, qCard: qCard, setCur: function (c) { CUR = c; }, showHome: showHome, "
-            "showFormula: showFormula, gradeQ: gradeQ, partsOf: partsOf, structOf: structOf, G: function () { return G; }, "
+            "showFormula: showFormula, gradeQ: gradeQ, curRun: function () { return run; }, partsOf: partsOf, structOf: structOf, G: function () { return G; }, "
             "candleTick: candleTick, birdSVG: birdSVG, Snd: Snd, quack: quackSound, SONG: SONG, showSong: showSong, songCookie: songCookie };\nshowGym();")
     test = page.replace('\nshowGym();\n', '\n' + hook + '\n')
     assert test != page, 'could not find the start-up call to hook into'

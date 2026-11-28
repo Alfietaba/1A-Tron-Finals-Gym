@@ -650,6 +650,9 @@ svg.dg { display: block; max-width: 100%; height: auto; margin: .7rem auto; colo
 .heart.on { color: var(--bad); }
 .heart.off { color: var(--rule); }
 .heart.lose { animation: lose .6s ease-out; }
+.heart .hf { fill: var(--bad); opacity: .55; }
+.heart.gain { animation: hgain .7s cubic-bezier(.3, 1.6, .5, 1); }
+@keyframes hgain { 0% { transform: scale(.4); } 55% { transform: scale(1.45); filter: drop-shadow(0 0 6px var(--bad)); } 100% { transform: scale(1); } }
 @keyframes lose { 0% { transform: scale(1); color: var(--bad); } 35% { transform: scale(1.5); color: var(--bad); } 100% { transform: scale(1); } }
 .prog.streak i { background: linear-gradient(90deg, var(--gold), var(--flame)); }
 .toast { position: fixed; left: 50%; top: calc(env(safe-area-inset-top, 0px) + 3.7rem); z-index: 65; transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: .5rem 1.1rem; border-radius: 999px; font-family: var(--font-display); font-weight: 500; font-size: .92rem; white-space: nowrap; box-shadow: 0 8px 24px rgba(8, 16, 30, .28); pointer-events: none; animation: toast 1.75s ease forwards; }
@@ -685,7 +688,7 @@ details.more .brk, details.more .rlist { margin-top: .45rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .qcard, .fb, .modal, .overlay { animation: none; }
-  .cd-fire, .cd-out .cd-smoke path, .shake, .pop, .floater, .chip.hot svg, .heart.lose, .toast, .dock, .sd-card, .pip.bump, .sd-dots i.new, .fl-swap, .n-up, .n-down { animation: none; }
+  .cd-fire, .cd-out .cd-smoke path, .shake, .pop, .floater, .chip.hot svg, .heart.lose, .heart.gain, .toast, .dock, .sd-card, .pip.bump, .sd-dots i.new, .fl-swap, .n-up, .n-down { animation: none; }
   .sd-ring .fg, .sd-bar i, .cd-wax, .cd-top, .candle { transition: none; }
   .xpbar i, .ring .fg, .prog i { transition: none; }
 }
