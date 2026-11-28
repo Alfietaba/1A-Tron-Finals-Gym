@@ -261,6 +261,19 @@ function birdPoke(wrap, quiet) {
   }
 }
 
+/* A right answer: the duck hops and flaps. On a phone it hides while you answer, so it pops up
+   from the corner for the hop and ducks back down. Silent, so it never talks over the answer sounds. */
+function birdCheer() {
+  var w = document.getElementById('bird'); if (!w || reduced || exam || !(birdCfg().show || songWantsDuck())) return;
+  var peek = w.hidden && !document.documentElement.classList.contains('docked');
+  if (w.hidden && !peek) return;
+  if (peek) { w._peek = true; birdPlace(); w.classList.remove('peek'); void w.offsetWidth; w.classList.add('peek'); }
+  w.classList.remove('flap', 'oops'); void w.offsetWidth; w.classList.add('flap');
+  clearTimeout(w._t); w._t = setTimeout(function () { w.classList.remove('flap'); }, 900);
+  clearTimeout(w._pk);
+  if (w._peek) w._pk = setTimeout(function () { w._peek = false; w.classList.remove('peek'); birdPlace(); }, 1250);
+}
+
 /* ---------- the bird in the corner ---------- */
 function birdBoot() {
   if (document.getElementById('bird')) return;
@@ -295,7 +308,7 @@ function birdDraw() {
 function birdPlace() {
   var w = document.getElementById('bird'); if (!w) return;
   var b = birdCfg(), answering = !!(run && app.querySelector('.qcard')), inExam = !!(exam && document.querySelector('.bar') && !app.querySelector('.sum-top'));
-  var hide = !(b.show || songWantsDuck()) || inExam || (answering && (window.innerWidth < 760 || document.documentElement.classList.contains('docked')));
+  var hide = !(b.show || songWantsDuck()) || inExam || (answering && !w._peek && (window.innerWidth < 760 || document.documentElement.classList.contains('docked')));
   w.hidden = hide;
   if (hide) return;
   var bar = document.querySelector('.bar'), bottom = (bar ? bar.offsetHeight : 0) + 10;

@@ -1377,7 +1377,7 @@ function codeCheck(p, code, out, chk) {
       var sc = Math.max(0, Math.min(10, Math.round(r.score))), rec = codeRec(p.id);
       rec.tries++; rec.last = sc; rec.best = rec.best == null ? sc : Math.max(rec.best, sc); save();
       out.innerHTML = codeResHTML(r, sc);
-      if (sc >= 8) { Snd.good(2); FX.burst(sc === 10 ? 80 : 30, 0.5, 0.4); } else if (sc >= 5) Snd.half(); else Snd.bad();
+      if (sc >= 8) { Snd.good(2); FX.burst(sc === 10 ? 80 : 30, 0.5, 0.4); birdCheer(); } else if (sc >= 5) Snd.half(); else Snd.bad();
       var rs = out.querySelector('.cw-res'); if (rs && rs.scrollIntoView) rs.scrollIntoView({ block: 'start', behavior: reduced ? 'auto' : 'smooth' });
     }, function (e) {
       chk.disabled = false;
@@ -1409,7 +1409,7 @@ function codeSelf(p, out, keep) {
     var sc = 0; out.querySelectorAll('.cw-self input').forEach(function (cb) { if (cb.checked) sc += p.rubric[+cb.getAttribute('data-i')][0]; });
     var rec = codeRec(p.id); rec.tries++; rec.last = sc; rec.best = rec.best == null ? sc : Math.max(rec.best, sc); save();
     out.querySelector('#cw-selfres').innerHTML = '<p><b>' + sc + '/10</b> saved.</p>';
-    if (sc >= 8) Snd.good(1); else Snd.half();
+    if (sc >= 8) { Snd.good(1); birdCheer(); } else Snd.half();
   });
 }
 
@@ -1615,7 +1615,7 @@ function runNext() {
     run.res.push({ id: q.id, ok: res.ok, frac: res.frac, retry: isRetry, state: JSON.parse(JSON.stringify(st)) });
     if (!res.ok && !run.requeued[q.id]) { run.requeued[q.id] = true; run.ids.splice(Math.min(run.i + 4, run.ids.length), 0, q.id); }
     if (res.ok) {
-      Snd.good(run.combo - 1); buzz(run.combo % 5 === 0 ? [20, 40, 20, 40, 30] : 18);
+      Snd.good(run.combo - 1); buzz(run.combo % 5 === 0 ? [20, 40, 20, 40, 30] : 18); birdCheer();
       if (!reduced) card.el.classList.add('pop');
       if (gain) floatXP(card.el, '+' + gain + ' XP');
       if (run.combo > 0 && run.combo % 5 === 0) FX.burst(70, 0.5, 0.4);
@@ -1893,7 +1893,7 @@ function infNext() {
     sideAfter(q, res, gain, !!it.gen);
     /* feedback */
     if (res.ok) {
-      Snd.good(run.combo - 1); buzz(run.combo % 5 === 0 ? [20, 40, 20, 40, 30] : 18);
+      Snd.good(run.combo - 1); buzz(run.combo % 5 === 0 ? [20, 40, 20, 40, 30] : 18); birdCheer();
       if (!reduced) card.el.classList.add('pop');
       if (gain) floatXP(card.el, '+' + gain + ' XP');
       if (isMile(run.combo)) { toast(run.combo + ' in a row' + (gained ? ' · heart back' : '')); FX.burst(Math.min(160, 50 + run.combo * 2), 0.5, 0.35); if (run.combo >= 10) Snd.done(); }

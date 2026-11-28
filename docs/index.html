@@ -1307,6 +1307,11 @@ h2 { font-weight: 700; letter-spacing: -.01em; }
 .nx-tag { justify-self: start; display: inline-flex; align-items: center; gap: .32rem; font-family: var(--font-ui); font-size: .7rem; font-weight: 700; line-height: 1.5; color: var(--hlt-ink); background: var(--hlt); border-radius: 999px; padding: .05rem .55rem .05rem .45rem; margin: -.1rem 0 -.15rem; }
 .nx-tag::before { content: ''; width: .38rem; height: .38rem; border-radius: 50%; background: currentColor; }
 #nx-note::before { content: ''; display: inline-block; width: .8rem; height: .55rem; border-radius: .15rem; background: var(--hlt); margin-right: .3rem; vertical-align: .05rem; }
+
+/* ---------- the duck cheers a right answer; on a phone it peeks up from the corner for it ---------- */
+.bird-dock.peek { pointer-events: none; animation: bd-peek 1.25s cubic-bezier(.3, 1.3, .5, 1) both; }
+@keyframes bd-peek { 0% { transform: translateY(115%); opacity: 0; } 16% { transform: translateY(0); opacity: 1; } 78% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(115%); opacity: 0; } }
+.bird-dock.peek .bird-bub { display: none; }
 </style>
 
 <div class="app" id="app"></div>
@@ -11544,6 +11549,19 @@ function birdPoke(wrap, quiet) {
   }
 }
 
+/* A right answer: the duck hops and flaps. On a phone it hides while you answer, so it pops up
+   from the corner for the hop and ducks back down. Silent, so it never talks over the answer sounds. */
+function birdCheer() {
+  var w = document.getElementById('bird'); if (!w || reduced || exam || !(birdCfg().show || songWantsDuck())) return;
+  var peek = w.hidden && !document.documentElement.classList.contains('docked');
+  if (w.hidden && !peek) return;
+  if (peek) { w._peek = true; birdPlace(); w.classList.remove('peek'); void w.offsetWidth; w.classList.add('peek'); }
+  w.classList.remove('flap', 'oops'); void w.offsetWidth; w.classList.add('flap');
+  clearTimeout(w._t); w._t = setTimeout(function () { w.classList.remove('flap'); }, 900);
+  clearTimeout(w._pk);
+  if (w._peek) w._pk = setTimeout(function () { w._peek = false; w.classList.remove('peek'); birdPlace(); }, 1250);
+}
+
 /* ---------- the bird in the corner ---------- */
 function birdBoot() {
   if (document.getElementById('bird')) return;
@@ -11578,7 +11596,7 @@ function birdDraw() {
 function birdPlace() {
   var w = document.getElementById('bird'); if (!w) return;
   var b = birdCfg(), answering = !!(run && app.querySelector('.qcard')), inExam = !!(exam && document.querySelector('.bar') && !app.querySelector('.sum-top'));
-  var hide = !(b.show || songWantsDuck()) || inExam || (answering && (window.innerWidth < 760 || document.documentElement.classList.contains('docked')));
+  var hide = !(b.show || songWantsDuck()) || inExam || (answering && !w._peek && (window.innerWidth < 760 || document.documentElement.classList.contains('docked')));
   w.hidden = hide;
   if (hide) return;
   var bar = document.querySelector('.bar'), bottom = (bar ? bar.offsetHeight : 0) + 10;
@@ -13625,7 +13643,7 @@ function codeCheck(p, code, out, chk) {
       var sc = Math.max(0, Math.min(10, Math.round(r.score))), rec = codeRec(p.id);
       rec.tries++; rec.last = sc; rec.best = rec.best == null ? sc : Math.max(rec.best, sc); save();
       out.innerHTML = codeResHTML(r, sc);
-      if (sc >= 8) { Snd.good(2); FX.burst(sc === 10 ? 80 : 30, 0.5, 0.4); } else if (sc >= 5) Snd.half(); else Snd.bad();
+      if (sc >= 8) { Snd.good(2); FX.burst(sc === 10 ? 80 : 30, 0.5, 0.4); birdCheer(); } else if (sc >= 5) Snd.half(); else Snd.bad();
       var rs = out.querySelector('.cw-res'); if (rs && rs.scrollIntoView) rs.scrollIntoView({ block: 'start', behavior: reduced ? 'auto' : 'smooth' });
     }, function (e) {
       chk.disabled = false;
@@ -13657,7 +13675,7 @@ function codeSelf(p, out, keep) {
     var sc = 0; out.querySelectorAll('.cw-self input').forEach(function (cb) { if (cb.checked) sc += p.rubric[+cb.getAttribute('data-i')][0]; });
     var rec = codeRec(p.id); rec.tries++; rec.last = sc; rec.best = rec.best == null ? sc : Math.max(rec.best, sc); save();
     out.querySelector('#cw-selfres').innerHTML = '<p><b>' + sc + '/10</b> saved.</p>';
-    if (sc >= 8) Snd.good(1); else Snd.half();
+    if (sc >= 8) { Snd.good(1); birdCheer(); } else Snd.half();
   });
 }
 
@@ -13863,7 +13881,7 @@ function runNext() {
     run.res.push({ id: q.id, ok: res.ok, frac: res.frac, retry: isRetry, state: JSON.parse(JSON.stringify(st)) });
     if (!res.ok && !run.requeued[q.id]) { run.requeued[q.id] = true; run.ids.splice(Math.min(run.i + 4, run.ids.length), 0, q.id); }
     if (res.ok) {
-      Snd.good(run.combo - 1); buzz(run.combo % 5 === 0 ? [20, 40, 20, 40, 30] : 18);
+      Snd.good(run.combo - 1); buzz(run.combo % 5 === 0 ? [20, 40, 20, 40, 30] : 18); birdCheer();
       if (!reduced) card.el.classList.add('pop');
       if (gain) floatXP(card.el, '+' + gain + ' XP');
       if (run.combo > 0 && run.combo % 5 === 0) FX.burst(70, 0.5, 0.4);
@@ -14141,7 +14159,7 @@ function infNext() {
     sideAfter(q, res, gain, !!it.gen);
     /* feedback */
     if (res.ok) {
-      Snd.good(run.combo - 1); buzz(run.combo % 5 === 0 ? [20, 40, 20, 40, 30] : 18);
+      Snd.good(run.combo - 1); buzz(run.combo % 5 === 0 ? [20, 40, 20, 40, 30] : 18); birdCheer();
       if (!reduced) card.el.classList.add('pop');
       if (gain) floatXP(card.el, '+' + gain + ' XP');
       if (isMile(run.combo)) { toast(run.combo + ' in a row' + (gained ? ' · heart back' : '')); FX.burst(Math.min(160, 50 + run.combo * 2), 0.5, 0.35); if (run.combo >= 10) Snd.done(); }
