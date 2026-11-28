@@ -1,7 +1,5 @@
 /* MATH 116 Practice Sets 9 and 10: linear approximation, Riemann sums, FTC, substitution, integration by parts */
-TUT('math116', [
-  { id: 'kp', name: 'Integration by parts', sec: '∫u dv = uv − ∫v du', extra: 'Past the final, which ends at substitution. Here for extra practice; not counted in mastery or mock exams.' }
-], [
+TUT('math116', null, [
 
 /* ================= Practice Set 9 ================= */
 multi('ps9-1', 'k17', 'Let f(x) = x<sup>4</sup>. Estimate f(1.1) two ways: with a linear approximation and with differentials.', [
@@ -150,19 +148,19 @@ multi('ps10-4', 'k20', 'Evaluate ∫<sub>0</sub><sup>π/2</sup> sin³(x) cos(x) 
     hint: 'du = cos x dx, and the bounds become 0 and 1.',
     why: '∫<sub>0</sub><sup>1</sup> u³ du = 1/4. Same answer, much less work: pick the substitution whose derivative is sitting in the integrand.' }
 ]),
-num('ps10-5a', 'kp', 'Find the antiderivative F(x) of x² ln x (for x &gt; 0) that satisfies F(1) = 0.', '(x^3)ln(x)/3 - x^3/9 + 1/9',
+num('ps10-5a', 'k21', 'Find the antiderivative F(x) of x² ln x (for x &gt; 0) that satisfies F(1) = 0.', '(x^3)ln(x)/3 - x^3/9 + 1/9',
   'Integration by parts with u = ln x and dv = x² dx.',
   'du = dx/x and v = x³/3: ∫ x² ln x dx = (x³ ln x)/3 − ∫ x²/3 dx = (x³ ln x)/3 − x³/9 + C. F(1) = −1/9 + C = 0 gives C = 1/9.', null, null, { kind: 'expr', pts: [0.5, 1, 2, 3, 4] }),
-num('ps10-5b', 'kp', 'Evaluate ∫<sub>0</sub><sup>π</sup> x cos(x) dx.', '-2',
+num('ps10-5b', 'k21', 'Evaluate ∫<sub>0</sub><sup>π</sup> x cos(x) dx.', '-2',
   'Integration by parts with u = x and dv = cos x dx.',
   'v = sin x: [x sin x]<sub>0</sub><sup>π</sup> − ∫<sub>0</sub><sup>π</sup> sin x dx = 0 − [−cos x]<sub>0</sub><sup>π</sup> = cos π − cos 0 = −2.'),
-num('ps10-5c', 'kp', 'Find the antiderivative F(x) of x²e<sup>2x</sup> that satisfies F(0) = 0.', 'e^(2x)(x^2/2 - x/2 + 1/4) - 1/4',
+num('ps10-5c', 'k21', 'Find the antiderivative F(x) of x²e<sup>2x</sup> that satisfies F(0) = 0.', 'e^(2x)(x^2/2 - x/2 + 1/4) - 1/4',
   'Integration by parts twice, each time with u = the power of x and dv = e<sup>2x</sup> dx.',
   'u = x², v = e<sup>2x</sup>/2: x²e<sup>2x</sup>/2 − ∫ x e<sup>2x</sup> dx. Again with u = x: ∫ x e<sup>2x</sup> dx = x e<sup>2x</sup>/2 − e<sup>2x</sup>/4. So ∫ = x²e<sup>2x</sup>/2 − x e<sup>2x</sup>/2 + e<sup>2x</sup>/4 + C. F(0) = 1/4 + C = 0 gives C = −1/4.', null, null, { kind: 'expr', pts: [0, 0.5, 1, -1, 2] }),
-num('ps10-5d', 'kp', 'Find the antiderivative F(x) of arcsin x (for −1 &lt; x &lt; 1) that satisfies F(0) = 0.', 'x*arcsin(x) + sqrt(1-x^2) - 1',
+num('ps10-5d', 'k21', 'Find the antiderivative F(x) of arcsin x (for −1 &lt; x &lt; 1) that satisfies F(0) = 0.', 'x*arcsin(x) + sqrt(1-x^2) - 1',
   'Parts with u = arcsin x and dv = dx. The leftover integral needs a substitution.',
   'du = dx/√(1 − x²), v = x: x arcsin x − ∫ x/√(1 − x²) dx. With w = 1 − x², dw = −2x dx, that integral is −√(1 − x²). So ∫ = x arcsin x + √(1 − x²) + C. F(0) = 1 + C = 0 gives C = −1.', null, null, { kind: 'expr', pts: [0, 0.3, 0.5, -0.5, 0.9] }),
-num('ps10-5e', 'kp', 'Find the antiderivative F(x) of e<sup>2x</sup> sin x that satisfies F(0) = 0.', 'e^(2x)(2sin(x) - cos(x))/5 + 1/5',
+num('ps10-5e', 'k21', 'Find the antiderivative F(x) of e<sup>2x</sup> sin x that satisfies F(0) = 0.', 'e^(2x)(2sin(x) - cos(x))/5 + 1/5',
   'Parts twice (u = sin x, then u = cos x, with dv = e<sup>2x</sup> dx), then solve for the original integral.',
   'Let I = ∫ e<sup>2x</sup> sin x dx. Parts: I = (1/2)e<sup>2x</sup> sin x − (1/2)∫ e<sup>2x</sup> cos x dx, and ∫ e<sup>2x</sup> cos x dx = (1/2)e<sup>2x</sup> cos x + (1/2)I. So I = (1/2)e<sup>2x</sup> sin x − (1/4)e<sup>2x</sup> cos x − (1/4)I, giving (5/4)I = (1/2)e<sup>2x</sup> sin x − (1/4)e<sup>2x</sup> cos x and I = e<sup>2x</sup>(2 sin x − cos x)/5 + C. F(0) = −1/5 + C = 0 gives C = 1/5.', null, null, { kind: 'expr', pts: [0, 0.5, 1, -1, 2] })
 ]);

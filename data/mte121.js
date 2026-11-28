@@ -10,6 +10,7 @@ var T = [
   { id: 'c7', name: '2D arrays and structs', sec: 'Rows, columns, members' },
   { id: 'c8', name: 'Classes', sec: 'Private data, getters, setters' },
   { id: 'c9', name: 'Class files and operators', sec: 'Headers, ::, operator overloading' },
+  { id: 'c10', name: 'Pointers and dynamic memory', sec: 'new, delete, ->, *p' },
   { id: 'tw', name: 'Pre-exam warm-up', sec: 'In your head', extra: 'Quick, easy questions on the basics to settle your nerves before the exam. Not counted in mastery or mock exams.' }
 ];
 var W = 'The code runs inside main(). Type the exact output.';
@@ -2186,6 +2187,244 @@ order('c9-15', 'c9', 'Class Vec has a member ' + K`void output(ostream & out) co
   'operator<< is a free function because cout is on the left. It returns the stream by reference so calls can chain, like cout << a << b.',
   { code: true, label: 'Your code, top to bottom', test: { top: true, pre: '#include <iostream>\nusing namespace std;\nclass Vec\n{\n    int x, y;\npublic:\n    Vec(int a, int b) { x = a; y = b; }\n    void output(ostream & out) const { out << "(" << x << "," << y << ")"; }\n};' } }),
 
+mc('c9-16', 'c9', 'A class\'s input function prints a prompt only when it reads from the keyboard:' + C`
+bool input(istream & in)
+{
+    if (&in == &cin)
+        cout << "Enter title and seconds: ";
+    in >> title >> seconds;
+    return !in.fail();
+}` + 'Why does the check need both ampersands?',
+  ['It compares addresses: is in the same stream object as cin?', 'It checks whether in and cin have read the same data so far', 'The & turns in into a reference, so it can be compared with cin', 'Without them it still compiles, but the prompt always prints'], 0,
+  'Two streams cannot be compared with ==: there is no ' + K`==` + ' for istream objects, so ' + K`in == cin` + ' does not compile. ' + K`&in` + ' is the address of the stream that in refers to (a reference has the same address as the caller\'s object), and ' + K`&cin` + ' is the address of cin. They are equal only when the caller passed cin, so reading from an ifstream skips the prompt.',
+  { test: { err: true, top: true, pre: 'class Song\n{\n    string title;\n    int seconds;\npublic:', code: 'bool input(istream & in)\n{\n    if (in == cin)\n        cout << "Enter title and seconds: ";\n    in >> title >> seconds;\n    return !in.fail();\n}\n};\nint main() { return 0; }' } }),
+
+/* ---------- Pointers and dynamic memory ---------- */
+txt('c10-1', 'c10', W + C`
+int x = 5;
+int * p = &x;
+*p = *p + 3;
+x = x * 2;
+cout << x << " " << *p;`,
+  '16 16',
+  'p holds the address of x, so *p and x are the same box in memory.',
+  '*p = *p + 3 changes x itself to 8. Then x = x * 2 makes it 16. *p reads whatever is at x\'s address, so it is also 16. & gives an address, and * in front of a pointer follows it.'),
+mc('c10-2', 'c10', 'After ' + K`int x = 9;` + ' and ' + K`int * p = &x;` + ', what is stored in p?',
+  ['The address of x', 'A copy of the value 9', 'A second name for x, like a reference', 'Nothing until p is dereferenced with *p'], 0,
+  'A pointer variable stores a memory address. & in front of a variable gives its address, so p holds where x lives. *p follows that address and gets 9. (In a declaration, int * p means "p is a pointer to an int".)'),
+txt('c10-3', 'c10', W + C`
+int a = 3, b = 7;
+int * p = &a;
+int * q = &b;
+*p += *q;
+p = q;
+*p = 1;
+cout << a << " " << b << " " << *q;`,
+  '10 1 1',
+  'p = q copies an address, not a value. After it, which variable does p point to?',
+  '*p += *q adds b into a: a = 10. p = q makes p point at b too, so *p = 1 changes b, not a. *q also reads b, which is now 1. Without a * you change where a pointer points; with a * you change the value it points to.'),
+txt('c10-4', 'c10', P + C`
+struct Robot
+{
+    string name;
+    int x, y;
+};
+
+int main()
+{
+    Robot a = {"Rex", 1, 2};
+    Robot * p = &a;
+    p->x += 4;
+    (*p).y = p->x * 2;
+    cout << a.name << " " << a.x << " " << a.y;
+    return 0;
+}`,
+  'Rex 5 10',
+  'p->x means (*p).x: the x member of the struct p points to.',
+  'p points at a, so p->x += 4 makes a.x = 5, and (*p).y = 5 × 2 = 10 sets a.y. The arrow is shorthand for dereference-then-dot. The brackets in (*p).y matter, because . binds tighter than *.'),
+mc('c10-5', 'c10', K`Song s("Hey", 200);` + ' and ' + K`Song * p = &s;` + ' Which line calls getTitle on s through p?',
+  [K`cout << p->getTitle();`, K`cout << p.getTitle();`, K`cout << *p.getTitle();`, K`cout << &p->getTitle();`], 0,
+  'With a pointer to an object, use -> to reach its members. p.getTitle() fails because p is a pointer, not a Song. *p.getTitle() means *(p.getTitle()) since . goes first, so it fails too. (*p).getTitle() would also work.',
+  { test: { code: 'class Song\n{\n    string title;\n    int seconds;\npublic:\n    Song(string t, int s) { title = t; seconds = s; }\n    string getTitle() const { return title; }\n};\nint main()\n{\n    Song s("Hey", 200);\n    Song * p = &s;\n    cout << p->getTitle();\n    return 0;\n}', out: 'Hey' } }),
+txt('c10-6', 'c10', P + C`
+void byValue(int n)
+{
+    n += 10;
+}
+
+void byRef(int & n)
+{
+    n += 100;
+}
+
+void byPtr(int * n)
+{
+    *n += 1000;
+}
+
+int main()
+{
+    int a = 1;
+    byValue(a);
+    byRef(a);
+    byPtr(&a);
+    cout << a;
+    return 0;
+}`,
+  '1101',
+  'Which of the three functions can reach the caller\'s a?',
+  'byValue changes a copy, so nothing happens to a. byRef gets a reference: a = 101. byPtr gets a\'s address and changes what is there with *n: a = 1101. A pointer parameter does the same job as a reference, but the caller passes &a and the function writes *n.'),
+txt('c10-7', 'c10', P + C`
+void report(const int * p)
+{
+    if (p == nullptr)
+        cout << "none ";
+    else
+        cout << *p << " ";
+}
+
+int main()
+{
+    int k = 7;
+    int * a = nullptr;
+    report(a);
+    a = &k;
+    k++;
+    report(a);
+    return 0;
+}`,
+  'none 8',
+  'nullptr means "points at nothing". Check it before using *p.',
+  'The first call gets nullptr, so it prints none instead of dereferencing it (which would crash). Then a points at k, and k++ makes it 8 before the second call reads it. Always test a pointer against nullptr before following it if it might be empty.'),
+txt('c10-8', 'c10', W + C`
+int * p = new int;
+*p = 12;
+int * q = p;
+*q += 5;
+cout << *p << " ";
+delete p;
+p = nullptr;
+cout << (p == nullptr);`,
+  '17 1',
+  'new makes one int with no name. p and q both hold its address.',
+  'new int creates an int on the heap and returns its address. q = p copies the address, so *q += 5 changes the same int to 17. delete frees it, and setting p = nullptr marks p as empty, so p == nullptr prints 1. Every new needs exactly one delete.'),
+txt('c10-9', 'c10', 'data.txt contains:' + C`
+4
+3 9 2 6` + P + C`
+int main()
+{
+    ifstream fin("data.txt");
+    int n = 0;
+    fin >> n;
+    int * vals = new int[n];
+    for (int i = 0; i < n; i++)
+        fin >> vals[i];
+    int sum = 0;
+    for (int i = 0; i < n; i++)
+        sum += vals[i];
+    int above = 0;
+    for (int i = 0; i < n; i++)
+    {
+        if (vals[i] * n > sum)
+            above++;
+    }
+    cout << n << " " << sum << " " << above;
+    delete [] vals;
+    fin.close();
+    return 0;
+}`,
+  '4 20 2',
+  'The first number is the size. ' + K`vals[i] * n > sum` + ' is the same test as ' + K`vals[i] > sum / n` + ' without integer division.',
+  'n = 4 is only known once the file is read, so the array is made with new int[n]. The sum is 20 and the average is 5, so 9 and 6 are above it: 2. A dynamic array is used exactly like a normal one, and it is freed with delete [] because it was made with new [].', { test: { file: '4\n3 9 2 6\n', fname: 'data.txt' } }),
+mc('c10-10', 'c10', K`double * a = new double[n];` + ' Which line correctly frees the array when you are done with it?',
+  [K`delete [] a;`, K`delete a;`, K`delete a[n];`, K`a = nullptr;`], 0,
+  'Memory from new [] must be freed with delete [], and memory from plain new with plain delete. Mixing them is undefined behaviour. Setting a = nullptr alone frees nothing: the array is lost and leaks.'),
+mc('c10-11', 'c10', 'This function is called 1000 times in a loop. What is wrong with it?' + C`
+void printLast(int n)
+{
+    int * temp = new int[n];
+    for (int i = 0; i < n; i++)
+        temp[i] = i * i;
+    cout << temp[n - 1] << endl;
+}`,
+  ['Each call leaks its array: it is never deleted', 'It does not compile: new needs a constant size', 'temp[n - 1] reads one element past the end', 'Nothing: temp is freed when printLast returns'], 0,
+  'The pointer temp disappears when the function returns, but the array it pointed to does not. Nothing can free it any more, so each call leaks n ints. Add delete [] temp; before the closing brace. new [] with a size known only at run time is fine, and temp[n − 1] is the last valid element.'),
+mc('c10-12', 'c10', 'What happens here?' + C`
+int * p = new int;
+*p = 5;
+int * q = p;
+delete p;
+p = nullptr;
+cout << *q;`,
+  ['Undefined behaviour: q holds a freed address', 'It prints 5, because q kept its own copy of the int', 'It prints 0, because delete clears the memory', 'It does not compile, because q was deleted as well'], 0,
+  'q is a dangling pointer: it holds the address of memory that has already been freed. p = nullptr only changes p, not q. Reading *q might print 5, garbage, or crash; none of it is guaranteed. After delete, set every pointer to that memory to nullptr, or stop using them.'),
+txt('c10-13', 'c10', W + C`
+int a[5] = {2, 4, 6, 8, 10};
+int * p = a;
+cout << *(p + 2) << " ";
+p++;
+cout << p[2] << " " << *p + 1;`,
+  '6 8 5',
+  'An array name used as a value is the address of element 0. p[i] is *(p + i). Does *p + 1 add to the address or to the value?',
+  'p starts at a[0], so *(p + 2) is a[2] = 6. p++ moves p to a[1]. Now p[2] is a[3] = 8, and *p + 1 is the value a[1] plus 1 = 5, because * goes before +. *(p + 1) would have been 6.'),
+txt('c10-14', 'c10', P + C`
+class Sensor
+{
+private:
+    int port;
+    int value;
+public:
+    Sensor()
+    {
+        port = 0;
+        value = 0;
+    }
+    void setup(int p, int v)
+    {
+        port = p;
+        value = v;
+    }
+    int getPort() const
+    {
+        return port;
+    }
+    bool beats(const Sensor * other) const
+    {
+        if (other == nullptr)
+            return true;
+        return value > other->value;
+    }
+};
+
+int main()
+{
+    int n = 4;
+    Sensor * s = new Sensor[n];
+    for (int i = 0; i < n; i++)
+        s[i].setup(i + 1, (i * 7 + 3) % 5);
+    Sensor * best = nullptr;
+    for (int i = 0; i < n; i++)
+    {
+        if (s[i].beats(best))
+            best = &s[i];
+    }
+    cout << best->getPort();
+    delete [] s;
+    return 0;
+}`,
+  '4',
+  'Work out the four values first: (i × 7 + 3) % 5 for i = 0 to 3.',
+  'The values are 3, 0, 2 and 4. best starts as nullptr, so s[0] beats it. 0 and 2 do not beat 3, but 4 does, so best ends at s[3], port 4. new Sensor[n] runs the default constructor for every element. Inside a member function, other->value can read the other object\'s private data because it is the same class.'),
+order('c10-15', 'c10', 'n is an int that was read at run time. Make a dynamic array of n ints holding the squares 0, 1, 4, ..., print the last one, then free the memory and leave no dangling pointer. Some tiles are decoys.',
+  ['int * squares = new int[n];',
+   'for (int i = 0; i < n; i++)\n    squares[i] = i * i;',
+   'cout << squares[n - 1];',
+   'delete [] squares;',
+   'squares = nullptr;'],
+  ['int squares[n];', 'int squares = new int[n];', 'delete squares;'],
+  'new int[n] returns the address of the first element, so it goes into an int *. A plain int squares[n] needs a constant size in standard C++. Memory from new [] is freed with delete [], and setting the pointer to nullptr afterwards means it cannot be used by mistake.',
+  { code: true, label: 'Your code, top to bottom', test: { pre: 'int n = 5;' } }),
+
 txt('w-1', 'tw', W + C`
 cout << 7 / 2 << " " << 7 % 2;`, '3 1', 'Integer division drops the remainder; % gives the remainder.', '7 / 2 = 3 with remainder 1.'),
 txt('w-2', 'tw', W + C`
@@ -2548,7 +2787,7 @@ public:
     Song(string t, int s);
     int getSeconds() const;          // getter: const
     void setSeconds(int s);          // setter: seconds = abs(s);
-    bool input(istream & in);
+    bool input(istream & in);        // if (&in == &cin) prompt
     void output(ostream & out) const;
 };`],
   ['Class files', C`
@@ -2567,16 +2806,25 @@ ostream & operator<<(ostream & out, const Vec & v)
 {
     v.output(out);
     return out;
-}`]
+}`],
+  ['Pointers and dynamic memory', C`
+int * p = &x;          // p holds the address of x
+*p = 5;                // follow p: changes x
+Robot * r = &bot;  r->x = 3;   // same as (*r).x
+int * p = nullptr;     // points at nothing
+int * q = new int;     delete q;
+int * a = new int[n];  // n known at run time
+a[i] == *(a + i)
+delete [] a;  a = nullptr;`]
 ];
 COURSES.push({
   id: 'mte121', code: 'MTE 121', name: 'Digital Computation', key: 'mte121-midterm-gym-v1', hue: 'c3',
   exam: { at: '2026-12-12T09:00:00-05:00', label: 'Sat Dec 12, 9:00 AM', name: 'Final' },
-  scope: 'C++ fundamentals to classes and operator overloading',
+  scope: 'C++ fundamentals to classes, operator overloading, pointers and dynamic memory',
   progs: CODE,
   topics: T, Q: Q,
   titles: ['Hello World', 'Semicolon Survivor', 'Integer Divider', 'Branch Manager', 'Loop Wrangler', 'Off-by-One Hunter', 'Reference Ranger', 'Function Smith', 'Encoder Whisperer', 'Midterm Compiler'],
-  formula: { kind: 'html', title: 'C++ syntax sheet', sub: 'C++ syntax quick reference', extra: CX, extraTitle: 'Final topics: arrays, structs and classes', sheetTitle: 'Syntax sheet', note: 'A C++ syntax quick reference, plus the VEX IQ calls this gym uses. It is not an official exam sheet.',
+  formula: { kind: 'html', title: 'C++ syntax sheet', sub: 'C++ syntax quick reference', extra: CX, extraTitle: 'Final topics: arrays, structs, classes and pointers', sheetTitle: 'Syntax sheet', note: 'A C++ syntax quick reference, plus the VEX IQ calls this gym uses. It is not an official exam sheet.',
     items: [
       ['Libraries', K`iostream` + ', ' + K`fstream` + ', ' + K`cmath` + ', ' + K`using namespace std`],
       ['Function definition and call', C`
@@ -2615,7 +2863,7 @@ wait(20, msec);   wait(2, seconds);
 rotateRobot(angle, speed);            // given on the exams
 // 1 wheel turn = 200 mm:  degrees = mm / 200 * 360`]
     ] },
-  mock: { minutes: 120, blurb: 'Final length: 10 multiple choice (2 points each), 4 output traces (5 points each) and 3 build-the-code puzzles (10 points each). Traces now include arrays, structs and classes, so track every member of every object.',
+  mock: { minutes: 120, blurb: 'Final length: 10 multiple choice (2 points each), 4 output traces (5 points each) and 3 build-the-code puzzles (10 points each). Traces now include arrays, structs, classes and pointers, so track every member of every object and what every pointer points to.',
     sections: [
       { label: 'Multiple choice', short: 'multiple choice', n: 10, pts: 2, pick: function (q) { return q.type === 'mc'; } },
       { label: 'Output trace', short: 'output trace', n: 4, pts: 5, pick: function (q) { return q.type === 'txt'; } },

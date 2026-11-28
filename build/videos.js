@@ -45,7 +45,11 @@ var VIDS = {
     k17: [["Linear Approximation, Differentials, Tangent Line, Linearization", "FIbpibkywmk"], ["Linear Approximations and Differentials", "9f3wSvmOHSc"], ["Differentials and Linear Approximations: Theory", "UAzgQtwkmvI"]],
     k18: [["Riemann Sums and the Definite Integral (conceptual)", "N3NkavlmLc8"], ["Definite Integrals as the Limit of a Riemann Sum", "q-G8F0h52L0"], ["Evaluate a Definite Integral Using Right Riemann Sums and Limits", "JUvm7-WNWv4"], ["Writing Definite Integrals from Limits of Riemann Sums", "QkzH8NVecgQ"]],
     k19: [["Fundamental Theorem of Calculus: Part 1 and Part 2 Explained", "7uDGju1peGM"], ["Fundamental Theorem of Calculus Part 1", "aeB5BWY0RlE"], ["Fundamental Theorem of Calculus Part 2", "ns8N1UuXl4w"]],
-    k20: [["How to Integrate Using U-Substitution (NancyPi)", "8B31SAk1nD8"], ["How To Integrate Using U-Substitution", "sdYdnpYn-1o"], ["U-Substitution With Definite Integrals", "tM4RWc9ryx0"]]
+    k20: [["How to Integrate Using U-Substitution (NancyPi)", "8B31SAk1nD8"], ["How To Integrate Using U-Substitution", "sdYdnpYn-1o"], ["U-Substitution With Definite Integrals", "tM4RWc9ryx0"]],
+    k21: [["Integration By Parts", "sWSLLO3DS1I"], ["Integration By Parts: Tabular Method", "Yyic5aaXGaw"], ["Integration by Parts Examples (Step-by-Step Tutorial)", "ErpONB9KdC4"]],
+    k22: [["Area Between Two Curves", "kgg5Rspf1Js"], ["Finding Area Between Two Curves (Calculus)", "mPFCWcRIT6E"], ["Finding Area Between Two Curves (With Respect to y)", "tdl8mM03KI0"]],
+    k23: [["Volumes of Revolution: Disk & Shell Method Visualized", "N5xBtn5kEsQ"], ["Disk, Washer and Shell Methods: Volume of Solid of Revolution", "KozIM2VMFPI"], ["Volumes: The Disk and Washer Method", "QYB0PFdXPyo"]],
+    k24: [["Average Value of a Function on an Interval", "K-H86pxiBlk"], ["Calculate Work from Pulling Springs: Hooke's Law with Integrals", "dm25wOD28TQ"], ["Pumping Liquid Work Problems in Calculus 2", "hjQzm7ZgjQU"]]
   },
   che102: {
     h1: [["The mole and Avogadro's number (Khan Academy)", "_Su9Fij7TMQ"], ["Avogadro's Number, The Mole, Grams, Atoms, Molar Mass Calculations", "74-X94OP2XI"], ["Avogadro's Number: Converting Between Atoms and Moles", "VFORULBoGLM"]],
@@ -80,7 +84,8 @@ var VIDS = {
     c6: [["C++ Arrays for Beginners: Passing Arrays to Functions", "GvJv8vS7S5Q"], ["C++ Tutorial: Passing an Array to a Function", "qc4PTgRImhM"], ["C/C++: Passing Arrays to Functions", "HNPh7t-Cpr8"]],
     c7: [["Multidimensional Arrays in C++ (2D arrays)", "A4nX2f4xldQ"], ["Pass 2-D Arrays to Functions in C++", "3wtCVsP1UWM"], ["How to Declare, Define, and Access Structures: C++ Structs #1", "qjyJ-ueJEGg"], ["Passing Structures to Functions: C++ Structs #6", "O269m7gB6To"]],
     c8: [["C++ Tutorial for Beginners: Introduction to Classes and Public/Private Members", "GqqujGu06ag"], ["C++ Classes: Getters and Setters", "0vRoAzIti50"], ["C++ Class Constructor", "HIloCCbSTY0"]],
-    c9: [["Header & Implementation File for C++ Classes", "ru_u9N7jydU"], ["Separating a C++ Class into .h and .cpp Files", "gyA7uDlazkc"], ["Operator Overloading Introduction (C++)", "9tHu4mWtrnM"], ["C++ Operator Overloading Explained", "bQLy53peImg"]]
+    c9: [["Header & Implementation File for C++ Classes", "ru_u9N7jydU"], ["Separating a C++ Class into .h and .cpp Files", "gyA7uDlazkc"], ["Operator Overloading Introduction (C++)", "9tHu4mWtrnM"], ["C++ Operator Overloading Explained", "bQLy53peImg"]],
+    c10: [["Dynamic Memory Allocation: C++ Pointers Tutorial", "27QLVnn74Eg"], ["Dynamic Memory Allocation in C++ (New and Delete Keywords)", "3xJIAygSqcc"], ["delete vs delete[]: Dynamically Allocate Arrays in C++", "d_SbCR89Rw8"]]
   },
   mte100: {
     d1: [["Introduction to the Engineering Design Process", "pfJVWaMGN6A"], ["STEMonstrations: Engineering Design Process (NASA)", "IbbxjA5e2hw"], ["Engineering Design Process: the 7 steps", "nBWFRHlvkKc"]],
@@ -99,7 +104,9 @@ var VIDS = {
     d14: [["Gears Explained (driver, driven, ratios, torque)", "4ROtKKuSaBI"], ["Simple Gears Explained: calculating the gear ratio", "mhtF00LQQjI"], ["Introduction to Gears: Types, Ratios, and Mechanical Advantage", "omln3cCRHNE"], ["Compare the Parts: Rigid Coupling vs Flexible Coupling", "rZy3ToN3jBU"]],
     d15: [["Stall Torque and No-Load Speed (Engineers Studio #4)", "zDnmNZxmm_Y"], ["Steady-State DC Motor Behaviour: the speed-torque curve", "wI3dSff8Qa0"], ["PWM H-Bridge Motor Control", "3Lfh6Py6nc4"], ["DC Motor Control: PWM waveforms on a full H-bridge", "63R71jCpihI"]],
     d16: [["Wheatstone Bridge with Strain Gauge Explained", "GjmM6KKhgp0"], ["Why You Need a Wheatstone Bridge for Accurate Strain Gauge Readings", "L0uW1NHYdDQ"], ["RTD, Thermocouple and Thermistor Explained Simply", "J2ulD-bPTS4"], ["Encoder Explained: Incremental vs Absolute, Resolution and Signals", "4UoyIwBAxug"], ["How a Rotary Incremental Encoder Works: Direction and Position", "Xbfnxbjjm9s"]],
-    d17: [["WBS, Gantt Chart and Critical Path: Explained", "YDxAKKVdMVM"], ["Critical Path Method Explained, Part 1", "qovA5KE9kyo"], ["Critical Path Analysis: Creating Gantt Charts", "V-POYsOpFes"]]
+    d17: [["WBS, Gantt Chart and Critical Path: Explained", "YDxAKKVdMVM"], ["Critical Path Method Explained, Part 1", "qovA5KE9kyo"], ["Critical Path Analysis: Creating Gantt Charts", "V-POYsOpFes"]],
+    d18: [["Creating Extrude, Revolve, Sweep and Loft in SolidWorks", "vsQml0qzS5w"], ["SolidWorks EASY Loft and Shell Features", "rzhLnY7JbRw"], ["Creating Standard Assembly Mates in SOLIDWORKS", "tbWByaGD7Ok"], ["SOLIDWORKS: Beginner's Guide to Advanced Mates Part 1", "pzHNbPFzSSY"]],
+    d19: [["The 7 Principles of Universal Design", "G-tHuD7R8cs"], ["7 Principles of Universal Design to Design for All Abilities", "8j4hNohiG4A"]]
   }
 };
 var VIDQ = { math115: 'linear algebra', math116: 'calculus', che102: 'chemistry', mte121: 'C++', mte100: 'engineering' };

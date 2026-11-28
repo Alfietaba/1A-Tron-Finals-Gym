@@ -1108,6 +1108,38 @@ course('math116').gens = [
       'L(x) = √a + (x − a)/(2√a).',
       'L(' + x + ') = ' + r + ' + (' + dlt + ')/' + 2 * r + ' = ' + est + ' ≈ ' + ((2 * r * r + dlt) / (2 * r)).toFixed(4) + '. The true value is ' + Math.sqrt(x).toFixed(4) + '.', null, null,
       { chk: { val: (function () { var h = 1e-6, a0 = r * r; return Math.sqrt(a0) + (Math.sqrt(a0 + h) - Math.sqrt(a0 - h)) / (2 * h) * dlt; })() } });
+  } },
+  { t: 'k22', make: function (R) {   /* area between y = x² and y = kx (or y = k², a horizontal line, for −k ≤ x ≤ k) */
+    var k = R.i(1, 6), line = R.chance(0.6), ans, why, g;
+    if (line) {
+      var a = R.p([1, 1, 2, 3]), m = k * a, top = m * m * m, as = (a === 1 ? '' : a) + 'x²', ms = (m === 1 ? '' : m) + 'x';   /* y = a x² and y = m x meet at x = 0 and x = k */
+      ans = frac(top, 6 * a * a); g = function (x) { return m * x - a * x * x; };
+      why = as + ' = ' + ms + ' gives x = 0 and x = ' + k + '. The line is on top in between, so A = ∫<sub>0</sub><sup>' + k + '</sup> (' + ms + ' − ' + as + ') dx = ' + frac(m * k * k, 2) + ' − ' + frac(a * k * k * k, 3) + ' = ' + ans + '.';
+      return num(nid('ab'), 'k22', 'Find the area of the region between y = ' + as + ' and y = ' + ms + '.', ans,
+        'Find where the curves meet, then integrate (top − bottom) between those x-values.', why, null, null,
+        { chk: { val: (function () { var N = 200, h = k / N, s2 = g(0) + g(k); for (var j = 1; j < N; j++) s2 += (j % 2 ? 4 : 2) * g(j * h); return s2 * h / 3; })() } });
+    }
+    ans = frac(4 * k * k * k, 3); g = function (x) { return k * k - x * x; };
+    why = 'x² = ' + k * k + ' gives x = ±' + k + '. The line is on top, so A = ∫<sub>−' + k + '</sub><sup>' + k + '</sup> (' + k * k + ' − x²) dx = 2(' + k * k * k + ' − ' + frac(k * k * k, 3) + ') = ' + ans + '.';
+    return num(nid('ab'), 'k22', 'Find the area of the region between y = x² and the line y = ' + k * k + '.', ans,
+      'Find where the curves meet, then integrate (top − bottom). The region is symmetric about the y-axis.', why, null, null,
+      { chk: { val: (function () { var N = 200, h = 2 * k / N, s2 = g(-k) + g(k); for (var j = 1; j < N; j++) s2 += (j % 2 ? 4 : 2) * g(-k + j * h); return s2 * h / 3; })() } });
+  } },
+  { t: 'k23', make: function (R) {   /* disks: y = c√x on [0, h] about the x-axis, V = πc²h²/2 */
+    var c = R.i(1, 4), h = R.i(1, 6), n2 = c * c * h * h, f = frac(n2, 2), ans = (f.indexOf('/') < 0 ? (f === '1' ? '' : f) + 'pi' : (f.split('/')[0] === '1' ? '' : f.split('/')[0]) + 'pi/' + f.split('/')[1]);
+    var cs = (c === 1 ? '' : c) + '√x';
+    return num(nid('dk'), 'k23', 'The region under y = ' + cs + ' for 0 ≤ x ≤ ' + h + ' is rotated about the x-axis. Find the volume. Give an exact answer in terms of π.', ans,
+      'Disks: V = π∫ [f(x)]² dx.',
+      'Each slice is a disk of radius ' + cs + ', so V = π∫<sub>0</sub><sup>' + h + '</sup> ' + (c === 1 ? '' : c * c) + 'x dx = π · ' + (c === 1 ? '' : c * c + ' · ') + h * h + '/2 = ' + ans.replace('pi', 'π') + '.', null, null,
+      { chk: { val: (function () { var N = 200, d = h / N, F = function (x) { return Math.PI * c * c * x; }, s2 = F(0) + F(h); for (var j = 1; j < N; j++) s2 += (j % 2 ? 4 : 2) * F(j * d); return s2 * d / 3; })() } });
+  } },
+  { t: 'k24', make: function (R) {   /* Hooke's law: F N holds a stretch of d cm; work to stretch from a cm to b cm */
+    var d = R.p([5, 10, 20, 25, 50]), F = R.p([2, 4, 5, 10, 20, 40]), a = R.p([0, 0, 10, 20]), b = a + R.p([10, 20, 30, 40]);
+    var k = 100 * F / d, ans = frac(F * (b * b - a * a), 200 * d);
+    return num(nid('hk'), 'k24', 'A force of ' + F + ' N holds a spring stretched ' + d + ' cm beyond its natural length. How much work, in J, does it take to stretch it from ' + (a ? a + ' cm' : 'its natural length') + ' to ' + b + ' cm beyond its natural length? Give an exact answer.', ans,
+      'Hooke\'s law F = kx, with x in metres from the natural length. Find k, then W = ∫ kx dx.',
+      'k = ' + F + ' / ' + d / 100 + ' = ' + k + ' N/m. W = ∫<sub>' + a / 100 + '</sub><sup>' + b / 100 + '</sup> ' + k + 'x dx = (' + k + '/2)(' + (b / 100) + '² − ' + (a / 100) + '²) = ' + ans + ' J.', null, null,
+      { unit: 'J', chk: { val: (function () { var N = 200, lo = a / 100, hi = b / 100, dd = (hi - lo) / N, G = function (x) { return (F / (d / 100)) * x; }, s2 = G(lo) + G(hi); for (var j = 1; j < N; j++) s2 += (j % 2 ? 4 : 2) * G(lo + j * dd); return s2 * dd / 3; })() } });
   } }
 ];
 
